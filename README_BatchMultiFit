@@ -1,0 +1,47 @@
+(*
+
+Dependencies:
+Needs ErrorBarLogPlots.m in the same directory as BatchMultiFit.m
+https://library.wolfram.com/infocenter/MathSource/6747/
+
+For the export of the pictures the frontend (XML.exe) will be always invoked for rendering -> needs a X server!
+https://mathematica.stackexchange.com/questions/136574/exporting-plots-on-a-remote-machine-without-display-in-script-model
+
+
+On a local machine, with running X server, run script via:
+MathKernel -noprompt -run "<<run_BatchMultiFit.m" >> run_BatchMultiFit.log &
+
+
+In case of a ssh session to a remote headless server you can ssh -Y ... to forward your local X server. However this will work only as long the ssh connection is up.
+
+
+In case of a ssh session to a remote headless server which you have/wanna disconnect at some point you can use following 3 options:
+(1) a VNC-server running on the headless server (works soso)
+(2) similarly a NX server on the headless server (works well)
+(3) use xvfb on the headless server (recommended)
+
+Further information:
+
+to (1)
+start on the server a VNC-server via: 
+vncserver :1 [-alwaysshared] [-localhost]
+export DISPLAY=<server-IP>:1  [or export DISPLAY=localhost:1]
+
+Note that some VNC-servers (TightVNC) may crash if there are more than 6 parallel jobs.
+
+to (2)
+NX (NoMachine) works usually much better regarding stability as VNC, however it is closed source.
+
+to (3):
+sudo apt-get install xvfb (for Debain based distros)
+
+in the ssh session to the headless server start script with screen plus xvfb-run:
+screen -d -m xvfb-run MathKernel -noprompt -run "<<run_BatchMultiFit.m" >> run_BatchMultiFit.log 
+
+after disconnection, xvfb is still running and allows the rendering from XML.exe
+
+ps -e | grep X
+should show sth like
+Xvfb :99 -screen 0 640x480x16 -nolisten tcp -auth /tmp/xvfb-run.WHQ2Cz/Xauthority
+ 
+*)
