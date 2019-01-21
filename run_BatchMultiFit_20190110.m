@@ -1,7 +1,7 @@
 (* nice MathKernel -noprompt -run "<<run_BatchMultiFit.m" >> run_BatchMultiFit_20190110.log & *)
 
 (* Load BatchMultiFit program *)
-Get["/home/martins/projects/BatchMultiFit_SF/BatchMultiFit.m"];
+Get["/home/martins/projects/BatchMultiFit/BatchMultiFit.m"];
 
 (* define number of threads, using more than >6 threads causes the vncserver crashing (?!) *)
 CloseKernels[]
@@ -9,7 +9,7 @@ LaunchKernels[16]
 $KernelCount
 
 
-SetDirectory["/home/martins/projects/BatchMultiFit_SF"];
+SetDirectory["/home/martins/projects/BatchMultiFit"];
 
 
 
