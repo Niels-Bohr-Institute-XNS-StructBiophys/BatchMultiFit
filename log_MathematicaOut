@@ -1,0 +1,163 @@
+Folder and fit overview
+
+
+run_BatchMultiFit_20180809.m
+repeat old examples
+
+
+
+
+run_BatchMultiFit_20180812.m
+dilute SSS suspension
+(* with ycohscf *)
+expfileconc={"export/im_0047273_caz_s-scale.chi",0.01}; (* use scaling factor since conc is not really known *)
+OutDir="MathematicaOut/SSS_4to1dil_001/";
+
+
+
+
+run_BatchMultiFit_20180821.m
+dilute SSS suspension
+
+(* with ycohscf, {Chi2,"red"} *)
+OutDir="MathematicaOut/SSS_4to1dil_002/";
+expfileconc={"export/im_0047273_caz_s-scale.chi",0.01}; (* use scaling factor since conc is not really known *)
+Nmaxsp=6;
+FitMethod="DifferentialEvolution";
+FitMaxIt=1000;
+FitTarF={Chi2,"red"};
+
+
+(* with ycohscf, T *)
+OutDir="MathematicaOut/SSS_4to1dil_003/";
+expfileconc={"export/im_0047273_caz_s-scale.chi",0.01}; (* use scaling factor since conc is not really known *)
+Nmaxsp=6;
+FitMethod="DifferentialEvolution";
+FitMaxIt=1000;
+
+
+(* with ycohscf, {Chi2,"red"}, with dI *)
+OutDir="MathematicaOut/SSS_4to1dil_004/";
+expfileconc={"export/im_0047273_caz_s-scaled_sIdI.chi",0.01}; (* use scaling factor since conc is not really known *)
+Nmaxsp=6;
+FitMethod="DifferentialEvolution";
+FitMaxIt=1000;
+FitTarF={Chi2,"red"};
+
+
+(* with ycohscf, {Chi2,"red"}, with dI, FindMinimum *)
+OutDir="MathematicaOut/SSS_4to1dil_005/";
+expfileconc={"export/im_0047273_caz_s-scaled_sIdI.chi",0.01}; (* use scaling factor since conc is not really known *)
+Nmaxsp=6;
+Nmaxst=0;
+FitFunc=FindMinimum;
+FitMethod="Automatic";
+
+
+(* with ycohscf, {Chi2,"red"}, with dI, postprocess DiffEvol *)
+OutDir="MathematicaOut/SSS_4to1dil_006/";
+expfileconc={"export/im_0047273_caz_s-scaled_sIdI.chi",0.01}; (* use scaling factor since conc is not really known *)
+Nmaxsp=6;
+FitMethod={"DifferentialEvolution","PostProcess"->True};
+FitMaxIt=1000;
+FitTarF={Chi2,"red"};
+
+
+(* with ycohscf, {Chi2,"red"}, with dI, postprocess RandomSearch with InteriorPoint *)
+OutDir="MathematicaOut/SSS_4to1dil_007/";
+expfileconc={"export/im_0047273_caz_s-scaled_sIdI.chi",0.01}; (* use scaling factor since conc is not really known *)
+Nmaxsp=6;
+FitMethod={"RandomSearch","PostProcess"->"InteriorPoint"};
+Fitsmin=0.01;
+Fitsmax=0.37;
+FitMaxIt=1000;
+FitTarF={Chi2,"red"};
+ParStart={{"c1",True,0.0},{"c2",True,0.1},{"c3",True,0.4},{"c4",True,0.4},{"c5",True,0.1},{"c6",True,0.0},{"rhoisl",True,0,"270<#<360"},{"rhoosl",True,0,"270<#<360"},{"rhodm",True,0,"333<#<345"},{"Xa",True,0.005,"0.001<#<0.009"}};
+
+same ParStart and s-range for others
+
+
+
+-> Chi2 with dI seems to work as good as T (log Chi2) for the unloaded sample.
+
+
+
+
+run_BatchMultiFit_20181130.m
+
+(* with ycohscf, T *)
+OutDir="MathematicaOut/SSS_3pBC_native_001/";
+expfileconc={"export/im_0047237_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
+Nmaxsp=5;
+FitFunc=NMinimize;
+FitMethod="DifferentialEvolution";
+Fitsmin=0.01;
+Fitsmax=0.37;
+FitMaxIt=1000;
+FitTarF=T;
+ParStart={{"c1",True,0.0},{"c2",True,0.3},{"c3",True,0.4},{"c4",True,0.3},{"c5",True,0.0},{"rhoisl",True,0,"270<#<370"},{"rhoosl",True,0,"270<#<370"},{"rhodm",True,0,"333<#<345"},{"Xa",True,0.005,"0.006<#<0.018"}};
+
+
+(* with ycohscf, T *)
+OutDir="MathematicaOut/SSS_5pBC_native_001/";
+expfileconc={"export/im_0047239_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
+Nmaxsp=5;
+FitFunc=NMinimize;
+FitMethod="DifferentialEvolution";
+
+
+(* with ycohscf, T *)
+OutDir="MathematicaOut/SSS_7p5pBC_native_001/";
+expfileconc={"export/im_0047240_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
+Nmaxsp=5;
+FitFunc=NMinimize;
+FitMethod="DifferentialEvolution";
+
+
+(* with ycohscf, T, fixed rhoisl to BC *)
+OutDir="MathematicaOut/SSS_3pBC_native_002/";
+expfileconc={"export/im_0047237_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
+Nmaxsp=5;
+FitFunc=NMinimize;
+FitMethod="DifferentialEvolution";
+
+
+(* with ycohscf, T, fixed rhoisl to BC *)
+OutDir="MathematicaOut/SSS_5pBC_native_002/";
+expfileconc={"export/im_0047239_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
+Nmaxsp=5;
+FitFunc=NMinimize;
+FitMethod="DifferentialEvolution";
+
+
+(* with ycohscf, T, fixed rhoisl to BC *)
+OutDir="MathematicaOut/SSS_7p5pBC_native_002/";
+expfileconc={"export/im_0047240_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
+Nmaxsp=5;
+FitFunc=NMinimize;
+FitMethod="DifferentialEvolution";
+
+
+(* with ycohscf, T, fixed rhoosl to BC *)
+OutDir="MathematicaOut/SSS_3pBC_native_003/";
+expfileconc={"export/im_0047237_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
+Nmaxsp=5;
+FitFunc=NMinimize;
+FitMethod="DifferentialEvolution";
+
+
+(* with ycohscf, T, fixed rhoosl to BC *)
+OutDir="MathematicaOut/SSS_5pBC_native_003/";
+expfileconc={"export/im_0047239_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
+Nmaxsp=5;
+FitFunc=NMinimize;
+FitMethod="DifferentialEvolution";
+
+
+(* with ycohscf, T, fixed rhoosl to BC *)
+OutDir="MathematicaOut/SSS_7p5pBC_native_003/";
+expfileconc={"export/im_0047240_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
+Nmaxsp=5;
+FitFunc=NMinimize;
+FitMethod="DifferentialEvolution";
+
