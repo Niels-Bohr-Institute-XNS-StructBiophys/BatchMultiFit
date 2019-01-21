@@ -7,7 +7,7 @@ Needs["ErrorBarPlots`"]
 SetOptions[ErrorListPlot,DisplayFunction->Identity];
 DistributeDefinitions[ErrorListPlot];
 (* Do not use ParallelNeeds["ErrorBarPlots`"], use DistributeDefinitions *)
-SetDirectory["/home/martins/projects/BatchMultiFit_SF"];
+SetDirectory["/home/martins/projects/BatchMultiFit"];
 
 Get["ErrorBarLogPlots.m"];
 (*SetOptions[ErrorListLogLogPlot,DisplayFunction->Identity];*)
