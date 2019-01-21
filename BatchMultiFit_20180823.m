@@ -263,11 +263,6 @@ f];
 
 
 (* scf can be "red" to obtain reduced Chi2 1/(n-#p) *)
-(* 
-   currently all parameters for one dataset are assumed to be NOT fixed, i.e. no check is applied if they are fixed
-
-   #p=Nsp+Nst+3+1+1 (3x SLD, bkg, scale chiXn) 
-*)
 Chi2[p0_,Nsp0_,Nst0_,set0_,fsp0_,fst0_,Tscf0_,scf0_,smin0_:0,smax0_:Infinity]:=Module[{p=p0,Nsp=Nsp0,Nst=Nst0,set=set0,fsp=fsp0,fst=fst0,Tscf=Tscf0,scf=scf0,smin=smin0,smax=smax0,c,d,rho,drho,ddrho,a,count,Nset,s,y,ycohscf,yexp,sigma,red,f},
 (* adapt depth of input arguments if necessary *)
 (* Depth == # of indices + 1 *)
@@ -429,16 +424,14 @@ Num2Str[x0_,p0_Integer,n0_Integer,padright0_String]:=Module[{x=x0,p=p0,n=n0,padr
 (* use "Automatic" for FitMethod in case of constrained local optimization with FindMinimum as FitFunc, "LevenbergMarquardt" and others work only for uncontrained problems *)
 
 Clear[BatchMultiFit]
-BatchMultiFit[OutDir0_,Xnmode0_,expfileconc0_,YFileDir0_,YFileListLocal0_,Nmaxsp0_,Nmaxst0_,FitFunc0_,FitMethod0_,Fitsmin0_,Fitsmax0_,FitMaxIt0_,FitTarF0_,ParStart0_,PlRange0_,plsc0_:1.0,Ymode0_:1,AddConstraints0_:{},Smear0_:{0,0.0},Tscf0_:1.0,ycohscf0_:{False,1.0,"1.0<=#<=1.0"},LicoConstr0_:{"","==1.0"},ExportFlag0_:False,PlotFlag0_:False,cdConstr0_:{False,{"chi",True,0.0(*,Constraint*)}},ow0_:False]:=Module[{OutDir=OutDir0,Xnmode=Xnmode0,expfileconc=expfileconc0,YFileDir=YFileDir0,YFileListLocal=YFileListLocal0,Nmaxsp=Nmaxsp0,Nmaxst=Nmaxst0,FitFunc=FitFunc0,FitMethod=FitMethod0,Fitsmin=Fitsmin0,Fitsmax=Fitsmax0,FitMaxIt=FitMaxIt0,FitTarF=FitTarF0,ParStart=ParStart0,PlRange=PlRange0,plsc=plsc0,Ymode=Ymode0,AddConstraints=AddConstraints0,Smear=Smear0,Tscf=Tscf0,ycohscf=ycohscf0,LicoConstr=LicoConstr0,LicoConstr2Num,ExportFlag=ExportFlag0,PlotFlag=PlotFlag0,cdConstr=cdConstr0,ow=ow0,count,stream,dummy,dummy2,dummy3,dummy4,YFile,FitArgList,FitConstrList,FitStartList,FitOut,(*FitOutList,*)it,Par,Chi2RedResidual,Residual,(*ResidualList,*)PlotArgList,pexpfit,pexpfitList,cdList,chsList,chlList,pBarChartList,pImg,ImgSizeUnit,Nsp,Nst,exp,set,Nset,fsp,fst(*,NY*),col,AddConstraintsY,FF,RetVecIF,chi,YFileListExistLocal},
+BatchMultiFit[OutDir0_,Xnmode0_,expfileconc0_,YFileDir0_,YFileListLocal0_,Nmaxsp0_,Nmaxst0_,FitFunc0_,FitMethod0_,Fitsmin0_,Fitsmax0_,FitMaxIt0_,FitTarF0_,ParStart0_,PlRange0_,plsc0_:1.0,Ymode0_:1,AddConstraints0_:{},Smear0_:{0,0.0},Tscf0_:1.0,ycohscf0_:{False,1.0,"1.0<=#<=1.0"},LicoConstr0_:{"","==1.0"},ExportFlag0_:False,PlotFlag0_:False,cdConstr0_:{False,{"chi",True,0.0(*,Constraint*)}},ow0_:False]:=Module[{OutDir=OutDir0,Xnmode=Xnmode0,expfileconc=expfileconc0,YFileDir=YFileDir0,YFileListLocal=YFileListLocal0,Nmaxsp=Nmaxsp0,Nmaxst=Nmaxst0,FitFunc=FitFunc0,FitMethod=FitMethod0,Fitsmin=Fitsmin0,Fitsmax=Fitsmax0,FitMaxIt=FitMaxIt0,FitTarF=FitTarF0,ParStart=ParStart0,PlRange=PlRange0,plsc=plsc0,Ymode=Ymode0,AddConstraints=AddConstraints0,Smear=Smear0,Tscf=Tscf0,ycohscf=ycohscf0,LicoConstr=LicoConstr0,LicoConstr2Num,ExportFlag=ExportFlag0,PlotFlag=PlotFlag0,cdConstr=cdConstr0,ow=ow0,count,stream,dummy,dummy2,dummy3,dummy4,YFile,FitArgList,FitConstrList,FitStartList,FitOut,(*FitOutList,*)it,Par,Residual,(*ResidualList,*)PlotArgList,pexpfit,pexpfitList,cdList,chsList,chlList,pBarChartList,pImg,ImgSizeUnit,Nsp,Nst,exp,set,Nset,fsp,fst(*,NY*),col,AddConstraintsY,FF,RetVecIF,chi,YFileListExistLocal},
 (* check directories *)
 If[StringTake[YFileDir,-1]!="/",YFileDir=YFileDir<>"/"];
 If[DirectoryQ[YFileDir]==False,Print["YFile directory "<>YFileDir<>" does not exist. Exit."];Exit[];];
 (* append slash if it does not exist yet *)
 If[StringTake[OutDir,-1]!="/",OutDir=OutDir<>"/"];
 (* Check if OutDir exists, otherwise create it *)
-(* Don't use CreateDirectory[OutDir]; cause of permissions *)
-(* One might check return of Run[""] command *)
-If[DirectoryQ[OutDir]==False,Print["Out directory "<>OutDir<>" does not exist. Create directory."];Run["mkdir -m u=rwx,g=rx,o=rx "<>OutDir];];
+If[DirectoryQ[OutDir]==False,Print["Out directory "<>OutDir<>" does not exist. Create directory."];CreateDirectory[OutDir];];
 (* Make Xnmode, expfileconc, YFileListLocal, Smear, Ymode, Tscf suitable lists if it comes only as a string or 1D-array *)
 If[Length[Dimensions[YFileListLocal]]==0,YFileListLocal={{YFileListLocal}};];
 If[Length[Dimensions[YFileListLocal]]==1,YFileListLocal=Transpose[{YFileListLocal}];];(* Transpose must be used ! *)
@@ -493,9 +486,8 @@ If[Length[col]<Nset,Print["Nset is larger than available colors. Increase the nu
 (* define global lists *)
 FitOutList=Table[{},{i,1,Length[YFileListLocal]}];
 ResidualList=Table[{},{i,1,Length[YFileListLocal]}];
-Chi2RedResidualList=Table[{},{i,1,Length[YFileListLocal]}];
 (* YFileList=YFileListLocal *)
-SetSharedVariable[FitOutList,ResidualList,Chi2RedResidualList,YFileListGlobal];
+SetSharedVariable[FitOutList,ResidualList,YFileListGlobal];
 ParallelDo[
 YFile=YFileListLocal[[Y]];
 (* open logfile *)
@@ -651,17 +643,10 @@ AppendTo[Residual,FitTarF[[1]]@@{PlotArgList,Nsp,Nst,set,fsp,fst,Tscf,FitTarF[[2
 Do[dummy=Join[PlotArgList[[1;;Nsp+Nst]],PlotArgList[[Nsp+Nst+1+(i-1)*4;;Nsp+Nst+i*4]],{PlotArgList[[Nsp+Nst+4*Nset+i]]}];
 AppendTo[Residual,FitTarF[[1]]@@{dummy,Nsp,Nst,set[[i]],fsp[[i]],fst[[i]],Tscf[[i]],FitTarF[[2]],0.15,0.35}];
 ,{i,1,Nset}];
-(* Residual value over the whole fit-range (sets have been cutted to full range) using {Chi2,red} for all sets and for each set *)
-Chi2RedResidual={Chi2@@{PlotArgList,Nsp,Nst,set,fsp,fst,Tscf,"red"}};
-Do[dummy=Join[PlotArgList[[1;;Nsp+Nst]],PlotArgList[[Nsp+Nst+1+(i-1)*4;;Nsp+Nst+i*4]],{PlotArgList[[Nsp+Nst+4*Nset+i]]}];
-AppendTo[Chi2RedResidual,Chi2@@{dummy,Nsp,Nst,set[[i]],fsp[[i]],fst[[i]],Tscf[[i]],"red"}];
-,{i,1,Nset}];
-(* don't use AppendTo[ResidualList, Residual]; etc -> order will not match order in YFileListGlobal *)
+(* don't use AppendTo[ResidualList, Residual]; -> order will not match order in YFileListGlobal *)
 ResidualList[[Y]]=Residual;
-Chi2RedResidualList[[Y]]=Chi2RedResidual;
 WriteString[stream,"Number of iterations = "<>ToString[it]<>"\n"];
 WriteString[stream,"Target function values = "<>StringJoin[Riffle[ToString/@N[Residual[[1;;1+Nset]],4],", "]]<>"\n"];
-WriteString[stream,"Chi2Red function values = "<>StringJoin[Riffle[ToString/@N[Chi2RedResidual[[1;;1+Nset]],4],", "]]<>"\n"];
 WriteString[stream,"Target function value (Braggpeak range) = "<>StringJoin[Riffle[ToString/@N[Residual[[2+Nset;;]],4],", "]]<>"\n"];
 WriteString[stream,"\n"];
 (* plot *)
@@ -698,5 +683,4 @@ Close[stream];
 ,{Y,1,Length[YFileListLocal]}];(* end (Parallel)Do *) 
 (* finally the MasterKernel ($KernelID 0) saves the global visably variables in the mx file again, in parallel DumSave does not work, even not for a specific $KernelID only *)
 DumpSave[OutDir<>"T.mx",{YFileListGlobal,ResidualList,FitOutList}];
-DumpSave[OutDir<>"Chi2Red.mx",{YFileListGlobal,Chi2RedResidualList,FitOutList}];
 ];
