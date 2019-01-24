@@ -23,19 +23,22 @@ SetDirectory["/home/martins/projects/BatchMultiFit"];
 Nsp=6;
 mindisl=4;maxdisl=20;ddisl=2;
 mindosl=4;maxdosl=20;ddosl=2;
-(* select dirs *)
-dirlist=Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_00*","",Infinity],DirectoryQ]
+
+dirlist=Select[Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_00*","",Infinity],StringMatchQ[#,{_~~"*003*",_~~"*004*"}]&],DirectoryQ];
+Print[dirlist];
 
 
 
 
 (* simulation params for cis, disl and dosl *)
+(*
 Nsp=6;
-mindisl=4;maxdisl=148;ddisl=4;
-mindosl=4;maxdosl=148;ddosl=4;
-(* select dirs *)
-dirlist=Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_00[5,6]","",Infinity],DirectoryQ]
+mindisl=4;maxdisl=144;ddisl=4;
+mindosl=4;maxdosl=144;ddosl=4;
 
+dirlist=Select[Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_00*","",Infinity],StringMatchQ[#,{_~~"*005*",_~~"*006*"}]&],DirectoryQ];
+Print[dirlist];
+*)
 
 Do[
 (* dir and log files *)
@@ -57,3 +60,7 @@ Do[AppendTo[Tpdata[[i]],Tpdata[[i,1+1]]*Tpdata[[i,4+Nsp+1]]/10.0+Tpdata[[i,1+2]]
 (* start analysis and plotting *)
 pT[Tpdata[[All,All]],mindisl,maxdisl,ddisl,mindosl,maxdosl,ddosl,Nsp,lablist];
 ,{i,1,Length[dirlist]}]
+
+
+(* use always Exit[] *)
+Exit[]
