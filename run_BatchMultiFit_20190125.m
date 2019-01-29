@@ -1,4 +1,4 @@
-(* screen xvfb-run MathKernel -noprompt -run "<<run_BatchMultiFit_20190125.m" >> run_BatchMultiFit_20190125.log & *)
+(* screen -d -m xvfb-run MathKernel -noprompt -run "<<run_BatchMultiFit_20190125.m" >> run_BatchMultiFit_20190125.log & *)
 
 (* Load BatchMultiFit program *)
 Get["/home/martins/projects/BatchMultiFit/BatchMultiFit.m"];
@@ -43,7 +43,12 @@ Tscf=1.0; (* Default *)
 ycohscf={True,1.0,"0.5<#<2.5"};
 LicoConstr={"","==1.0"}; (* Default *)
 ExportFlag=True;
-Print[AbsoluteTiming[BatchMultiFit[OutDir,Xnmode,expfileconc,YFileDir,YFileList,Nmaxsp,Nmaxst,FitFunc,FitMethod,Fitsmin,Fitsmax,FitMaxIt,FitTarF,ParStart,PlRange,plsc,Ymode,AddConstraints,Smear,Tscf,ycohscf,LicoConstr,ExportFlag]][[1]]]
+
+PlotFlag=False;
+cdConstr={False,{"chi",True,0.0}};
+ow=True;
+
+Print[AbsoluteTiming[BatchMultiFit[OutDir,Xnmode,expfileconc,YFileDir,YFileList,Nmaxsp,Nmaxst,FitFunc,FitMethod,Fitsmin,Fitsmax,FitMaxIt,FitTarF,ParStart,PlRange,plsc,Ymode,AddConstraints,Smear,Tscf,ycohscf,LicoConstr,ExportFlag,PlotFlag,cdConstr,ow]][[1]]]
 
 
 (* with ycohscf(0.5-2.5), T *)
@@ -125,6 +130,7 @@ Print[AbsoluteTiming[BatchMultiFit[OutDir,Xnmode,expfileconc,YFileDir,YFileList,
 
 
 (* with ycohscf(0.5-2.5), {Chi2,"red"}, with dI *)
+(*
 OutDir="MathematicaOut/SSS_0p0BC_1to5dil_OSL_006/";
 Xnmode="X";
 expfileconc={"export/im_0051238_caz_CapA_0p0BC_1to5dil-H2O_s-scaled_sIdI.chi",0.05};
@@ -147,9 +153,10 @@ ycohscf={True,1.0,"0.5<#<2.5"};
 LicoConstr={"","==1.0"}; (* Default *)
 ExportFlag=True;
 Print[AbsoluteTiming[BatchMultiFit[OutDir,Xnmode,expfileconc,YFileDir,YFileList,Nmaxsp,Nmaxst,FitFunc,FitMethod,Fitsmin,Fitsmax,FitMaxIt,FitTarF,ParStart,PlRange,plsc,Ymode,AddConstraints,Smear,Tscf,ycohscf,LicoConstr,ExportFlag]][[1]]]
-
+*)
 
 (* with ycohscf(0.5-2.5), {Chi2,"red"}, with dI *)
+(*
 OutDir="MathematicaOut/SSS_3p0BC_1to5dil_OSL_006/";
 Xnmode="X";
 expfileconc={"export/im_0051239_caz_CapB_3p0BC_1to5dil-H2O_s-scaled_sIdI.chi",0.05};
@@ -171,9 +178,10 @@ ycohscf={True,1.0,"0.5<#<2.5"};
 LicoConstr={"","==1.0"}; (* Default *)
 ExportFlag=True;
 Print[AbsoluteTiming[BatchMultiFit[OutDir,Xnmode,expfileconc,YFileDir,YFileList,Nmaxsp,Nmaxst,FitFunc,FitMethod,Fitsmin,Fitsmax,FitMaxIt,FitTarF,ParStart,PlRange,plsc,Ymode,AddConstraints,Smear,Tscf,ycohscf,LicoConstr,ExportFlag]][[1]]];
-
+*)
 
 (* with ycohscf(0.5-2.5), {Chi2,"red"}, with dI *)
+(*
 OutDir="MathematicaOut/SSS_5p0BC_1to5dil_OSL_006/";
 Xnmode="X";
 expfileconc={"export/im_0051247_caz_CapA_5p0BC_1to5dil-H2O_s-scaled_sIdI.chi",0.05};
@@ -195,9 +203,10 @@ ycohscf={True,1.0,"0.5<#<2.5"};
 LicoConstr={"","==1.0"}; (* Default *)
 ExportFlag=True;
 Print[AbsoluteTiming[BatchMultiFit[OutDir,Xnmode,expfileconc,YFileDir,YFileList,Nmaxsp,Nmaxst,FitFunc,FitMethod,Fitsmin,Fitsmax,FitMaxIt,FitTarF,ParStart,PlRange,plsc,Ymode,AddConstraints,Smear,Tscf,ycohscf,LicoConstr,ExportFlag]][[1]]];
-
+*)
 
 (* with ycohscf(0.5-2.5), {Chi2,"red"}, with dI *)
+(*
 OutDir="MathematicaOut/SSS_7p5BC_1to5dil_OSL_006/";
 Xnmode="X";
 expfileconc={"export/im_0051251_caz_CapA_7p5BC_1to5dil-H2O_s-scaled_sIdI.chi",0.05};
@@ -219,7 +228,7 @@ ycohscf={True,1.0,"0.5<#<2.5"};
 LicoConstr={"","==1.0"}; (* Default *)
 ExportFlag=True;
 Print[AbsoluteTiming[BatchMultiFit[OutDir,Xnmode,expfileconc,YFileDir,YFileList,Nmaxsp,Nmaxst,FitFunc,FitMethod,Fitsmin,Fitsmax,FitMaxIt,FitTarF,ParStart,PlRange,plsc,Ymode,AddConstraints,Smear,Tscf,ycohscf,LicoConstr,ExportFlag]][[1]]];
-
+*)
 
 
 

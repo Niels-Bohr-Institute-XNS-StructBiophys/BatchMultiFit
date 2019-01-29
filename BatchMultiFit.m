@@ -442,7 +442,8 @@ If[DirectoryQ[OutDir]==False,Print["Out directory "<>OutDir<>" does not exist. C
 (* Make Xnmode, expfileconc, YFileListLocal, Smear, Ymode, Tscf suitable lists if it comes only as a string or 1D-array *)
 If[Length[Dimensions[YFileListLocal]]==0,YFileListLocal={{YFileListLocal}};];
 If[Length[Dimensions[YFileListLocal]]==1,YFileListLocal=Transpose[{YFileListLocal}];];(* Transpose must be used ! *)
-(* if overwrite flag is not set, fit only those YFiles that do not yet exist in the directory (png exists?) *)
+(* if overwrite flag is False (default), fit only those YFiles that do not yet exist in the directory (png exists?) *)
+(* to overwrite all exist. files choose True for ow *)
 If[ow==False,
 YFileListExistLocal=FileNames[OutDir<>"*.png"];
 YFileListExistLocal=StringTrim[StringTrim[#,OutDir],".png"]&/@YFileListExistLocal;
