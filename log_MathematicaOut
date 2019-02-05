@@ -1,163 +1,375 @@
 Folder and fit overview
 
-
-run_BatchMultiFit_20180809.m
+###################
 repeat old examples
+###################
+run_BatchMultiFit_20180809.m
 
 
 
+#########################
+dilute SSS 0p0 suspension
+#########################
 
 run_BatchMultiFit_20180812.m
-dilute SSS suspension
-(* with ycohscf *)
-expfileconc={"export/im_0047273_caz_s-scale.chi",0.01}; (* use scaling factor since conc is not really known *)
-OutDir="MathematicaOut/SSS_4to1dil_001/";
+
+	(* with ycohscf *)
+	expfileconc={"export/im_0047273_caz_s-scale.chi",0.01}; (* use scaling factor since conc is not really known *)
+	OutDir="MathematicaOut/SSS_4to1dil_001/";
 
 
 
 
 run_BatchMultiFit_20180821.m
-dilute SSS suspension
 
-(* with ycohscf, {Chi2,"red"} *)
-OutDir="MathematicaOut/SSS_4to1dil_002/";
-expfileconc={"export/im_0047273_caz_s-scale.chi",0.01}; (* use scaling factor since conc is not really known *)
-Nmaxsp=6;
-FitMethod="DifferentialEvolution";
-FitMaxIt=1000;
-FitTarF={Chi2,"red"};
+	test diff Min algs with 1% conc. and huge scaling factors
 
-
-(* with ycohscf, T *)
-OutDir="MathematicaOut/SSS_4to1dil_003/";
-expfileconc={"export/im_0047273_caz_s-scale.chi",0.01}; (* use scaling factor since conc is not really known *)
-Nmaxsp=6;
-FitMethod="DifferentialEvolution";
-FitMaxIt=1000;
+	(* with ycohscf, {Chi2,"red"} *)
+	OutDir="MathematicaOut/SSS_4to1dil_002/";
+	expfileconc={"export/im_0047273_caz_s-scale.chi",0.01}; (* use scaling factor since conc is not really known *)
+	Nmaxsp=6;
+	FitMethod="DifferentialEvolution";
+	FitMaxIt=1000;
+	FitTarF={Chi2,"red"};
 
 
-(* with ycohscf, {Chi2,"red"}, with dI *)
-OutDir="MathematicaOut/SSS_4to1dil_004/";
-expfileconc={"export/im_0047273_caz_s-scaled_sIdI.chi",0.01}; (* use scaling factor since conc is not really known *)
-Nmaxsp=6;
-FitMethod="DifferentialEvolution";
-FitMaxIt=1000;
-FitTarF={Chi2,"red"};
+	(* with ycohscf, T *)
+	OutDir="MathematicaOut/SSS_4to1dil_003/";
+	expfileconc={"export/im_0047273_caz_s-scale.chi",0.01}; (* use scaling factor since conc is not really known *)
+	Nmaxsp=6;
+	FitMethod="DifferentialEvolution";
+	FitMaxIt=1000;
 
 
-(* with ycohscf, {Chi2,"red"}, with dI, FindMinimum *)
-OutDir="MathematicaOut/SSS_4to1dil_005/";
-expfileconc={"export/im_0047273_caz_s-scaled_sIdI.chi",0.01}; (* use scaling factor since conc is not really known *)
-Nmaxsp=6;
-Nmaxst=0;
-FitFunc=FindMinimum;
-FitMethod="Automatic";
+	(* with ycohscf, {Chi2,"red"}, with dI *)
+	OutDir="MathematicaOut/SSS_4to1dil_004/";
+	expfileconc={"export/im_0047273_caz_s-scaled_sIdI.chi",0.01}; (* use scaling factor since conc is not really known *)
+	Nmaxsp=6;
+	FitMethod="DifferentialEvolution";
+	FitMaxIt=1000;
+	FitTarF={Chi2,"red"};
 
 
-(* with ycohscf, {Chi2,"red"}, with dI, postprocess DiffEvol *)
-OutDir="MathematicaOut/SSS_4to1dil_006/";
-expfileconc={"export/im_0047273_caz_s-scaled_sIdI.chi",0.01}; (* use scaling factor since conc is not really known *)
-Nmaxsp=6;
-FitMethod={"DifferentialEvolution","PostProcess"->True};
-FitMaxIt=1000;
-FitTarF={Chi2,"red"};
+	(* with ycohscf, {Chi2,"red"}, with dI, FindMinimum *)
+	OutDir="MathematicaOut/SSS_4to1dil_005/";
+	expfileconc={"export/im_0047273_caz_s-scaled_sIdI.chi",0.01}; (* use scaling factor since conc is not really known *)
+	Nmaxsp=6;
+	Nmaxst=0;
+	FitFunc=FindMinimum;
+	FitMethod="Automatic";
 
 
-(* with ycohscf, {Chi2,"red"}, with dI, postprocess RandomSearch with InteriorPoint *)
-OutDir="MathematicaOut/SSS_4to1dil_007/";
-expfileconc={"export/im_0047273_caz_s-scaled_sIdI.chi",0.01}; (* use scaling factor since conc is not really known *)
-Nmaxsp=6;
-FitMethod={"RandomSearch","PostProcess"->"InteriorPoint"};
-Fitsmin=0.01;
-Fitsmax=0.37;
-FitMaxIt=1000;
-FitTarF={Chi2,"red"};
-ParStart={{"c1",True,0.0},{"c2",True,0.1},{"c3",True,0.4},{"c4",True,0.4},{"c5",True,0.1},{"c6",True,0.0},{"rhoisl",True,0,"270<#<360"},{"rhoosl",True,0,"270<#<360"},{"rhodm",True,0,"333<#<345"},{"Xa",True,0.005,"0.001<#<0.009"}};
-
-same ParStart and s-range for others
+	(* with ycohscf, {Chi2,"red"}, with dI, postprocess DiffEvol *)
+	OutDir="MathematicaOut/SSS_4to1dil_006/";
+	expfileconc={"export/im_0047273_caz_s-scaled_sIdI.chi",0.01}; (* use scaling factor since conc is not really known *)
+	Nmaxsp=6;
+	FitMethod={"DifferentialEvolution","PostProcess"->True};
+	FitMaxIt=1000;
+	FitTarF={Chi2,"red"};
 
 
+	(* with ycohscf, {Chi2,"red"}, with dI, postprocess RandomSearch with InteriorPoint *)
+	OutDir="MathematicaOut/SSS_4to1dil_007/";
+	expfileconc={"export/im_0047273_caz_s-scaled_sIdI.chi",0.01}; (* use scaling factor since conc is not really known *)
+	Nmaxsp=6;
+	FitMethod={"RandomSearch","PostProcess"->"InteriorPoint"};
+	Fitsmin=0.01;
+	Fitsmax=0.37;
+	FitMaxIt=1000;
+	FitTarF={Chi2,"red"};
+	ParStart={{"c1",True,0.0},{"c2",True,0.1},{"c3",True,0.4},{"c4",True,0.4},{"c5",True,0.1},{"c6",True,0.0},{"rhoisl",True,0,"270<#<360"},{"rhoosl",True,0,"270<#<360"},{"rhodm",True,0,"333<#<345"},{"Xa",True,0.005,"0.001<#<0.009"}};
 
--> Chi2 with dI seems to work as good as T (log Chi2) for the unloaded sample.
+	same ParStart and s-range for others
+
+
+	-> Chi2 with dI seems to work as good as T (log Chi2) for the unloaded sample
 
 
 
+####################################
+native SSS 0p0 and loaded suspension
+####################################
 
 run_BatchMultiFit_20181130.m
 
-(* with ycohscf, T *)
-OutDir="MathematicaOut/SSS_3pBC_native_001/";
-expfileconc={"export/im_0047237_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
-Nmaxsp=5;
-FitFunc=NMinimize;
-FitMethod="DifferentialEvolution";
-Fitsmin=0.01;
-Fitsmax=0.37;
-FitMaxIt=1000;
-FitTarF=T;
-ParStart={{"c1",True,0.0},{"c2",True,0.3},{"c3",True,0.4},{"c4",True,0.3},{"c5",True,0.0},{"rhoisl",True,0,"270<#<370"},{"rhoosl",True,0,"270<#<370"},{"rhodm",True,0,"333<#<345"},{"Xa",True,0.005,"0.006<#<0.018"}};
+	use T vs Chi2Red Min algs with 20% conc. and small scaling factors
+
+	(* with ycohscf, T *)
+	OutDir="MathematicaOut/SSS_3pBC_native_001/";
+	expfileconc={"export/im_0047237_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
+	Nmaxsp=5;
+	FitFunc=NMinimize;
+	FitMethod="DifferentialEvolution";
+	Fitsmin=0.01;
+	Fitsmax=0.37;
+	FitMaxIt=1000;
+	FitTarF=T;
+	ParStart={{"c1",True,0.0},{"c2",True,0.3},{"c3",True,0.4},{"c4",True,0.3},{"c5",True,0.0},{"rhoisl",True,0,"270<#<370"},{"rhoosl",True,0,"270<#<370"},{"rhodm",True,0,"333<#<345"},{"Xa",True,0.005,"0.006<#<0.018"}};
 
 
-(* with ycohscf, T *)
-OutDir="MathematicaOut/SSS_5pBC_native_001/";
-expfileconc={"export/im_0047239_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
-Nmaxsp=5;
-FitFunc=NMinimize;
-FitMethod="DifferentialEvolution";
+	(* with ycohscf, T *)
+	OutDir="MathematicaOut/SSS_5pBC_native_001/";
+	expfileconc={"export/im_0047239_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
+	Nmaxsp=5;
+	FitFunc=NMinimize;
+	FitMethod="DifferentialEvolution";
 
 
-(* with ycohscf, T *)
-OutDir="MathematicaOut/SSS_7p5pBC_native_001/";
-expfileconc={"export/im_0047240_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
-Nmaxsp=5;
-FitFunc=NMinimize;
-FitMethod="DifferentialEvolution";
+	(* with ycohscf, T *)
+	OutDir="MathematicaOut/SSS_7p5pBC_native_001/";
+	expfileconc={"export/im_0047240_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
+	Nmaxsp=5;
+	FitFunc=NMinimize;
+	FitMethod="DifferentialEvolution";
 
 
-(* with ycohscf, T, fixed rhoisl to BC *)
-OutDir="MathematicaOut/SSS_3pBC_native_002/";
-expfileconc={"export/im_0047237_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
-Nmaxsp=5;
-FitFunc=NMinimize;
-FitMethod="DifferentialEvolution";
+	(* with ycohscf, T, fixed rhoisl to BC *)
+	OutDir="MathematicaOut/SSS_3pBC_native_002/";
+	expfileconc={"export/im_0047237_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
+	Nmaxsp=5;
+	FitFunc=NMinimize;
+	FitMethod="DifferentialEvolution";
 
 
-(* with ycohscf, T, fixed rhoisl to BC *)
-OutDir="MathematicaOut/SSS_5pBC_native_002/";
-expfileconc={"export/im_0047239_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
-Nmaxsp=5;
-FitFunc=NMinimize;
-FitMethod="DifferentialEvolution";
+	(* with ycohscf, T, fixed rhoisl to BC *)
+	OutDir="MathematicaOut/SSS_5pBC_native_002/";
+	expfileconc={"export/im_0047239_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
+	Nmaxsp=5;
+	FitFunc=NMinimize;
+	FitMethod="DifferentialEvolution";
 
 
-(* with ycohscf, T, fixed rhoisl to BC *)
-OutDir="MathematicaOut/SSS_7p5pBC_native_002/";
-expfileconc={"export/im_0047240_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
-Nmaxsp=5;
-FitFunc=NMinimize;
-FitMethod="DifferentialEvolution";
+	(* with ycohscf, T, fixed rhoisl to BC *)
+	OutDir="MathematicaOut/SSS_7p5pBC_native_002/";
+	expfileconc={"export/im_0047240_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
+	Nmaxsp=5;
+	FitFunc=NMinimize;
+	FitMethod="DifferentialEvolution";
 
 
-(* with ycohscf, T, fixed rhoosl to BC *)
-OutDir="MathematicaOut/SSS_3pBC_native_003/";
-expfileconc={"export/im_0047237_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
-Nmaxsp=5;
-FitFunc=NMinimize;
-FitMethod="DifferentialEvolution";
+	(* with ycohscf, T, fixed rhoosl to BC *)
+	OutDir="MathematicaOut/SSS_3pBC_native_003/";
+	expfileconc={"export/im_0047237_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
+	Nmaxsp=5;
+	FitFunc=NMinimize;
+	FitMethod="DifferentialEvolution";
 
 
-(* with ycohscf, T, fixed rhoosl to BC *)
-OutDir="MathematicaOut/SSS_5pBC_native_003/";
-expfileconc={"export/im_0047239_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
-Nmaxsp=5;
-FitFunc=NMinimize;
-FitMethod="DifferentialEvolution";
+	(* with ycohscf, T, fixed rhoosl to BC *)
+	OutDir="MathematicaOut/SSS_5pBC_native_003/";
+	expfileconc={"export/im_0047239_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
+	Nmaxsp=5;
+	FitFunc=NMinimize;
+	FitMethod="DifferentialEvolution";
 
 
-(* with ycohscf, T, fixed rhoosl to BC *)
-OutDir="MathematicaOut/SSS_7p5pBC_native_003/";
-expfileconc={"export/im_0047240_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
-Nmaxsp=5;
-FitFunc=NMinimize;
-FitMethod="DifferentialEvolution";
+	(* with ycohscf, T, fixed rhoosl to BC *)
+	OutDir="MathematicaOut/SSS_7p5pBC_native_003/";
+	expfileconc={"export/im_0047240_caz_s-scaled_sIdI.chi",0.2}; (* scale with approx. overall SSS onc *)
+	Nmaxsp=5;
+	FitFunc=NMinimize;
+	FitMethod="DifferentialEvolution";
+
+
+
+
+####################################
+dilute SSS 0p0 and loaded suspension
+####################################
+
+expdata (use SSS conc):
+expfileconc={"export/im_0051238_caz_CapA_0p0BC_1to5dil-H2O_s-scaled_sIdI.chi",0.0317};
+expfileconc={"export/im_0051239_caz_CapB_3p0BC_1to5dil-H2O_s-scaled_sIdI.chi",0.0267};
+expfileconc={"export/im_0051247_caz_CapA_5p0BC_1to5dil-H2O_s-scaled_sIdI.chi",0.0233};
+expfileconc={"export/im_0051251_caz_CapA_7p5BC_1to5dil-H2O_s-scaled_sIdI.chi",0.0192};
+
+
+
+
+run_BatchMultiFit_20190110.m
+
+	Yfiles (normalized with VCRY):
+	disl=4:2:20, dosl=4:2:20
+	Nsp=6
+	YFileList=FileNames[YFileDir<>"SSS_180x360_P*_ST_360_400_N100.log"];
+
+
+	(* with 0.8 < ycohscf < 1.2, T *)
+	OutDir="MathematicaOut/SSS_*BC_1to5dil_001/";
+
+	(* with 0.8 < ycohscf < 1.2, ChiRed2 *)
+	OutDir="MathematicaOut/SSS_*BC_1to5dil_002/";
+
+	(*
+	for both 001 and 002 chiXn1 scale factor is always at maximum of 1.2, that means a conc of 1.2*3.17=3.80%
+	for old 1:4 dil data simulations gave 7.02*1.0=7.02%
+
+	After correction for thickness difference, old data is 1.5/1.2 too low, thus 7.02*1.0*1.5/1.2=8.78%
+
+	different SSS conc.
+	1:4 19/5=3.80%
+	1:5 19/5=3.17%
+
+	allow a chiXn1 of [0.5,2.0] in 003 and 004
+	*)
+
+
+	(* with 0.5 < ycohscf < 2, T *)
+	OutDir="MathematicaOut/SSS_*BC_1to5dil_003/";
+
+	best fits (T):
+	BC 	Tmin	disl	dosl
+	0p0	2.49652	18	14
+	3p0	1.91418	18	20
+	5p0	1.87615	18	20
+	7p5	1.6957	18	18
+
+
+	(* with 0.5 < ycohscf < 2, ChiRed2 *)
+	OutDir="MathematicaOut/SSS_*BC_1to5dil_004/";
+
+	best fits (Chi2Red):
+	BC 	Chi2Redmin	disl	dosl
+	0p0	4.36958		16	14
+	3p0	3.16298		04	04
+	5p0	3.20222		04	04
+	7p5	2.36722		04	10
+
+
+	-> as for old data chiXn1 (1.93-1.97) is about two times too high, do same as 003 and 004 for loaded samples
+	-> disl and dosl quite distinct btw Tmin and Chi2Red opt.
+
+	-> cause of high loading of stabilizers and BC thicker shells should be simulated
+
+
+run_BatchMultiFit_20190120.m
+run_BatchMultiFit_20190121.m
+run_BatchMultiFit_20190122.m
+run_BatchMultiFit_20190123.m
+
+
+	Yfiles (normalized with VCRY):
+	disl=4:4:144, dosl=4:4:144, disl+dosl<150
+	Nsp=6 
+	YFileList=FileNames[YFileDir<>"SSS_180x360_P*_ST_360_400_N50.log"];
+
+	(* with 0.5 < ycohscf < 2, T *)
+	OutDir="MathematicaOut/SSS_*BC_1to5dil_005/";
+
+	best fits (T):
+	BC 	Tmin	disl	dosl
+	0p0	2.50882	020	012	and around (incl 12/20), quite some diff btw good and bad fits, ~ 340 350 340, ici 3.6-3.8, c3+c4 ~ 0.8, chiXn ~1.95
+	3p0	1.83615	012	040	and around (8-16/20-52), quite some diff btw good and bad fits, ~ 325 345 338, ici 3.1-3.3, cis 0.1-0.2 0.1 0.45 0.2 0.1 0.05, chiXn ~1.7-1.8
+	5p0	1.79714	012	040	and around (8-16/20-52), quite some diff btw good and bad fits, ~ 325 340-345 337, ici 2.8-3.0, cis 0.15 0.15 0.5 0.2 0.1 0.05, chiXn ~1.9
+	7p5	1.70363	012	084	and around (8-16/4-144), some diff btw good and bad fits, ~ 325 334 334, ici 2.4-2.6, cis 0.3 0.15 0.5 0.1 0.05 0.0, chiXn ~1.9, dosl completely ill-defined, but dosl rhoosl also not bound since rhoosl is for most good fits around 337
+
+
+	(* with 0.5 < ycohscf < 2, ChiRed2 *)
+	OutDir="MathematicaOut/SSS_*BC_1to5dil_006/";
+
+	best fits (Chi2Red):
+	BC 	Tmin	disl	dosl
+	0p0	4.62633	012	020	and 2 others around, quite some diff btw good and bad fits, ~ 335 350 340, ici 3.6-3.8, c3+c4 ~ 0.8, chiXn ~1.95
+	3p0	2.40822	012	040	and 2 others around, some diff btw good and bad fits, ~ 325 340 338, ici 3.1, cis 0.15 0.1 0.4 0.15 0.15 0.05, chiXn ~1.8
+	5p0	2.89352	012	040	and 4 others around, some diff btw good and bad fits, ~ 325 338 337, ici 2.9, cis 0.2 0.1 0.5 0.15 0.1 0.0, chiXn ~1.95
+	7p5	1.49595	012	088	and around (12/76-108), some diff btw good and bad fits, ~ 323 334 334, ici 2.4, cis 0.3 0.15 0.5 0.05 0.05 0.0, chiXn 2.0
+
+
+	-> more or less same best fits btw 005 and 006, however good fits range much less in 006 due to non-logarithmic Chi2 design.
+	-> with more BC chiXn1 increases to limit 2, while rhodm decreases from 340 to 334, too providing also higher intensities
+	-> fixing rhodm to 334 will fail, however within 1%, i.e. [330.5,337.5] might still work for all sets
+	-> with higher BC loading, SLD of osl decreases to rhodm, while dosl significantly increases
+
+		dtot	ici	dtot_exp (from xls using ici and composition)
+	0p0	32	3.7	48
+	3p0	52	3.1	61
+	5p0	52	2.9	75
+	7p5	ca. 100	2.4	87
+
+	-> wuerde wrt ED and disl & dosl bis auf 0p0 relativ gut mit model passen dass isl=PC+ATOC und OSL=TW80+BC
+	-> 0p0 sonderfall, rhoisl zu hoch dafuer (disl passt), rhoosl passt, aber dosl zu klein, rhodm generell zu hoch fuer 0p0 (340)
+	-> also ATOC und PC bevorzugt auf SSS, darueber legt sich dann BC und TW80
+	-> chiXn1 weiterhin problematisch
+	-> rhodm largest for 0p0 where TW80 is missing in osl, monomers in solution, which decrease when adding BC, since rhodm converges to rhodm(H2O) for higher loadings
+
+
+
+
+new simulations with VOSL norm. and phi_tot scaling instead of VCRY norm. and phi_cry scaling
+
+
+expdata (use total lipid conc):
+expfileconc={"export/im_0051238_caz_CapA_0p0BC_1to5dil-H2O_s-scaled_sIdI.chi",0.05};
+expfileconc={"export/im_0051239_caz_CapB_3p0BC_1to5dil-H2O_s-scaled_sIdI.chi",0.05};
+expfileconc={"export/im_0051247_caz_CapA_5p0BC_1to5dil-H2O_s-scaled_sIdI.chi",0.05};
+expfileconc={"export/im_0051251_caz_CapA_7p5BC_1to5dil-H2O_s-scaled_sIdI.chi",0.05};
+
+
+run_BatchMultiFit_20190125.m
+
+
+	Yfiles (normalized with VOSL):
+	disl=4:4:144, dosl=4:4:144, disl+dosl<150
+	Nsp=6 
+	YFileList=FileNames[YFileDir<>"SSS_180x360_P*_ST_360_400_N50_OSL.log"];
+
+	(* with 0.5 < ycohscf < 2, T *)
+	OutDir="MathematicaOut/SSS_*BC_1to5dil_OSL_005/";
+
+	best fits (T):
+	BC 	Tmin	disl	dosl
+	0p0	2.50882	020	012	and around (incl 12/20), quite some diff btw good and bad fits, ~ 340 350 340, ici 3.6-3.8, c3+c4 ~ 0.8, chiXn ~1.95
+	3p0	1.83615	012	040	and around (8-16/20-52), quite some diff btw good and bad fits, ~ 325 345 338, ici 3.1-3.3, cis 0.1-0.2 0.1 0.45 0.2 0.1 0.05, chiXn ~1.7-1.8
+	5p0	1.79714	012	040	and around (8-16/20-52), quite some diff btw good and bad fits, ~ 325 340-345 337, ici 2.8-3.0, cis 0.15 0.15 0.5 0.2 0.1 0.05, chiXn ~1.9
+	7p5	1.68604	004	004	and around (8-16/4-144), some diff btw good and bad fits, ~ 325 334 334, ici 2.4-2.6, cis 0.3 0.15 0.5 0.1 0.05 0.0, chiXn ~1.9, dosl completely ill-defined, but dosl rhoosl also not bound since rhoosl is for most good fits around 337
+
+	-> except 7p5 the best fits are the same for VOSL approach as for VCRY
+
+
+	(* with 0.5 < ycohscf < 2, ChiRed2 *)
+	OutDir="MathematicaOut/SSS_*BC_1to5dil_OSL_006/";
+
+	best fits (Chi2Red):
+	BC 	Tmin	disl	dosl
+	0p0	4.62633	012	020	and 2 others around, quite some diff btw good and bad fits, ~ 335 350 340, ici 3.6-3.8, c3+c4 ~ 0.8, chiXn ~1.95
+	3p0	2.40823	012	040	and 2 others around, some diff btw good and bad fits, ~ 325 340 338, ici 3.1, cis 0.15 0.1 0.4 0.15 0.15 0.05, chiXn ~1.8
+	5p0	2.24334	004	008	and 4 others around, some diff btw good and bad fits, ~ 325 338 337, ici 2.9, cis 0.2 0.1 0.5 0.15 0.1 0.0, chiXn ~1.95
+	7p5	1.85304	012	068	and around (12/76-108), some diff btw good and bad fits, ~ 323 334 334, ici 2.4, cis 0.3 0.15 0.5 0.05 0.05 0.0, chiXn 2.0
+
+	-> for 0p0 and 3p0 same best fits for VOSL approach as for VCRY
+
+
+
+
+
+
+
+
+run_BatchMultiFit_20190126.m
+
+	(* with 0.75 < ycohscf < 1.25, T and rhodm fixed to 334 *)
+	OutDir="MathematicaOut/SSS_[0,3]BC_1to5dil_OSL_007/";
+
+	best fits (T):
+	BC 	Tmin	disl	dosl
+	0p0	6.36633	024	004
+	3p0	2.96968	004	036	(only 266 out of 666 sim. fitted)
+
+	-> does not fit well 0p0 data
+
+
+
+run_BatchMultiFit_20190130.m
+
+	(* with 0.5 < ycohscf < 2, T and rhodm in [330.5,337.5] *)
+	OutDir="MathematicaOut/SSS_*BC_1to5dil_OSL_009/";
+
+	BC 	Tmin	disl	dosl
+	0p0	4.04751	024	004
+
+	-> does not fit well 0p0 data
+
+
+
+
 

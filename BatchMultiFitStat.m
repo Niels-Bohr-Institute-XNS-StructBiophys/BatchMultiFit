@@ -173,7 +173,7 @@ If[(k==1)||(k>(1+Nsp)),Export[outdir<>"pl_"<>StringReplace[lablist[[k]]," "->"_"
 PlRange={0.97*Min[#],1.03*Max[#]}&@data[[All,3+k]];
 (* min point for individual WhiskerBox plots done via Epilog, combination of ListPlot and BoxWhiskerChart works only in Mathematica < 11.3 *)
 (* plmin=ListPlot[{mindata[[1,3+k]]},PlotStyle->{Red,PointSize[Large]}]; *)
-box=BoxWhiskerChart[data[[All,3+k]],"Mean",ChartLabels->lablist[[k]],PlotLabel->lablist[[k]]<>" all",BarSpacing->1,Epilog->{Red,PointSize[0.01],Point[{0.75,mindata[[1,3+k]]}]}];
+box=BoxWhiskerChart[data[[All,3+k]],"Mean",ChartLabels->lablist[[k]],PlotLabel->lablist[[k]]<>" all",GridLines -> {None,Automatic},BarSpacing->1,Epilog->{Red,PointSize[0.01],Point[{0.75,mindata[[1,3+k]]}]}];
 If[(k==1)||( k>(1+Nsp+3)),Export[outdir<>"box_"<>StringReplace[lablist[[k]]," "->"_"]<>"_all.png",Show[box,PlotRange->PlRange],"PNG",ImageSize->OptionValue[ImageSize]];];
 (* WhiskerBox stat plots for bestdata *)
 box=BoxWhiskerChart[bestdata[[All,3+k]],"Mean",ChartLabels->lablist[[k]],PlotLabel->lablist[[k]]<>" best",BarSpacing->1,Epilog->{Red,PointSize[0.01],Point[{0.75,mindata[[1,3+k]]}]}];

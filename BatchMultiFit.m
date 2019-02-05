@@ -207,6 +207,7 @@ set
 Clear[T]
 (*
   - with scaling function scf e.g. Log or Identity,
+  - in case of Log the Residuals resemble those of Hub / Henriques+Skepoe papers [ log(I_exp) - log( ycohscf * I_mod + a ) ]^2
   - individual scaling factors for coherent y contributions (ycohscf) for each set are possible (e.g. if concentration or abs units are not exactly the same)
   - individual scaling factors for residuals (Tscf) of each set are possible
   - respect different intensities and number of points between different data sets by Normyexp, which includes both effects
