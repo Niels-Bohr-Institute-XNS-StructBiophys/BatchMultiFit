@@ -526,15 +526,22 @@ WriteString[stream,"\n"];,{i,1,Nset}];
 Do[{Nsp,Nst,fsp[[i]],fst[[i]]}=loadY[RetVecIF,YFileDir<>YFile[[Ymode[[i]]]],set[[i]],Xnmode[[i]],expfileconc[[i,2]],Smear[[i]],Nmaxsp,Nmaxst,True,WriteString[stream,#<>"\n"]&];
 WriteString[stream,"\n"];
 ,{i,1,Nset}];
+
+(* Print PartStart array *)
+WriteString[stream,"ParStart = "<>ToString[ParStart]<>"\n"];
+WriteString[stream,"\n"];
+
 (* apply checks for number of parameters and presence of initial value if fixed *)
 If[Length[ParStart]!=(Nsp+Nst+4*Nset),Print["There must be "<>ToString[Nsp+Nst+4*Nset]<>" fit parameters. Exit."];Exit[];];
 Do[If[ParStart[[i,2]]==False&&Length[ParStart[[i]]]<3,Print["Parameter "<>ParStart[[i,1]]<>" is fixed, but no value is provided. Exit."];Exit[];];,{i,1,Length[ParStart]}];(* in the following we know that all fixed values are given *)
+
 (* Argument list for fit function *)
 (* when cdConstr[[1]]==True check that all c_i are fixed, Nsp>0 and normalize the sum of all c_i to 1.0 *)
 If[cdConstr[[1]]==True&&Nsp==0,Print["Nsp must be >0 if cdConstr[[1]]==True. Exit."];Exit[];];(* in the following we know that Nsp>0 *)
 If[cdConstr[[1]]==True&&Norm[ParStart[[1;;Nsp,2]]/.{True->0,False->1},1]!=Nsp,Print["All c_i must be fixed when cdConstr[[1]]==True. Exit."];Exit[];];(* in the following we know that for all Nsp c_i fixed values are given *)
 If[cdConstr[[1]]==True,ParStart[[1;;Nsp,3]]/=Total[ParStart[[1;;Nsp,3]]];];(* in the following we know that sum(c_i)=1 *)
 If[cdConstr[[1]]==True,If[cdConstr[[2,2]]==False&&Length[cdConstr[[2]]]<3,Print["Parameter "<>cdConstr[[2,1]]<>" is fixed, but no value is provided. Exit."];Exit[];];];
+
 (* get number from upper boundary of LicoConstr *)
 LicoConstr2Num=StringReplace[LicoConstr[[2]],{"="->"","<"->"",">"->""}];
 (* c's and d's *)
@@ -542,16 +549,20 @@ count=0;
 (* when cdConstr[[1]]==True, c_i->c_i*chi, d_i->d_i*(#2-chi) *)
 dummy=dummy2="";
 If[cdConstr[[1]]==True,dummy3=If[cdConstr[[2,2]]==True,1,3];dummy=cdConstr[[2,dummy3]]<>"*";dummy2="("<>LicoConstr2Num<>"-"<>cdConstr[[2,dummy3]]<>")*";];
+
 (* start to assemble FitArgList *)
 FitArgList="{"<>StringJoin[Table[dummy<>If[ParStart[[i,2]],ParStart[[i,1]],ToString[ParStart[[i,3]]]]<>",",{i,1,Nsp}]]<>StringJoin[Table[dummy2<>If[ParStart[[Nsp+i,2]],ParStart[[Nsp+i,1]],ToString[ParStart[[Nsp+i,3]]]]<>",",{i,1,Nst}]];
 count+=Nsp+Nst;
+
 (* contrasts and background *)
 Do[Do[FitArgList=FitArgList<>If[ParStart[[count+j,2]],ParStart[[count+j,1]],ToString[ParStart[[count+j,3]]]]<>",",{j,1,4}];count+=4;,{i,1,Nset}];
 (* chiXn{i} variables for the i-th set *)
 Do[FitArgList=FitArgList<>If[ycohscf[[i,1]]==True,"chiXn"<>ToString[i],ToString[ycohscf[[i,2]]]]<>",";,{i,1,Nset}];
+
 (* terminate string and transform to an expression *)
 FitArgList=StringDrop[FitArgList,-1]<>"}";
 FitArgList=ToExpression[FitArgList];
+
 (* basic constraints for linear coefficients c_i and d_i *)
 count=0;
 (* >0 for those c_i and d_i that will be optimized *)
@@ -563,6 +574,7 @@ If[Length[Cases[ParStart[[1;;Nsp+Nst,2]],True]]>1,FitConstrList=FitConstrList<>L
 FitConstrList=StringDrop[FitConstrList,-1]<>LicoConstr[[2]]<>",";
 ];
 count+=Nsp+Nst;
+
 (* additional userdefined constraints especially for rho's and sld's, ignore multiplicities of parameters for different datasets !!! *)
 (* set >0 for those Xa_i's and na_i's that will be optimized if no other constraints are given for them e.g. {Xa1,True} -> Xa1>0, {Xa1,True,0.0,"#>0.1"} -> Xa1>0.1 *)
 Do[Do[If[Count[ParStart[[Nsp+Nst+1;;count+j,1]],ParStart[[count+j,1]]]==1,dummy=If[ParStart[[count+j,2]]&&Length[ParStart[[count+j]]]==4,StringReplace[ParStart[[count+j,4]],"#"->ParStart[[count+j,1]]]<>",",""];If[(j==4)&&ParStart[[count+j,2]]&&(Length[ParStart[[count+j]]]<4),dummy=ParStart[[count+j,1]]<>">0.0,";(* else do nothing *)];If[dummy!="",WriteString[stream,ToString[dummy]<>"\n"];];FitConstrList=FitConstrList<>dummy;];
@@ -571,16 +583,20 @@ Do[Do[If[Count[ParStart[[Nsp+Nst+1;;count+j,1]],ParStart[[count+j,1]]]==1,dummy=
 count+=4;
 ,{i,1,Nset}];
 WriteString[stream,"\n"];
+
 (* chiXn{i} constraints if provided *)
 Do[If[ycohscf[[i,1]]&&Length[ycohscf[[i]]]==3,FitConstrList=FitConstrList<>StringReplace[ycohscf[[i,3]],"#"->"chiXn"<>ToString[i]]<>",";];,{i,1,Nset}];
 (* chi constraint if cdConstr[[1]]==True *)
 If[cdConstr[[1]]==True,FitConstrList=FitConstrList<>If[Length[cdConstr[[2]]]>3,StringReplace[cdConstr[[2,4]],"#"->cdConstr[[2,1]]],"0.0<"<>cdConstr[[2,1]]<>StringReplace[LicoConstr[[2]],"=="->"<"]]<>",";];
+
 (* constraints from AddConstraints, use YFileListGlobal in AddConstraints to access stabilizer layer thicknesses *)
 AddConstraintsY=ToString[#,InputForm]&/@Evaluate/@ToExpression/@AddConstraints;
 FitConstrList=FitConstrList<>StringJoin[#<>","&/@AddConstraintsY];
+
 (* finish FitConstrList *)
 FitConstrList=StringDrop[FitConstrList,-1]<>"}";
 FitConstrList=ToExpression[FitConstrList];
+
 (* parameters names (and initial values for FindMinimum) for fit functions, ignore multiplicities of parameters for different datasets !!!, list only those that shall be optimized (True) *)
 (* for NMinimize no initial values are possible, if provided they will be ignored *)
 If[ToString[FitFunc]!="NMinimize"&&ToString[FitFunc]!="FindMinimum",Print["Unknown Fit Function "<>ToString[FitFunc]<>". Exit."];Exit[];];
@@ -592,6 +608,7 @@ Do[Do[If[Count[ParStart[[Nsp+Nst+1;;count+j,1]],ParStart[[count+j,1]]]==1&&ParSt
 (* count=Nsp+Nst+(i-1)*4 *)
 count+=4;
 ,{i,1,Nset}];
+
 (* chiXn{i} *)
 Do[If[ycohscf[[i,1]]==True,AppendTo[FitStartList,If[ToString[FitFunc]=="NMinimize","chiXn"<>ToString[i],{"chiXn"<>ToString[i],ycohscf[[i,2]]}]]];,{i,1,Nset}];
 (* chi use by default initial value 0.0 (only stacks) *)
@@ -600,6 +617,7 @@ FitStartList=ToExpression[FitStartList];
 (* write to logfile *)
 WriteString[stream,ToString[FitFunc]<>"["<>ToString[FitTarF[[1]]]<>"["<>ToString[FitArgList]<>","<>ToString[Nsp]<>","<>ToString[Nst]<>","<>"<set>"<>","<>"<fsp>"<>","<>"<fst>"<>","<>ToString[Tscf]<>","<>ToString[FitTarF[[2]]]<>"]"<>","<>ToString[FitConstrList,InputForm]<>"},"<>ToString[FitStartList]<>", MaxIterations->"<>ToString[FitMaxIt]<>", Method->"<>ToString[FitMethod]<>", StepMonitor:>it++]"<>"\n"];
 WriteString[stream,"\n"];
+
 (* start fitting procedure *)
 it=0;
 If[
@@ -612,6 +630,7 @@ WriteString[stream,"\n"];
 FitOut=FitFunc@@{{FitTarF[[1]]@@{FitArgList,Nsp,Nst,set,fsp,fst,Tscf,FitTarF[[2]]},FitConstrList},FitStartList,MaxIterations->FitMaxIt,Method->FitMethod,StepMonitor:> it++};,
 (* plot only, it=0, Residual=0, fitted parameters==initial values -> all initial values must be provided, also chiXn(via ycohscf) and chi(via cdConstr), plscf and LicoConstr(via c_i) can be considered *)
 WriteString[stream,"Creating plots only, fitting is deactivated\n"];
+
 (* when cdConstr[[1]]==True, c_i->c_i*chi, d_i->d_i*(#2-chi) *)
 dummy=dummy2="";
 If[cdConstr[[1]]==True,dummy3=If[cdConstr[[2,2]]==True,1,3];dummy=cdConstr[[2,dummy3]]<>"*";dummy2="("<>LicoConstr2Num<>"-"<>cdConstr[[2,dummy3]]<>")*";];
@@ -623,11 +642,21 @@ Do[If[ycohscf[[i,1]]==True,dummy4=dummy4<>"chiXn"<>ToString[i]<>"->"<>ToString[y
 dummy4=StringDrop[dummy4,-1]<>"}";
 FitOut={0,ToExpression[dummy4]};
 ];
+
 (* don't use AppendTo[FitOutList,FitOut]; -> order will not match order in YFileListGlobal *)
 FitOutList[[Y]]=FitOut;
 Par=FitOut[[2]];
+
+(* write fit parameters *)
+WriteString[stream,"Fitted parameters:\n"];
 Do[WriteString[stream,StringReplace[#,{"->"->"=","*^"->"*10^"}]&@ToString[#,InputForm]&@Par[[i]]<>"\n"];,{i,1,Length[Par]}];
 WriteString[stream,"\n"];
+
+(* write fixed parameters (if fit-flag was set to False) *)
+WriteString[stream,"Fixed parameters:\n"];
+Do[If[ParStart[[i,2]]==False,WriteString[stream,ToString[#,InputForm]&@ParStart[[i,3]]<>"\n"]];,{i,1,Length[ParStart]}];
+WriteString[stream,"\n"];
+
 (* create plot of experimental and fit data, compute Residuals *)
 (* when cdConstr[[1]]==True, c_i->c_i*chi, d_i->d_i*(#2-chi) *)
 dummy=dummy2="";
@@ -636,11 +665,13 @@ PlotArgList="{";
 PlotArgList=PlotArgList<>StringJoin[Table[dummy<>If[ParStart[[i,2]],ParStart[[i,1]],ToString[ParStart[[i,3]]]]<>",",{i,1,Nsp}]];
 PlotArgList=PlotArgList<>StringJoin[Table[dummy2<>If[ParStart[[i,2]],ParStart[[i,1]],ToString[ParStart[[i,3]]]]<>",",{i,Nsp+1,Nsp+Nst}]];
 PlotArgList=PlotArgList<>StringJoin[Table[If[ParStart[[i,2]],ParStart[[i,1]],ToString[ParStart[[i,3]]]]<>",",{i,Nsp+Nst+1,Length[ParStart]}]];
+
 (* include also chiXn{i} *)
 Do[PlotArgList=PlotArgList<>If[ycohscf[[i,1]]==True,"chiXn"<>ToString[i],ToString[ycohscf[[i,2]]]]<>",";,{i,1,Nset}];
 PlotArgList=StringDrop[PlotArgList,-1]<>"}";
 PlotArgList=ToExpression[PlotArgList]/.Par;
 If[cdConstr[[1]]==True,chi=If[cdConstr[[2,2]]==True,ToExpression[cdConstr[[2,1]]]/.Par,cdConstr[[2,3]]];];
+
 (* Residual value over the whole fit-range for all sets and for each set *)
 Residual={FitOut[[1]]};
 Do[dummy=Join[PlotArgList[[1;;Nsp+Nst]],PlotArgList[[Nsp+Nst+1+(i-1)*4;;Nsp+Nst+i*4]],{PlotArgList[[Nsp+Nst+4*Nset+i]]}];
@@ -681,6 +712,7 @@ WriteString[stream,"Chi2Red function values = "<>StringJoin[Riffle[ToString/@N[C
 WriteString[stream,"LogdI function values = "<>StringJoin[Riffle[ToString/@N[LogdIResidual[[1;;1+Nset]],4],", "]]<>"\n"];
 WriteString[stream,"Target function value (Braggpeak range) = "<>StringJoin[Riffle[ToString/@N[Residual[[2+Nset;;]],4],", "]]<>"\n"];
 WriteString[stream,"\n"];
+
 (* plot *)
 pexpfitList={};pBarChartList={};ImgSizeUnit=320;
 Do[
@@ -694,11 +726,13 @@ If[ExportFlag==True,Export[OutDir<>YFile[[1]]<>"_set_"<>ToString[i]<>"_fit.dat",
 AppendTo[pexpfitList,ListLogLogPlot[dummy2,Joined->True,PlotStyle->{col[[i,2]],Thick},PlotRange->PlRange,PlotMarkers->{Automatic,Small}]];
 ,{i,1,Nset}];
 pexpfit=Show[pexpfitList,Frame->True,PlotLabel->Style[Framed[ToString[OutDir]<>ToString[YFile[[1]]]<>"\n"<>"it = "<>ToString[it]<>"    "<>"T = "<>StringJoin[Riffle[ToString/@Residual[[1;;1+Nset]],", "]]<>"    "<>"T (Bragg) = "<>StringJoin[Riffle[ToString/@Residual[[2+Nset;;]],", "]]<>If[cdConstr[[1]]==True,"    "<>cdConstr[[2,1]]<>" = "<>Num2Str[chi,5,4,""],""]],16,Background->LightYellow],ImageSize->3*ImgSizeUnit,DisplayFunction->Identity];
+
 (* create barchart of coefficients c_i and d_i *)
 cdList=Labeled[#,ToString[NumberForm[N[Round[#*10^4]/10^4],{5,4}]],Above]&/@PlotArgList[[1;;Nsp+Nst]];
 chlList=ParStart[[1;;Nsp+Nst,1]];
 chsList=Join[Table[Blue,{i,1,Nsp}],Table[Green,{i,1,Nst}]];
 AppendTo[pBarChartList,BarChart[cdList,ChartLabels->chlList,ChartStyle->chsList,Frame->True,FrameTicks->{None, Automatic},ImageSize->ImgSizeUnit]];
+
 (* create barchart for rho and sld *)
 Do[
 cdList=Labeled[#,ToString[NumberForm[N[Round[#*10^5]/10^5],{4,3}]],Above]&/@PlotArgList[[Nsp+Nst+1+(i-1)*4;;Nsp+Nst+3+(i-1)*4]];
@@ -706,8 +740,10 @@ chlList=ParStart[[Nsp+Nst+1+(i-1)*4;;Nsp+Nst+3+(i-1)*4,1]];
 chsList=Table[col[[i,2]],{j,1,3}];
 AppendTo[pBarChartList,BarChart[cdList,ChartLabels->Placed[chlList,Top],ChartStyle->chsList,Frame->True,FrameTicks->{None, Automatic},PlotRange->{{0.5,3.5},If[Xnmode[[i]]=="X",{250,530},{-0.6,8}]}, AspectRatio->1,ImageSize->3*ImgSizeUnit/Nset]];
 ,{i,1,Nset}];
+
 (* create final image and export *)
 pImg=Grid[{{pexpfit},{GraphicsGrid[{pBarChartList[[2;;]]}]},{pBarChartList[[1]]}},Frame->All,Spacings->0];Export[OutDir<>YFile[[1]]<>".png",pImg,ImageSize->3*ImgSizeUnit];
+
 (* close logfile *)
 $Messages=$Messages[[{1}]];
 On[General::stop];
