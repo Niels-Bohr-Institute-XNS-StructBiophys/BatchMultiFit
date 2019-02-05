@@ -13,18 +13,26 @@ Note: package xvfb-run must be installed
 
 
 (* Load BatchMultiFitStat program *)
-Get["/home/martins/projects/BatchMultiFit/BatchMultiFitStat.m"];
-
-
+(*
 SetDirectory["/home/martins/projects/BatchMultiFit"];
+
+Get["/home/martins/projects/BatchMultiFit/BatchMultiFitStat.m"];
+*)
+
+Get["BatchMultiFitStat.m"];
+
 
 
 (* simulation params for cis, disl and dosl *)
+
 Nsp=6;
 mindisl=4;maxdisl=20;ddisl=2;
 mindosl=4;maxdosl=20;ddosl=2;
 
 dirlist=Select[Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_00*","",Infinity],StringMatchQ[#,{_~~"*003*",_~~"*004*"}]&],DirectoryQ];
+
+
+dirlist=Select[Select[FileNames["MathematicaOut/SSS_0p0BC_1to5dil_003","",Infinity],StringMatchQ[#,{_~~"*003*"}]&],DirectoryQ];
 Print[dirlist];
 
 
@@ -37,6 +45,8 @@ mindisl=4;maxdisl=144;ddisl=4;
 mindosl=4;maxdosl=144;ddosl=4;
 
 dirlist=Select[Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_00*","",Infinity],StringMatchQ[#,{_~~"*005*",_~~"*006*"}]&],DirectoryQ];
+
+dirlist=Select[Select[FileNames["MathematicaOut/SSS_0p0BC_1to5dil_005","",Infinity],StringMatchQ[#,{_~~"*005*"}]&],DirectoryQ];
 Print[dirlist];
 *)
 
