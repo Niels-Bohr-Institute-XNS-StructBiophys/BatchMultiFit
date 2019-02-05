@@ -152,17 +152,16 @@ WriteString[logstream,"\n"];
 (* Point radius {r_x,r_y} for black and white dots, adapt automatically to grid *)
 PointSizeDot=OptionValue[PointSize];
 If[PointSizeDot=="Automatic",PointSizeDot=dd/8.0;];
-Print[PointSizeDot];
 
 (* best and min data dots *)
 (* bestdots=Graphics[{Black,AbsolutePointSize[PointSizeDot],Point[#[[2;;3]]]&/@bestdata}]; *)
 bestdots=Table[Graphics[{Black,Disk[bestdata[[i,2;;3]],PointSizeDot]}],{i,1,Length[bestdata]}];
 mindot=Table[Graphics[{White,Disk[mindata[[i,2;;3]],PointSizeDot]}],{i,1,Length[mindata]}];
 
-(* data + fits plot all fits *)
+(* full data + s-restricted fits, plot all fits *)
 stream=ToString[InputForm[Import[data[[1,1]]]]]; (* exp data set from first log file derived *)
 expfile="export/"<>StringCases[StringCases[stream,Shortest["Load file export/"~~__~~"\\n"]][[1]],"export/"~~x__~~"\\n"->x][[1]];
-expdata=loadexp[{expfile},False, Print, 0.0,0.37][[1]];
+expdata=loadexp[{expfile},False, Print][[1]];
 plexp=ErrorListLogLogPlot[{{#[[1]],#[[2]]},ErrorBar[0*#[[3]],#[[4]]]}&/@expdata,Joined->False,PlotStyle->{Green,Thin},DisplayFunction->Identity];
 
 plfit=Table[,{i,1,Length[data]}];
