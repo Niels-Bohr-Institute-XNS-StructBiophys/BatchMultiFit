@@ -696,8 +696,8 @@ Do[dummy=Join[PlotArgList[[1;;Nsp+Nst]],PlotArgList[[Nsp+Nst+1+(i-1)*4;;Nsp+Nst+
 AppendTo[Chi2RedResidual,Chi2@@{dummy,Nsp,Nst,set[[i]],fsp[[i]],fst[[i]],Tscf[[i]],"red"}];
 ,{i,1,Nset}];
 
-(* Residual value over the whole fit-range (sets have been cutted to full range) using {T,red} for all sets and for each set *)
-LogdIResidual={T@@{FitArgList,Nsp,Nst,set,fsp,fst,Tscf,Log}};
+(* Residual value over the whole fit-range (sets have been cutted to full range) using {T,Log} for all sets and for each set *)
+LogdIResidual={T@@{PlotArgList,Nsp,Nst,set,fsp,fst,Tscf,Log}};
 Do[dummy=Join[PlotArgList[[1;;Nsp+Nst]],PlotArgList[[Nsp+Nst+1+(i-1)*4;;Nsp+Nst+i*4]],{PlotArgList[[Nsp+Nst+4*Nset+i]]}];
 AppendTo[LogdIResidual,T@@{dummy,Nsp,Nst,set[[i]],fsp[[i]],fst[[i]],Tscf[[i]],Log}];
 ,{i,1,Nset}];
