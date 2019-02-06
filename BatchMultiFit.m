@@ -654,7 +654,7 @@ WriteString[stream,"\n"];
 
 (* write fixed parameters (if fit-flag was set to False) *)
 WriteString[stream,"Fixed parameters:\n"];
-Do[If[ParStart[[i,2]]==False,WriteString[stream,ToString[#,InputForm]&@ParStart[[i,3]]<>"\n"]];,{i,1,Length[ParStart]}];
+Do[If[ParStart[[i,2]]==False,WriteString[stream,ParStart[[i,1]]<>" = "<>ToString[ParStart[[i,3]],InputForm]<>"\n"]];,{i,1,Length[ParStart]}];
 WriteString[stream,"\n"];
 
 (* create plot of experimental and fit data, compute Residuals *)
