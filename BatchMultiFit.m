@@ -430,7 +430,7 @@ Num2Str[x0_,p0_Integer,n0_Integer,padright0_String]:=Module[{x=x0,p=p0,n=n0,padr
 (* use "Automatic" for FitMethod in case of constrained local optimization with FindMinimum as FitFunc, "LevenbergMarquardt" and others work only for uncontrained problems *)
 
 Clear[BatchMultiFit]
-BatchMultiFit[OutDir0_,Xnmode0_,expfileconc0_,YFileDir0_,YFileListLocal0_,Nmaxsp0_,Nmaxst0_,FitFunc0_,FitMethod0_,Fitsmin0_,Fitsmax0_,FitMaxIt0_,FitTarF0_,ParStart0_,PlRange0_,plsc0_:1.0,Ymode0_:1,AddConstraints0_:{},Smear0_:{0,0.0},Tscf0_:1.0,ycohscf0_:{False,1.0,"1.0<=#<=1.0"},LicoConstr0_:{"","==1.0"},ExportFlag0_:False,PlotFlag0_:False,cdConstr0_:{False,{"chi",True,0.0(*,Constraint*)}},ow0_:False]:=Module[{OutDir=OutDir0,Xnmode=Xnmode0,expfileconc=expfileconc0,YFileDir=YFileDir0,YFileListLocal=YFileListLocal0,Nmaxsp=Nmaxsp0,Nmaxst=Nmaxst0,FitFunc=FitFunc0,FitMethod=FitMethod0,Fitsmin=Fitsmin0,Fitsmax=Fitsmax0,FitMaxIt=FitMaxIt0,FitTarF=FitTarF0,ParStart=ParStart0,PlRange=PlRange0,plsc=plsc0,Ymode=Ymode0,AddConstraints=AddConstraints0,Smear=Smear0,Tscf=Tscf0,ycohscf=ycohscf0,LicoConstr=LicoConstr0,LicoConstr2Num,ExportFlag=ExportFlag0,PlotFlag=PlotFlag0,cdConstr=cdConstr0,ow=ow0,count,stream,dummy,dummy2,dummy3,dummy4,YFile,FitArgList,FitConstrList,FitStartList,FitOut,(*FitOutList,*)it,Par,Residual,Chi2RedResidual,LogdIResidual,(*ResidualList,Chi2RedResidualList,LogdIResidualList,*)PlotArgList,pexpfit,pexpfitList,cdList,chsList,chlList,pBarChartList,pImg,ImgSizeUnit,Nsp,Nst,exp,set,Nset,fsp,fst(*,NY*),col,AddConstraintsY,FF,RetVecIF,chi,YFileListExistLocal},
+BatchMultiFit[OutDir0_,Xnmode0_,expfileconc0_,YFileDir0_,YFileListLocal0_,Nmaxsp0_,Nmaxst0_,FitFunc0_,FitMethod0_,Fitsmin0_,Fitsmax0_,FitMaxIt0_,FitTarF0_,ParStart0_,PlRange0_,plsc0_:1.0,Ymode0_:1,AddConstraints0_:{},Smear0_:{0,0.0},Tscf0_:1.0,ycohscf0_:{False,1.0,"1.0<=#<=1.0"},LicoConstr0_:{"","==1.0"},ExportFlag0_:False,PlotFlag0_:False,cdConstr0_:{False,{"chi",True,0.0(*,Constraint*)}},ow0_:False]:=Module[{OutDir=OutDir0,Xnmode=Xnmode0,expfileconc=expfileconc0,YFileDir=YFileDir0,YFileListLocal=YFileListLocal0,Nmaxsp=Nmaxsp0,Nmaxst=Nmaxst0,FitFunc=FitFunc0,FitMethod=FitMethod0,Fitsmin=Fitsmin0,Fitsmax=Fitsmax0,FitMaxIt=FitMaxIt0,FitTarF=FitTarF0,ParStart=ParStart0,PlRange=PlRange0,plsc=plsc0,Ymode=Ymode0,AddConstraints=AddConstraints0,Smear=Smear0,Tscf=Tscf0,ycohscf=ycohscf0,LicoConstr=LicoConstr0,LicoConstr2Num,ExportFlag=ExportFlag0,PlotFlag=PlotFlag0,cdConstr=cdConstr0,ow=ow0,count,stream,dummy,dummy2,dummy3,dummy4,YFile,FitArgList,FitConstrList,FitStartList,FitOut,(*FitOutList,*)it,Par,ici,idi,Residual,Chi2RedResidual,LogdIResidual,(*ResidualList,Chi2RedResidualList,LogdIResidualList,*)PlotArgList,pexpfit,pexpfitList,cdList,chsList,chlList,pBarChartList,pImg,ImgSizeUnit,Nsp,Nst,exp,set,Nset,fsp,fst(*,NY*),col,AddConstraintsY,FF,RetVecIF,chi,YFileListExistLocal},
 (* check directories *)
 If[StringTake[YFileDir,-1]!="/",YFileDir=YFileDir<>"/"];
 If[DirectoryQ[YFileDir]==False,Print["YFile directory "<>YFileDir<>" does not exist. Exit."];Exit[];];
@@ -656,6 +656,30 @@ WriteString[stream,"\n"];
 WriteString[stream,"Fixed parameters:\n"];
 Do[If[ParStart[[i,2]]==False,WriteString[stream,ParStart[[i,1]]<>" = "<>ToString[ParStart[[i,3]],InputForm]<>"\n"]];,{i,1,Length[ParStart]}];
 WriteString[stream,"\n"];
+
+(* write ici and idi and other params derived from fit params *)
+WriteString[stream,"Derived parameters:\n"];
+
+If[Nsp>0,
+ici=0.0;
+Do[ici+=i*If[ParStart[[i,2]]==False,ParStart[[i,3]],ToExpression[ParStart[[i,1]]]/.Par];,{i,1,Nsp}];
+dummy=0.0;
+Do[dummy+=If[ParStart[[i,2]]==False,ParStart[[i,3]],ToExpression[ParStart[[i,1]]]/.Par];,{i,1,Nsp}];
+ici/=dummy;
+WriteString[stream,"ici = "<>ici<>"\n"];
+];
+
+If[Nst>0,
+idi=0.0;
+Do[idi+=i*If[ParStart[[i,2]]==False,ParStart[[i,3]],ToExpression[ParStart[[i,1]]]/.Par];,{i,Nsp+1,Nsp+Nst}];
+dummy=0.0;
+Do[dummy+=If[ParStart[[i,2]]==False,ParStart[[i,3]],ToExpression[ParStart[[i,1]]]/.Par];,{i,Nsp+1,Nsp+Nst}];
+idi/=dummy;
+WriteString[stream,"idi = "<>idi<>"\n"];
+];
+
+WriteString[stream,"\n"];
+
 
 (* create plot of experimental and fit data, compute Residuals *)
 (* when cdConstr[[1]]==True, c_i->c_i*chi, d_i->d_i*(#2-chi) *)
