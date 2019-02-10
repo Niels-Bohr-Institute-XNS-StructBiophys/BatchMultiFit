@@ -659,6 +659,7 @@ WriteString[stream,"\n"];
 
 (* create plot of experimental and fit data, compute Residuals *)
 (* when cdConstr[[1]]==True, c_i->c_i*chi, d_i->d_i*(#2-chi) *)
+(* If PartStart[[i,2]] is True, use param name PartStart[[i,1]] and replace it by fitted param, otherwise use fixed value PartStart[[i,3]] *)
 dummy=dummy2="";
 If[cdConstr[[1]]==True,dummy3=If[cdConstr[[2,2]]==True,1,3];dummy=cdConstr[[2,dummy3]]<>"*";dummy2="("<>LicoConstr2Num<>"-"<>cdConstr[[2,dummy3]]<>")*";];
 PlotArgList="{";
