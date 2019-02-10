@@ -70,11 +70,14 @@ files=FileNames[dir<>"SSS*.log"];
 
 (* default fit params *)
 (* Choices: "Target function values", "Chi2Red function values", "LogdI function values" *)
-lablist=Join[{"Target function values"},Table["c"<>ToString[i],{i,1,Nsp}],{"rhoisl","rhoosl","rhodm","chiXn1"}];
-(*lablist=Join[{"Target function values"},Table["c"<>ToString[i],{i,1,Nsp}],{"rhoisl","rhoosl","chiXn1"}];*)
+lablist=Join[{"disl","dosl","Target function values"},Table["c"<>ToString[i],{i,1,Nsp}],{"rhoisl","rhoosl","rhodm","chiXn1"}];
+(*lablist=Join[{"disl","dosl","Target function values"},Table["c"<>ToString[i],{i,1,Nsp}],{"rhoisl","rhoosl","chiXn1"}];*)
 Tpdata=DeriveTp[files,lablist];
 
 (* params derived from fit params *)
+AppendTo[lablist,"dtot"];
+Do[AppendTo[Tpdata[[i]],Tpdata[[i,1+1]]/10.0+Tpdata[[i,1+2]]/10.0,{j,1,Nsp}]],{i,1,Length[files]}];
+
 AppendTo[lablist,"ici"];
 Do[AppendTo[Tpdata[[i]],Sum[Tpdata[[i,4+j]]*j,{j,1,Nsp}]/Sum[Tpdata[[i,4+j]],{j,1,Nsp}]],{i,1,Length[files]}];
 

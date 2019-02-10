@@ -89,8 +89,8 @@ mu2list=OptionValue[mu2];
 dd=OptionValue[Ticks];
 dd=If[ToString[dd]=="Automatic",{ddosl,ddisl},{dd,dd}];
 
-(* number of cols without filename, disl, dosl *)
-n=Length[data[[1]]]-3;
+(* number of cols without filename, should be same as lablist *)
+n=Length[data[[1]]]-1;
 
 (* define Min and Max of T *)
 maxT=Max[data[[All,4]]];
@@ -119,23 +119,23 @@ WriteString[logstream,"Length[bestdata] = "<>ToString[Length[bestdata]]<>"\n"];
 WriteString[logstream,"Length[mindata] = "<>ToString[Length[mindata]]<>"\n"];
 WriteString[logstream,"\n"];
 
-WriteString[logstream,"params = "<>ToString[Join[{"filename","disl","dosl"},lablist]]<>"\n\n"];
+WriteString[logstream,"params = "<>ToString[Join[{"filename"},lablist]]<>"\n\n"];
 
 (* calc Mean and Var from data, bestdata, mindata and write to logfile *)
 WriteString[logstream,"stat ={Mean, Median, StandardDev, Min, Max}"<>"\n\n"];
 
 WriteString[logstream,"data ("<>ToString[Length[data]]<>" fits):\n"];
 MeanMedianStDevMinMax=If[Length[data]>1,
-Table[{Mean[#],Median[#],StandardDeviation[#],Min[#],Max[#]}&@data[[All,3+k]],{k,1,n}],
-Table[{#[[1]],#[[1]],0,#[[1]],#[[1]]}&@data[[All,3+k]],{k,1,n}]
+Table[{Mean[#],Median[#],StandardDeviation[#],Min[#],Max[#]}&@data[[All,1+k]],{k,1,n}],
+Table[{#[[1]],#[[1]],0,#[[1]],#[[1]]}&@data[[All,1+k]],{k,1,n}]
 ];
 Do[WriteString[logstream,lablist[[k]]<>" = "<>ToString[MeanMedianStDevMinMax[[k]]]<>"\n"],{k,1,n}];
 WriteString[logstream,"\n"];
 
 WriteString[logstream,"bestdata ("<>ToString[Length[bestdata]]<>" fits):\n"];
 MeanMedianStDevMinMax=If[Length[bestdata]>1,
-Table[{Mean[#],Median[#],StandardDeviation[#],Min[#],Max[#]}&@bestdata[[All,3+k]],{k,1,n}],
-Table[{#[[1]],#[[1]],0,#[[1]],#[[1]]}&@bestdata[[All,3+k]],{k,1,n}]
+Table[{Mean[#],Median[#],StandardDeviation[#],Min[#],Max[#]}&@bestdata[[All,1+k]],{k,1,n}],
+Table[{#[[1]],#[[1]],0,#[[1]],#[[1]]}&@bestdata[[All,1+k]],{k,1,n}]
 ];
 Do[WriteString[logstream,lablist[[k]]<>" = "<>ToString[MeanMedianStDevMinMax[[k]]]<>"\n"],{k,1,n}];
 WriteString[logstream,"\n"];
@@ -143,8 +143,8 @@ WriteString[logstream,"\n"];
 (* WriteString[logstream,"mindata = "<>ToString[mindata[[1]]]<>"\n\n"]; *)
 WriteString[logstream,"mindata ("<>ToString[Length[mindata]]<>" fits):\n"];
 MeanMedianStDevMinMax=If[Length[mindata]>1,
-Table[{Mean[#],Median[#],StandardDeviation[#],Min[#],Max[#]}&@mindata[[All,3+k]],{k,1,n}],
-Table[{#[[1]],#[[1]],0,#[[1]],#[[1]]}&@mindata[[All,3+k]],{k,1,n}]
+Table[{Mean[#],Median[#],StandardDeviation[#],Min[#],Max[#]}&@mindata[[All,1+k]],{k,1,n}],
+Table[{#[[1]],#[[1]],0,#[[1]],#[[1]]}&@mindata[[All,1+k]],{k,1,n}]
 ];
 Do[WriteString[logstream,lablist[[k]]<>" = "<>ToString[MeanMedianStDevMinMax[[k]]]<>"\n"],{k,1,n}];
 WriteString[logstream,"\n"];
@@ -203,33 +203,50 @@ boxlist=Table[,{i,1,Ceiling[n,3]/3},{j,1,Min[3,n-(i-1)*3]}];
 (* ticks *)
 ticks={{(If[!IntegerQ[#],#+0.0,#])&/@Range[doslmin,doslmax,dd[[2]]],None},{{#,Rotate[ToString[#],90Degree],{0,0.01}}&/@(If[!IntegerQ[#],#+0.0,#]&/@Range[dislmin,dislmax,dd[[1]]]),None}};
 
-count=1;count2=1;
+
+(* 2D pl maps for individual fit parameters, excl single ci *)
 (* loop over k=1,..,n *)
+count=1;count2=1;
 Do[
 
+If[(k==3)||(k>(3+Nsp)),
 (* range for current plot *)
-maxT=Max[data[[All,k+3]]];
-minT=Min[data[[All,k+3]]];
-data2=Join[data[[All,{2,3,k+3}]],dummy];
+maxT=Max[data[[All,1+k]]];
+minT=Min[data[[All,1+k]]];
+data2=Join[data[[All,{2,3,1+k}]],dummy];
 (* background plot for mu-range selection *)
 (* instead of PlotLegends->Automatic one could also play around with PlotLegends->BarLegend[...] with more styling options *)
 pl=ListDensityPlot[data2,InterpolationOrder->0,FrameTicks->ticks,FrameStyle->Directive[1.5*OptionValue[PlotFontSize],Black],FrameLabel->{"disl (A)","dosl (A)"},ClippingStyle->White,ColorFunction->(Hue[0.7*(1-(#-minT)/(maxT-minT+0.000001))]&),ColorFunctionScaling->False,PlotRange->{{dislmin-ddisl/2,dislmax+ddisl/2},{doslmin-ddosl/2,doslmax+ddosl/2},{minT-0.000001,maxT+0.000001}},BoundaryStyle->Black,ImageSize->OptionValue[ImageSize],PlotLegends->BarLegend[Automatic,LegendFunction->"Frame",LegendMargins->10,LabelStyle->{FontSize->28}],PlotLabel->Style[StringReplace[lablist[[k]]," "->"_"],1.5*OptionValue[PlotFontSize],Black]];
 pl=Show[Join[{pl},bestdots,mindot],ImageSize->OptionValue[ImageSize]];
 plist[[count2,count]]=pl;
-If[(k==1)||(k>(1+Nsp)),Export[outdir<>"pl_"<>StringReplace[lablist[[k]]," "->"_"]<>".png",pl,"PNG",ImageSize->OptionValue[ImageSize]];];
+Export[outdir<>"pl_"<>StringReplace[lablist[[k]]," "->"_"]<>".png",pl,"PNG",ImageSize->OptionValue[ImageSize]];
 
-(* PlotRange for WhiskerBox plots *)
-PlRange={0.97*Min[#],1.03*Max[#]}&@data[[All,3+k]];
-(* min point for individual WhiskerBox plots done via Epilog, combination of ListPlot and BoxWhiskerChart works only in Mathematica < 11.3 *)
-(* plmin=ListPlot[{mindata[[1,3+k]]},PlotStyle->{Red,PointSize[Large]}]; *)
-box=BoxWhiskerChart[data[[All,3+k]],"Mean",ChartLabels->lablist[[k]],FrameStyle->Directive[OptionValue[PlotFontSize],Black],PlotLabel->Style[StringReplace[lablist[[k]]<>" all"," "->"_"],OptionValue[PlotFontSize],Black],GridLines->{None,Automatic},BarSpacing->1,Epilog->{Red,PointSize[0.01],Point[{0.75,mindata[[1,3+k]]}]}];
-If[(k==1)||( k>(1+Nsp+3)),Export[outdir<>"box_"<>StringReplace[lablist[[k]]," "->"_"]<>"_all.png",Show[box,PlotRange->PlRange],"PNG",ImageSize->OptionValue[ImageSize]];];
-(* WhiskerBox stat plots for bestdata *)
-box=BoxWhiskerChart[bestdata[[All,3+k]],"Mean",ChartLabels->lablist[[k]],FrameStyle->Directive[OptionValue[PlotFontSize],Black],PlotLabel->Style[StringReplace[lablist[[k]]<>" best"," "->"_"],OptionValue[PlotFontSize],Black],GridLines->{None,Automatic},BarSpacing->1,Epilog->{Red,PointSize[0.01],Point[{0.75,mindata[[1,3+k]]}]}];
-If[(k==1)||(k>(1+Nsp+3)),Export[outdir<>"box_"<>StringReplace[lablist[[k]]," "->"_"]<>"_best.png",Show[box,PlotRange->PlRange],"PNG",ImageSize->OptionValue[ImageSize]];];
-boxlist[[count2,count]]=box;
 count=count+1;
-If[count>3,count=1;count2=count2+1;];
+If[count>3,count=1;count2+=1;];
+];
+
+,{k,1,n}];
+
+(* WhiskerBox plots for individual fit parameters, excl single ci and rho *)
+(* loop over k=1,..,n *)
+count=1;count2=1;
+Do[
+
+If[(k==3)||(k>(3+Nsp+3)),
+(* PlotRange for WhiskerBox plots *)
+PlRange={0.97*Min[#],1.03*Max[#]}&@data[[All,1+k]];
+(* min point for individual WhiskerBox plots done via Epilog, combination of ListPlot and BoxWhiskerChart works only in Mathematica < 11.3 *)
+(* plmin=ListPlot[{mindata[[1,1+k]]},PlotStyle->{Red,PointSize[Large]}]; *)
+box=BoxWhiskerChart[data[[All,1+k]],"Mean",ChartLabels->lablist[[k]],FrameStyle->Directive[OptionValue[PlotFontSize],Black],PlotLabel->Style[StringReplace[lablist[[k]]<>" all"," "->"_"],OptionValue[PlotFontSize],Black],GridLines->{None,Automatic},BarSpacing->1,Epilog->{Red,PointSize[0.01],Point[{0.75,mindata[[1,1+k]]}]}];
+Export[outdir<>"box_"<>StringReplace[lablist[[k]]," "->"_"]<>"_all.png",Show[box,PlotRange->PlRange],"PNG",ImageSize->OptionValue[ImageSize]];
+(* WhiskerBox stat plots for bestdata *)
+box=BoxWhiskerChart[bestdata[[All,1+k]],"Mean",ChartLabels->lablist[[k]],FrameStyle->Directive[OptionValue[PlotFontSize],Black],PlotLabel->Style[StringReplace[lablist[[k]]<>" best"," "->"_"],OptionValue[PlotFontSize],Black],GridLines->{None,Automatic},BarSpacing->1,Epilog->{Red,PointSize[0.01],Point[{0.75,mindata[[1,1+k]]}]}];
+Export[outdir<>"box_"<>StringReplace[lablist[[k]]," "->"_"]<>"_best.png",Show[box,PlotRange->PlRange],"PNG",ImageSize->OptionValue[ImageSize]];
+boxlist[[count2,count]]=box;
+
+count=count+1;
+If[count>3,count=1;count2+=1;];
+];
 
 ,{k,1,n}];
 
