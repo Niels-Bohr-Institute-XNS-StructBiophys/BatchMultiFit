@@ -1,5 +1,4 @@
 (* 
-
 How-to run:
 
 local (desktop) machine:
@@ -13,11 +12,9 @@ Note: package xvfb-run must be installed
 
 
 (* Load BatchMultiFitStat program *)
-(*
 SetDirectory["/home/martins/projects/BatchMultiFit"];
+(* Get["/home/martins/projects/BatchMultiFit/BatchMultiFitStat.m"]; *)
 
-Get["/home/martins/projects/BatchMultiFit/BatchMultiFitStat.m"];
-*)
 
 Get["BatchMultiFitStat.m"];
 
@@ -68,15 +65,17 @@ dir=dirlist[[i]];
 If[StringTake[dir,-1]!="/",dir=dir<>"/"];
 files=FileNames[dir<>"SSS*.log"];
 
-(* default fit params *)
+(* derive default fit params from log-files, disl and dosl must not be passed to DeriveTp *)
 (* Choices: "Target function values", "Chi2Red function values", "LogdI function values" *)
 lablist=Join[{"disl","dosl","Target function values"},Table["c"<>ToString[i],{i,1,Nsp}],{"rhoisl","rhoosl","rhodm","chiXn1"}];
 (*lablist=Join[{"disl","dosl","Target function values"},Table["c"<>ToString[i],{i,1,Nsp}],{"rhoisl","rhoosl","chiXn1"}];*)
-Tpdata=DeriveTp[files,lablist];
+
+Print[lablist];
+Tpdata=DeriveTp[files,lablist[[3;;]]];
 
 (* params derived from fit params *)
 AppendTo[lablist,"dtot"];
-Do[AppendTo[Tpdata[[i]],Tpdata[[i,1+1]]/10.0+Tpdata[[i,1+2]]/10.0,{j,1,Nsp}]],{i,1,Length[files]}];
+Do[AppendTo[Tpdata[[i]],Tpdata[[i,1+1]]+Tpdata[[i,1+2]]],{i,1,Length[files]}];
 
 AppendTo[lablist,"ici"];
 Do[AppendTo[Tpdata[[i]],Sum[Tpdata[[i,4+j]]*j,{j,1,Nsp}]/Sum[Tpdata[[i,4+j]],{j,1,Nsp}]],{i,1,Length[files]}];
@@ -91,6 +90,7 @@ AppendTo[lablist,"disl_rhoisl_dosl_rhoosl"];
 Do[AppendTo[Tpdata[[i]],Tpdata[[i,1+1]]*Tpdata[[i,4+Nsp+1]]/10.0+Tpdata[[i,1+2]]*Tpdata[[i,4+Nsp+2]]/10.0],{i,1,Length[files]}];
 
 (* start analysis and plotting *)
+Print[lablist];
 pT[Tpdata[[All,All]],mindisl,maxdisl,ddisl,mindosl,maxdosl,ddosl,Nsp,lablist];
 
 ,{i,1,Length[dirlist]}]

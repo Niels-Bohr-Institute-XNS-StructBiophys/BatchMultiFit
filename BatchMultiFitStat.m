@@ -2,6 +2,32 @@
 Needs["ErrorBarPlots`"];
 Get["ErrorBarLogPlots.m"];
 
+(*
+Options:
+"{",",","}" -> {a,b,c,d}, {"", " ", ""} -> a b c d
+{-5,5} -> Abs[num]>10^5 || Abs[num]<10^-5 -> ScientificForm, otherwise NumberForm
+"\"e\"<>#3" -> e#3, "\"*10^(\"<>#3<>\")\"" -> 10^(#3)
+Examples:
+NumberListToString[{99999.944,-Pi,Pi,-99999.944,100001.944,-100001.044,1.45709242 10^15,-0.0000387},{-3,3},"\"*10^(\"<>#3<>\")\"",{"", " ", ""}];
+NumberListToString[-200000.435805,{-3,3},"\"e\"<>#3"];
+*)
+Clear[NumberListToString];
+NumberListToString[list0_,SciNotatTresh0_:{-5,5},expsty0_:"\"e\"<>#3"(*"\"*10^(\"<>#3<>\")\""*),bracksty0_:{"{",",","}"}(*{"", " ", ""}*)]:=Module[{list=list0,SciNotatTresh=SciNotatTresh0,expsty=expsty0,bracksty=bracksty0,str,numscisty},
+numscisty="NumberFormat->(#1<>"<>expsty<>"&)";
+If[Length[Dimensions[list]]>1,Print["expected a 0D or 1D list in NumberListToString"];Exit];
+If[Length[Dimensions[list]]==0,
+(* 0D one number *)
+If[(Abs[list]>10^SciNotatTresh[[2]])||(Abs[list]<10^SciNotatTresh[[1]]),str=ToString[ScientificForm[list,ToExpression[numscisty]]];,str=ToString[list];];,
+(* 1D list *)
+str=bracksty[[1]];
+Do[
+If[(Abs[list[[i]]]>10^SciNotatTresh[[2]])||(Abs[list[[i]]]<10^SciNotatTresh[[1]]),str=str<>ToString[ScientificForm[list[[i]],ToExpression[numscisty]]];,str=str<>ToString[list[[i]]];];
+If[i<Length[list],str=str<>bracksty[[2]]];
+
+,{i,1,Length[list]}];
+str=str<>bracksty[[3]];
+];
+str];
 
 
 Clear[loadexp]
@@ -129,7 +155,7 @@ MeanMedianStDevMinMax=If[Length[data]>1,
 Table[{Mean[#],Median[#],StandardDeviation[#],Min[#],Max[#]}&@data[[All,1+k]],{k,1,n}],
 Table[{#[[1]],#[[1]],0,#[[1]],#[[1]]}&@data[[All,1+k]],{k,1,n}]
 ];
-Do[WriteString[logstream,lablist[[k]]<>" = "<>ToString[MeanMedianStDevMinMax[[k]]]<>"\n"],{k,1,n}];
+Do[WriteString[logstream,lablist[[k]]<>" = "<>NumberListToString[N[MeanMedianStDevMinMax[[k]]]]<>"\n"],{k,1,n}];
 WriteString[logstream,"\n"];
 
 WriteString[logstream,"bestdata ("<>ToString[Length[bestdata]]<>" fits):\n"];
@@ -137,7 +163,7 @@ MeanMedianStDevMinMax=If[Length[bestdata]>1,
 Table[{Mean[#],Median[#],StandardDeviation[#],Min[#],Max[#]}&@bestdata[[All,1+k]],{k,1,n}],
 Table[{#[[1]],#[[1]],0,#[[1]],#[[1]]}&@bestdata[[All,1+k]],{k,1,n}]
 ];
-Do[WriteString[logstream,lablist[[k]]<>" = "<>ToString[MeanMedianStDevMinMax[[k]]]<>"\n"],{k,1,n}];
+Do[WriteString[logstream,lablist[[k]]<>" = "<>NumberListToString[N[MeanMedianStDevMinMax[[k]]]]<>"\n"],{k,1,n}];
 WriteString[logstream,"\n"];
 
 (* WriteString[logstream,"mindata = "<>ToString[mindata[[1]]]<>"\n\n"]; *)
@@ -146,7 +172,7 @@ MeanMedianStDevMinMax=If[Length[mindata]>1,
 Table[{Mean[#],Median[#],StandardDeviation[#],Min[#],Max[#]}&@mindata[[All,1+k]],{k,1,n}],
 Table[{#[[1]],#[[1]],0,#[[1]],#[[1]]}&@mindata[[All,1+k]],{k,1,n}]
 ];
-Do[WriteString[logstream,lablist[[k]]<>" = "<>ToString[MeanMedianStDevMinMax[[k]]]<>"\n"],{k,1,n}];
+Do[WriteString[logstream,lablist[[k]]<>" = "<>NumberListToString[N[MeanMedianStDevMinMax[[k]]]]<>"\n"],{k,1,n}];
 WriteString[logstream,"\n"];
 
 (* Point radius {r_x,r_y} for black and white dots, adapt automatically to grid *)
