@@ -51,9 +51,33 @@ mindisl=4;maxdisl=144;ddisl=4;
 mindosl=4;maxdosl=144;ddosl=4;
 
 dirlist=Select[Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_OSL_00*","",Infinity],StringMatchQ[#,{_~~"*005*",_~~"*006*"}]&],DirectoryQ];
-(* dirlist=Select[Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_OSL_00*","",Infinity],StringMatchQ[#,{_~~"*007*"}]&],DirectoryQ]; *)
+dirlist=Select[Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_OSL_00*","",Infinity],StringMatchQ[#,{_~~"*005*"}]&],DirectoryQ];
+
 Print[dirlist];
 
+
+(*
+Nsp=6;
+mindisl=4;maxdisl=144;ddisl=4;
+mindosl=4;maxdosl=144;ddosl=4;
+
+dirlist=Select[Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_OSL_00*","",Infinity],StringMatchQ[#,{_~~"*007*",_~~"*009*"}]&],DirectoryQ];
+Print[dirlist];
+*)
+
+(*
+Nsp=6;
+mindisl=4;maxdisl=144;ddisl=4;
+mindosl=4;maxdosl=144;ddosl=4;
+
+dirlist=Select[Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_OSL_0*","",Infinity],StringMatchQ[#,{_~~"*011*",_~~"*013*"}]&],DirectoryQ];
+Print[dirlist];
+*)
+
+
+
+
+Tminrange=1.2;
 
 
 
@@ -91,7 +115,7 @@ Do[AppendTo[Tpdata[[i]],Tpdata[[i,1+1]]*Tpdata[[i,4+Nsp+1]]/10.0+Tpdata[[i,1+2]]
 
 (* start analysis and plotting *)
 Print[lablist];
-pT[Tpdata[[All,All]],mindisl,maxdisl,ddisl,mindosl,maxdosl,ddosl,Nsp,lablist];
+pT[Tpdata[[All,All]],mindisl,maxdisl,ddisl,mindosl,maxdosl,ddosl,Nsp,lablist,mu2->{Tminrange,0.0}];
 
 ,{i,1,Length[dirlist]}]
 
