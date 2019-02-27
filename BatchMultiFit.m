@@ -466,6 +466,7 @@ If[Length[Xnmode]!=Nset,Print["Length of Xnmode does not match Nset. Exit."];Exi
 (* plsc *)
 If[Length[Dimensions[plsc]]==0,plsc=Table[plsc,{i,1,Nset}];];
 If[Length[plsc]!=Nset,Print["Length of plsc does not match Nset. Exit."];Exit[];];
+(* Ymode *)
 (* Ymode allows to use different Yfiles for different datasets i.e. different simulations for different expdata *)
 If[Length[Dimensions[Ymode]]==0,Ymode=Table[Ymode,{i,1,Nset}];];
 If[Length[Ymode]!=Nset,Print["Max of Ymode does not match Nset."];Exit[];];
@@ -853,6 +854,7 @@ If[Length[Xnmode]!=Nset,Print["Length of Xnmode does not match Nset. Exit."];Exi
 (* plsc *)
 If[Length[Dimensions[plsc]]==0,plsc=Table[plsc,{i,1,Nset}];];
 If[Length[plsc]!=Nset,Print["Length of plsc does not match Nset. Exit."];Exit[];];
+(* Ymode *)
 (* Ymode allows to use different Yfiles for different datasets i.e. different simulations for different expdata *)
 If[Length[Dimensions[Ymode]]==0,Ymode=Table[Ymode,{i,1,Nset}];];
 If[Length[Ymode]!=Nset,Print["Max of Ymode does not match Nset."];Exit[];];
@@ -864,7 +866,7 @@ If[Length[Smear]!=Nset,Print["Length of Smear does not match Nset. Exit."];Exit[
 If[Length[Dimensions[Tscf]]==0,Tscf=Table[Tscf,{i,1,Nset}];];
 If[Length[Tscf]!=Nset,Print["Length of Tscf does not match Nset. Exit."];Exit[];];
 (* ycohscf *)
-If[Depth[ycohscf]-1==1,ycohscf=Table[ycohscf,{i,1,Nset}];];
+If[Dimensions[ycohscf]==0,ycohscf=Table[ycohscf,{i,1,Nset}];];
 If[Length[ycohscf]!=Nset,Print["Length of ycohscf does not match Nset. Exit."];Exit[];];
 
 (* set FF and RetVecIF (vectors or interpolation functions for Y's) *)
@@ -967,7 +969,7 @@ Export[OutDir<>YFile[[1]]<>"_set_"<>ToString[i]<>"_sp_"<>IntegerString[j,10,2]<>
 Do[
 dummy3=dummy;
 dummy3[[1;;Nsp+Nst]]=Table[0.0,{k,1,Nsp+Nst}];
-dummy3[[j]]=dummy[[Nsp+j]];
+dummy3[[Nsp+j]]=dummy[[Nsp+j]];
 dummy3[[Nsp+Nst+4]]=0.0;
 dummy4=Transpose[{#,plsc[[i]]*FF@@{dummy3,fsp[[i]],fst[[i]],Nsp,Nst,#}}&@set[[i]][[All,1]]];
 (* do not forget to increase Nst-index by 1 *)
@@ -1005,3 +1007,5 @@ Close[stream];
 ,{Y,1,Length[YFileListLocal]}];(* end (Parallel)Do *)
 
 ];
+
+
