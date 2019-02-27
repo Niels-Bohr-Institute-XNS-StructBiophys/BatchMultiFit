@@ -430,7 +430,7 @@ Num2Str[x0_,p0_Integer,n0_Integer,padright0_String]:=Module[{x=x0,p=p0,n=n0,padr
 (* use "Automatic" for FitMethod in case of constrained local optimization with FindMinimum as FitFunc, "LevenbergMarquardt" and others work only for uncontrained problems *)
 
 Clear[BatchMultiFit]
-BatchMultiFit[OutDir0_,Xnmode0_,expfileconc0_,YFileDir0_,YFileListLocal0_,Nmaxsp0_,Nmaxst0_,FitFunc0_,FitMethod0_,Fitsmin0_,Fitsmax0_,FitMaxIt0_,FitTarF0_,ParStart0_,PlRange0_,plsc0_:1.0,Ymode0_:1,AddConstraints0_:{},Smear0_:{0,0.0},Tscf0_:1.0,ycohscf0_:{False,1.0,"1.0<=#<=1.0"},LicoConstr0_:{"","==1.0"},ExportFlag0_:False,PlotFlag0_:False,cdConstr0_:{False,{"chi",True,0.0(*,Constraint*)}},ow0_:False]:=Module[{OutDir=OutDir0,Xnmode=Xnmode0,expfileconc=expfileconc0,YFileDir=YFileDir0,YFileListLocal=YFileListLocal0,Nmaxsp=Nmaxsp0,Nmaxst=Nmaxst0,FitFunc=FitFunc0,FitMethod=FitMethod0,Fitsmin=Fitsmin0,Fitsmax=Fitsmax0,FitMaxIt=FitMaxIt0,FitTarF=FitTarF0,ParStart=ParStart0,PlRange=PlRange0,plsc=plsc0,Ymode=Ymode0,AddConstraints=AddConstraints0,Smear=Smear0,Tscf=Tscf0,ycohscf=ycohscf0,LicoConstr=LicoConstr0,LicoConstr2Num,ExportFlag=ExportFlag0,PlotFlag=PlotFlag0,cdConstr=cdConstr0,ow=ow0,count,stream,dummy,dummy2,dummy3,dummy4,YFile,FitArgList,FitConstrList,FitStartList,FitOut,(*FitOutList,*)it,Par,ici,idi,Residual,Chi2RedResidual,LogdIResidual,(*ResidualList,Chi2RedResidualList,LogdIResidualList,*)PlotArgList,pexpfit,pexpfitList,cdList,chsList,chlList,pBarChartList,pImg,ImgSizeUnit,Nsp,Nst,exp,set,Nset,fsp,fst(*,NY*),col,AddConstraintsY,FF,RetVecIF,chi,YFileListExistLocal},
+BatchMultiFit[OutDir0_,Xnmode0_,expfileconc0_,YFileDir0_,YFileListLocal0_,Nmaxsp0_,Nmaxst0_,FitFunc0_,FitMethod0_,Fitsmin0_,Fitsmax0_,FitMaxIt0_,FitTarF0_,ParStart0_,PlRange0_,plsc0_:1.0,Ymode0_:1,AddConstraints0_:{},Smear0_:{0,0.0},Tscf0_:1.0,ycohscf0_:{False,1.0,"1.0<=#<=1.0"},LicoConstr0_:{"","==1.0"},ExportFlag0_:False,PlotFlag0_:False,cdConstr0_:{False,{"chi",True,0.0(*,Constraint*)}},ow0_:False]:=Module[{OutDir=OutDir0,Xnmode=Xnmode0,expfileconc=expfileconc0,YFileDir=YFileDir0,YFileListLocal=YFileListLocal0,Nmaxsp=Nmaxsp0,Nmaxst=Nmaxst0,FitFunc=FitFunc0,FitMethod=FitMethod0,Fitsmin=Fitsmin0,Fitsmax=Fitsmax0,FitMaxIt=FitMaxIt0,FitTarF=FitTarF0,ParStart=ParStart0,PlRange=PlRange0,plsc=plsc0,Ymode=Ymode0,AddConstraints=AddConstraints0,Smear=Smear0,Tscf=Tscf0,ycohscf=ycohscf0,LicoConstr=LicoConstr0,LicoConstr2Num,ExportFlag=ExportFlag0,PlotFlag=PlotFlag0,cdConstr=cdConstr0,ow=ow0,count,stream,dummy,dummy2,dummy3,dummy4,YFile,FitArgList,FitConstrList,FitStartList,FitOut,(*FitOutList,*)it,Par,ici,idi,Residual,Chi2RedResidual,LogdIResidual,(*ResidualList,Chi2RedResidualList,LogdIResidualList,*)PlotArgList,pexpfit,pexpfitList,cdList,chsList,chlList,pBarChartList,pImg,ImgSizeUnit,Nsp,Nst(* Nst is Nmaxst-1, i.e. 4 for max. 5-stacks *),exp,set,Nset,fsp,fst(*,NY*),col,AddConstraintsY,FF,RetVecIF,chi,YFileListExistLocal},
 (* check directories *)
 If[StringTake[YFileDir,-1]!="/",YFileDir=YFileDir<>"/"];
 If[DirectoryQ[YFileDir]==False,Print["YFile directory "<>YFileDir<>" does not exist. Exit."];Exit[];];
@@ -466,7 +466,7 @@ If[Length[Xnmode]!=Nset,Print["Length of Xnmode does not match Nset. Exit."];Exi
 (* plsc *)
 If[Length[Dimensions[plsc]]==0,plsc=Table[plsc,{i,1,Nset}];];
 If[Length[plsc]!=Nset,Print["Length of plsc does not match Nset. Exit."];Exit[];];
-(* Ymode *)
+(* Ymode allows to use different Yfiles for different datasets i.e. different simulations for different expdata *)
 If[Length[Dimensions[Ymode]]==0,Ymode=Table[Ymode,{i,1,Nset}];];
 If[Length[Ymode]!=Nset,Print["Max of Ymode does not match Nset."];Exit[];];
 If[Max[Ymode]>Dimensions[YFileListLocal][[2]],Print["Max of Ymode does not match Dimensions of YFileListLocal. Exit."];Exit[];];
@@ -780,5 +780,228 @@ Close[stream];
 DumpSave[OutDir<>"T.mx",{YFileListGlobal,ResidualList,FitOutList}];
 DumpSave[OutDir<>"Chi2Red.mx",{YFileListGlobal,Chi2RedResidualList,FitOutList}];
 DumpSave[OutDir<>"LogdI.mx",{YFileListGlobal,LogdIResidualList,FitOutList}];
+
+];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(*
+TODOs:
+-instead of files also accept s-ranges with conc and X/n flag, do not calc Residuals then and don't plot
+
+*)
+
+Clear[BatchMultiPlot];
+BatchMultiPlot[OutDir0_,Xnmode0_,expfileconc0_,YFileDir0_,YFileListLocal0_,Nmaxsp0_,Nmaxst0_,Fitsmin0_,Fitsmax0_,ParStart0_,ycohscf0_,PlRange0_,plsc0_:1.0,Ymode0_:1,Smear0_:{0,0.0},Tscf0_:1.0,PlotFlag0_:True,ow0_:False]:=Module[{OutDir=OutDir0,Xnmode=Xnmode0,expfileconc=expfileconc0,YFileDir=YFileDir0,YFileListLocal=YFileListLocal0,Nmaxsp=Nmaxsp0,Nmaxst=Nmaxst0,Fitsmin=Fitsmin0,Fitsmax=Fitsmax0,ParStart=ParStart0,ycohscf=ycohscf0,PlRange=PlRange0,plsc=plsc0,Ymode=Ymode0,Smear=Smear0,Tscf=Tscf0,
+PlotFlag=PlotFlag0,ImgSizeUnit,pImg,cdList,chlList,chsList,pexpfit,pexpfitList,pBarChartList,
+exp,set,Nset,
+Nsp,Nst,fsp,fst,YFile,
+RetVecIF,FF,
+PlotArgList,
+Chi2RedResidual,LogdIResidual,
+ow=ow0,stream,
+col,YFileListExistLocal,
+dummy,dummy2,dummy3,dummy4
+},
+
+(* check directories *)
+If[StringTake[YFileDir,-1]!="/",YFileDir=YFileDir<>"/"];
+If[DirectoryQ[YFileDir]==False,Print["YFile directory "<>YFileDir<>" does not exist. Exit."];Exit[];];
+(* append slash if it does not exist yet *)
+If[StringTake[OutDir,-1]!="/",OutDir=OutDir<>"/"];
+
+(* Check if OutDir exists, otherwise create it *)
+(* Don't use CreateDirectory[OutDir]; cause of permissions *)
+(* One might check return of Run[""] command *)
+If[DirectoryQ[OutDir]==False,Print["Out directory "<>OutDir<>" does not exist. Create directory."];Run["mkdir -m u=rwx,g=rx,o=rx "<>OutDir];];
+
+(* Make Xnmode, expfileconc, YFileListLocal, Smear, Ymode suitable lists if it comes only as a string or 1D-array *)
+If[Length[Dimensions[YFileListLocal]]==0,YFileListLocal={{YFileListLocal}};];
+If[Length[Dimensions[YFileListLocal]]==1,YFileListLocal=Transpose[{YFileListLocal}];];(* Transpose must be used ! *)
+
+(* if overwrite flag is False (default), fit only those YFiles that do not yet exist in the directory (png exists?) *)
+(* to overwrite all exist. files choose True for ow *)
+If[ow==False,
+YFileListExistLocal=FileNames[OutDir<>"*.png"];
+YFileListExistLocal=StringTrim[StringTrim[#,OutDir],".png"]&/@YFileListExistLocal;
+(* bring to same structure as YFileListLocal *)
+YFileListExistLocal={#}&/@YFileListExistLocal;
+(* now take the complement and overwrite YFileListLocal *)
+If[Length[YFileListExistLocal]>0,YFileListLocal=Complement[YFileListLocal,YFileListExistLocal];];
+If[Length[YFileListLocal]==0,Print["All fits for YFileListLocal already exist in directory. Exit."];Exit[];];
+];
+
+(* Set up Nset *)
+If[Depth[expfileconc]-1==1,expfileconc={expfileconc};];
+Nset=Length[expfileconc];
+
+(* Check other inputs *)
+(* Xnmode *)
+If[Length[Dimensions[Xnmode]]==0,Xnmode=Table[Xnmode,{i,1,Nset}];];
+If[Length[Xnmode]!=Nset,Print["Length of Xnmode does not match Nset. Exit."];Exit[];];
+(* plsc *)
+If[Length[Dimensions[plsc]]==0,plsc=Table[plsc,{i,1,Nset}];];
+If[Length[plsc]!=Nset,Print["Length of plsc does not match Nset. Exit."];Exit[];];
+(* Ymode allows to use different Yfiles for different datasets i.e. different simulations for different expdata *)
+If[Length[Dimensions[Ymode]]==0,Ymode=Table[Ymode,{i,1,Nset}];];
+If[Length[Ymode]!=Nset,Print["Max of Ymode does not match Nset."];Exit[];];
+If[Max[Ymode]>Dimensions[YFileListLocal][[2]],Print["Max of Ymode does not match Dimensions of YFileListLocal. Exit."];Exit[];];
+(* Smear *)
+If[Length[Dimensions[Smear]]==1,Smear=Table[Smear,{i,1,Nset}];];
+If[Length[Smear]!=Nset,Print["Length of Smear does not match Nset. Exit."];Exit[];];
+(* Tscf *)
+If[Length[Dimensions[Tscf]]==0,Tscf=Table[Tscf,{i,1,Nset}];];
+If[Length[Tscf]!=Nset,Print["Length of Tscf does not match Nset. Exit."];Exit[];];
+(* ycohscf *)
+If[Depth[ycohscf]-1==1,ycohscf=Table[ycohscf,{i,1,Nset}];];
+If[Length[ycohscf]!=Nset,Print["Length of ycohscf does not match Nset. Exit."];Exit[];];
+
+(* set FF and RetVecIF (vectors or interpolation functions for Y's) *)
+FF=F;RetVecIF=False;
+
+
+(* define colors *)
+col={{Blue,Cyan},{Red,Orange},{Green,Darker[Green,0.5]},{Brown,Darker[Brown,0.65]},{Black,Gray},{Pink,Darker[Yellow,0.05]},{Magenta,Darker[Magenta,0.6]}};
+If[Length[col]<Nset,Print["Nset is larger than available colors. Increase the number of colors in source code. Exit."];Exit[];];
+
+
+ParallelDo[
+
+YFile=YFileListLocal[[Y]];
+
+(* open logfile *)
+Print["Write log-file "<>OutDir<>YFile[[1]]<>".log"];
+stream=OpenWrite[OutDir<>YFile[[1]]<>".log"];
+If[stream==$Failed,Print["Cannot write log-file "<>OutDir<>YFile[[1]]<>".log Exit."];Exit[];];
+(* redirect messages to logfile *)
+$Messages=Append[$Messages,stream];
+Off[General::stop];
+
+(* load exp files *)
+exp=loadexp[expfileconc[[All,1]],True,WriteString[stream,#<>"\n"]&];
+WriteString[stream,"\n"];
+
+(* setup set and fsp, fst *)
+set=Table[{},{i,1,Nset}];
+fsp=Table[{},{i,1,Nset}];
+fst=Table[{},{i,1,Nset}];
+
+(* load YFiles and create set from exp, assume same amount of Nsp and Nst can be found with the given NMaxsp and NMaxst !!! *)
+Do[
+set[[i]]=createset[exp[[i]],Fitsmin,Fitsmax,True,WriteString[stream,#<>"\n"]&];
+WriteString[stream,"\n"];,{i,1,Nset}];
+(* here: return 3D matrices fsp/fst[[l,p]][[s]] according to the experimental s-points within the Fitrange -> use set[[i]] instead of exp[[i]] *)
+Do[{Nsp,Nst,fsp[[i]],fst[[i]]}=loadY[RetVecIF,YFileDir<>YFile[[Ymode[[i]]]],set[[i]],Xnmode[[i]],expfileconc[[i,2]],Smear[[i]],Nmaxsp,Nmaxst,True,WriteString[stream,#<>"\n"]&];
+WriteString[stream,"\n"];
+,{i,1,Nset}];
+
+(* Print PartStart array *)
+WriteString[stream,"ParStart = "<>ToString[ParStart]<>"\n"];
+WriteString[stream,"\n"];
+
+(* apply check for number of parameters and presence of initial value if fixed *)
+If[Length[ParStart]!=(Nsp+Nst+4*Nset),Print["There must be "<>ToString[Nsp+Nst+4*Nset]<>" fit parameters. Exit."];Exit[];];
+
+
+
+(* assemble PlotArgList *)
+(* c_i, d_i, all rho for all sets, include also chiXn{i} *)
+PlotArgList=Join[ParStart[[All,2]],ycohscf];
+
+(* Residual value over the whole fit-range (sets have been cutted to full range) using {Chi2,red} for all sets and for each set *)
+Chi2RedResidual={Chi2@@{PlotArgList,Nsp,Nst,set,fsp,fst,Tscf,"red"}};
+Do[dummy=Join[PlotArgList[[1;;Nsp+Nst]],PlotArgList[[Nsp+Nst+1+(i-1)*4;;Nsp+Nst+i*4]],{PlotArgList[[Nsp+Nst+4*Nset+i]]}];
+AppendTo[Chi2RedResidual,Chi2@@{dummy,Nsp,Nst,set[[i]],fsp[[i]],fst[[i]],Tscf[[i]],"red"}];
+,{i,1,Nset}];
+
+(* Residual value over the whole fit-range (sets have been cutted to full range) using {T,Log} for all sets and for each set *)
+LogdIResidual={T@@{PlotArgList,Nsp,Nst,set,fsp,fst,Tscf,Log}};
+Do[dummy=Join[PlotArgList[[1;;Nsp+Nst]],PlotArgList[[Nsp+Nst+1+(i-1)*4;;Nsp+Nst+i*4]],{PlotArgList[[Nsp+Nst+4*Nset+i]]}];
+AppendTo[LogdIResidual,T@@{dummy,Nsp,Nst,set[[i]],fsp[[i]],fst[[i]],Tscf[[i]],Log}];
+,{i,1,Nset}];
+
+WriteString[stream,"Chi2Red function values = "<>StringJoin[Riffle[ToString/@N[Chi2RedResidual[[1;;1+Nset]],4],", "]]<>"\n"];
+WriteString[stream,"LogdI function values = "<>StringJoin[Riffle[ToString/@N[LogdIResidual[[1;;1+Nset]],4],", "]]<>"\n"];
+WriteString[stream,"\n"];
+
+
+(* plot exp data *)
+pexpfitList={};
+pBarChartList={};
+ImgSizeUnit=320;
+
+Do[
+dummy=Join[PlotArgList[[1;;Nsp+Nst]],PlotArgList[[Nsp+Nst+1+(i-1)*4;;Nsp+Nst+i*4]],{PlotArgList[[Nsp+Nst+4*Nset+i]]}];
+AppendTo[pexpfitList,ErrorListLogLogPlot[{{#[[1]],plsc[[i]]*#[[2]]},ErrorBar[0*#[[3]],plsc[[i]]*#[[4]]]}&/@exp[[i]],Joined->False,PlotStyle->{col[[i,1]],Thick},PlotRange->PlRange]];
+(* note the printed numbers might look strange if exponentials like 10^-8 are printed *)
+WriteString[stream,"ListLogLogPlot[Transpose[{#,"<>ToString[plsc[[i]]]<>"*"<>ToString[FF]<>"["<>StringJoin[Num2Str[#,5,4,""]<>","&/@dummy]<>"fsp[["<>ToString[i]<>"]],fst[["<>ToString[i]<>"]],"<>ToString[Nsp]<>","<>ToString[Nst]<>",#]}&@set[["<>ToString[i]<>"]][[All,1]]],Joined->True,PlotStyle->{"<>ToString[col[[i,2]]]<>",Thick},PlotRange->PlRange,PlotMarkers->{Automatic,Small}]"<>"\n"];
+WriteString[stream,"\n"];
+
+
+(* export composed fit for each dataset *)
+(* overall fit *)
+dummy2=Transpose[{#,plsc[[i]]*FF@@{dummy,fsp[[i]],fst[[i]],Nsp,Nst,#}}&@set[[i]][[All,1]]];
+Export[OutDir<>YFile[[1]]<>"_set_"<>ToString[i]<>"_fit.dat",dummy2,"Table"];
+
+(* export individual sp and st contributions for each fit, putting all except the specific c_i or d_i to 0.0 and setting background to 0.0, include ycohscf *)
+Do[
+dummy3=dummy;
+dummy3[[1;;Nsp+Nst]]=Table[0.0,{k,1,Nsp+Nst}];
+dummy3[[j]]=dummy[[j]];
+dummy3[[Nsp+Nst+4]]=0.0;
+dummy4=Transpose[{#,plsc[[i]]*FF@@{dummy3,fsp[[i]],fst[[i]],Nsp,Nst,#}}&@set[[i]][[All,1]]];
+Export[OutDir<>YFile[[1]]<>"_set_"<>ToString[i]<>"_sp_"<>IntegerString[j,10,2]<>"_fit.dat",dummy4,"Table"];
+,{j,1,Nsp}];
+
+Do[
+dummy3=dummy;
+dummy3[[1;;Nsp+Nst]]=Table[0.0,{k,1,Nsp+Nst}];
+dummy3[[j]]=dummy[[Nsp+j]];
+dummy3[[Nsp+Nst+4]]=0.0;
+dummy4=Transpose[{#,plsc[[i]]*FF@@{dummy3,fsp[[i]],fst[[i]],Nsp,Nst,#}}&@set[[i]][[All,1]]];
+(* do not forget to increase Nst-index by 1 *)
+Export[OutDir<>YFile[[1]]<>"_set_"<>ToString[i]<>"_st_"<>IntegerString[j+1,10,2]<>"_fit.dat",dummy4,"Table"];
+,{j,1,Nst}];
+
+
+(* list of plots with fits *)
+AppendTo[pexpfitList,ListLogLogPlot[dummy2,Joined->True,PlotStyle->{col[[i,2]],Thick},PlotRange->PlRange,PlotMarkers->{Automatic,Small}]];
+,{i,1,Nset}];
+pexpfit=Show[pexpfitList,Frame->True,PlotLabel->Style[Framed[ToString[OutDir]<>ToString[YFile[[1]]]],16,Background->LightYellow],ImageSize->3*ImgSizeUnit,DisplayFunction->Identity];
+
+(* create barchart of coefficients c_i and d_i *)
+cdList=Labeled[#,ToString[NumberForm[N[Round[#*10^4]/10^4],{5,4}]],Above]&/@PlotArgList[[1;;Nsp+Nst]];
+chlList=ParStart[[1;;Nsp+Nst,1]];
+chsList=Join[Table[Blue,{i,1,Nsp}],Table[Green,{i,1,Nst}]];
+AppendTo[pBarChartList,BarChart[cdList,ChartLabels->chlList,ChartStyle->chsList,Frame->True,FrameTicks->{None, Automatic},ImageSize->ImgSizeUnit]];
+
+(* create barchart for rho and sld *)
+Do[
+cdList=Labeled[#,ToString[NumberForm[N[Round[#*10^5]/10^5],{4,3}]],Above]&/@PlotArgList[[Nsp+Nst+1+(i-1)*4;;Nsp+Nst+3+(i-1)*4]];
+chlList=ParStart[[Nsp+Nst+1+(i-1)*4;;Nsp+Nst+3+(i-1)*4,1]];
+chsList=Table[col[[i,2]],{j,1,3}];
+AppendTo[pBarChartList,BarChart[cdList,ChartLabels->Placed[chlList,Top],ChartStyle->chsList,Frame->True,FrameTicks->{None, Automatic},PlotRange->{{0.5,3.5},If[Xnmode[[i]]=="X",{250,530},{-0.6,8}]}, AspectRatio->1,ImageSize->3*ImgSizeUnit/Nset]];
+,{i,1,Nset}];
+
+(* create final image and export *)
+pImg=Grid[{{pexpfit},{GraphicsGrid[{pBarChartList[[2;;]]}]},{pBarChartList[[1]]}},Frame->All,Spacings->0];Export[OutDir<>YFile[[1]]<>".png",pImg,ImageSize->3*ImgSizeUnit];
+
+(* close logfile *)
+$Messages=$Messages[[{1}]];
+On[General::stop];
+Close[stream];
+
+,{Y,1,Length[YFileListLocal]}];(* end (Parallel)Do *)
 
 ];
