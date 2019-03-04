@@ -686,7 +686,7 @@ WriteString[stream,"ici = "<>ToString[ici]<>"\n"];
 
 If[Nst>0,
 idi=0.0;
-Do[idi+=i*If[ParStart[[i,2]]==False,ParStart[[i,3]],ToExpression[ParStart[[i,1]]]/.Par];,{i,Nsp+1,Nsp+Nst}];
+Do[idi+=(i-Nsp+1)*If[ParStart[[i,2]]==False,ParStart[[i,3]],ToExpression[ParStart[[i,1]]]/.Par];,{i,Nsp+1,Nsp+Nst}];
 dummy=0.0;
 Do[dummy+=If[ParStart[[i,2]]==False,ParStart[[i,3]],ToExpression[ParStart[[i,1]]]/.Par];,{i,Nsp+1,Nsp+Nst}];
 idi/=dummy;
