@@ -539,19 +539,23 @@ Do[If[ParStart[[i,2]]==False&&Length[ParStart[[i]]]<3,Print["Parameter "<>ParSta
 (* Argument list for fit function *)
 (* when cdConstr[[1]]==True check that all c_i are fixed, Nsp>0 and normalize the sum of all c_i to 1.0 *)
 If[cdConstr[[1]]==True&&Nsp==0,Print["Nsp must be >0 if cdConstr[[1]]==True. Exit."];Exit[];];(* in the following we know that Nsp>0 *)
-If[cdConstr[[1]]==True&&Norm[ParStart[[1;;Nsp,2]]/.{True->0,False->1},1]!=Nsp,Print["All c_i must be fixed when cdConstr[[1]]==True. Exit."];Exit[];];(* in the following we know that for all Nsp c_i fixed values are given *)
+If[cdConstr[[1]]==True&&Norm[ParStart[[1;;Nsp,2]]/.{True->0,False->1},1]!=Nsp,Print["All c_i must be fixed when cdConstr[[1]]==True. Exit."];Exit[];];
+(* in the following we know that for all Nsp c_i fixed values are given *)
 If[cdConstr[[1]]==True,ParStart[[1;;Nsp,3]]/=Total[ParStart[[1;;Nsp,3]]];];(* in the following we know that sum(c_i)=1 *)
 If[cdConstr[[1]]==True,If[cdConstr[[2,2]]==False&&Length[cdConstr[[2]]]<3,Print["Parameter "<>cdConstr[[2,1]]<>" is fixed, but no value is provided. Exit."];Exit[];];];
 
 (* get number from upper boundary of LicoConstr *)
 LicoConstr2Num=StringReplace[LicoConstr[[2]],{"="->"","<"->"",">"->""}];
-(* c's and d's *)
-count=0;
-(* when cdConstr[[1]]==True, c_i->c_i*chi, d_i->d_i*(#2-chi) *)
-dummy=dummy2="";
-If[cdConstr[[1]]==True,dummy3=If[cdConstr[[2,2]]==True,1,3];dummy=cdConstr[[2,dummy3]]<>"*";dummy2="("<>LicoConstr2Num<>"-"<>cdConstr[[2,dummy3]]<>")*";];
+
 
 (* start to assemble FitArgList *)
+count=0;
+
+(* c_i and d_i *)
+(* when cdConstr[[1]]==True, dummy->chi & dummy2->(Lico[#2]-chi) *)
+dummy=dummy2="";
+If[cdConstr[[1]]==True,dummy3=If[cdConstr[[2,2]]==True,1,3];dummy=cdConstr[[2,dummy3]]<>"*";dummy2="("<>LicoConstr2Num<>"-"<>cdConstr[[2,dummy3]]<>")*";];
+(* use dummy and dumm2 for c_i->c_i*chi, d_i->d_i*(Lico[#2]-chi) *) 
 FitArgList="{"<>StringJoin[Table[dummy<>If[ParStart[[i,2]],ParStart[[i,1]],ToString[ParStart[[i,3]]]]<>",",{i,1,Nsp}]]<>StringJoin[Table[dummy2<>If[ParStart[[Nsp+i,2]],ParStart[[Nsp+i,1]],ToString[ParStart[[Nsp+i,3]]]]<>",",{i,1,Nst}]];
 count+=Nsp+Nst;
 
@@ -564,17 +568,25 @@ Do[FitArgList=FitArgList<>If[ycohscf[[i,1]]==True,"chiXn"<>ToString[i],ToString[
 FitArgList=StringDrop[FitArgList,-1]<>"}";
 FitArgList=ToExpression[FitArgList];
 
-(* basic constraints for linear coefficients c_i and d_i *)
+
+(* start to assemble FitConstrList *)
 count=0;
-(* >0 for those c_i and d_i that will be optimized *)
+
+(* basic constraints for linear coefficients c_i and d_i *)
+(* add automatcially c_i>0.0 and d_i>0.0 for those that will be optimized *)
 FitConstrList="{"<>StringJoin[Table[If[ParStart[[i,2]],ParStart[[i,1]]<>">0.0,",""],{i,1,Nsp}]]<>StringJoin[Table[If[ParStart[[Nsp+i,2]],ParStart[[Nsp+i,1]]<>">0.0,",""],{i,1,Nst}]];
-(* sum( c's and d's that are optimized ) == 1, will be only applied if at least two coefficient will be optimized, one makes not much sense, fixing this parameter is more senseful ! *)
+(* summation constraint will be only applied if at least two coefficient will be optimized, one makes not much sense, fixing this parameter is more senseful ! *)
+(* fixed values will be inserted if ParStart[[i,2]] == False *)
+(* sum( c's ) + sum( d's ) == Lico[[#2]] if cdConstr[[1]] == False *)
+(* chi * sum( c's ) + (Lico[#2] - chi ) * d's == Lico[[#2]] if cdConstr[[1]] == True *)
 dummy=dummy2=dummy3="";
 If[cdConstr[[1]]==True,dummy4=If[cdConstr[[2,2]]==True,1,3];dummy=cdConstr[[2,dummy4]]<>"*(";dummy2="("<>LicoConstr2Num<>"-"<>cdConstr[[2,dummy4]]<>")*(";dummy3="0)+";];
 If[Length[Cases[ParStart[[1;;Nsp+Nst,2]],True]]>1,FitConstrList=FitConstrList<>LicoConstr[[1]]<>dummy<>StringJoin[Table[If[ParStart[[i,2]],ParStart[[i,1]],ToString[ParStart[[i,3]]]]<>"+",{i,1,Nsp}]]<>dummy3<>dummy2<>StringJoin[Table[If[ParStart[[Nsp+i,2]],ParStart[[Nsp+i,1]],ToString[ParStart[[Nsp+i,3]]]]<>"+",{i,1,Nst}]]<>dummy3;
 FitConstrList=StringDrop[FitConstrList,-1]<>LicoConstr[[2]]<>",";
 ];
 count+=Nsp+Nst;
+
+(* note that the current code does ignore all user-defined constraints in ParStart for c_i and d_i !!! -> they still can be added in AddConstr *)
 
 (* additional userdefined constraints especially for rho's and sld's, ignore multiplicities of parameters for different datasets !!! *)
 (* set >0 for those Xa_i's and na_i's that will be optimized if no other constraints are given for them e.g. {Xa1,True} -> Xa1>0, {Xa1,True,0.0,"#>0.1"} -> Xa1>0.1 *)
@@ -587,7 +599,8 @@ WriteString[stream,"\n"];
 
 (* chiXn{i} constraints if provided *)
 Do[If[ycohscf[[i,1]]&&Length[ycohscf[[i]]]==3,FitConstrList=FitConstrList<>StringReplace[ycohscf[[i,3]],"#"->"chiXn"<>ToString[i]]<>",";];,{i,1,Nset}];
-(* chi constraint if cdConstr[[1]]==True *)
+
+(* add automatically 0.0<chi<Lico[#2] constraint if cdConstr[[1]]==True and no user-defined constraint for chi is provided in cdConstr[[2,4]] *)
 If[cdConstr[[1]]==True,FitConstrList=FitConstrList<>If[Length[cdConstr[[2]]]>3,StringReplace[cdConstr[[2,4]],"#"->cdConstr[[2,1]]],"0.0<"<>cdConstr[[2,1]]<>StringReplace[LicoConstr[[2]],"=="->"<"]]<>",";];
 
 (* constraints from AddConstraints, use YFileListGlobal in AddConstraints to access stabilizer layer thicknesses *)
@@ -597,6 +610,7 @@ FitConstrList=FitConstrList<>StringJoin[#<>","&/@AddConstraintsY];
 (* finish FitConstrList *)
 FitConstrList=StringDrop[FitConstrList,-1]<>"}";
 FitConstrList=ToExpression[FitConstrList];
+
 
 (* parameters names (and initial values for FindMinimum) for fit functions, ignore multiplicities of parameters for different datasets !!!, list only those that shall be optimized (True) *)
 (* for NMinimize no initial values are possible, if provided they will be ignored *)
