@@ -373,3 +373,500 @@ run_BatchMultiFit_20190130.m
 
 
 
+
+#########################################################
+individual contribution plots for dilute 0p0 and 3p0 fits
+#########################################################
+
+
+
+new subroutine BatchMultiPlot in BatchMultiFit.m
+
+run_BatchMultiPlot_20190227.m
+
+
+
+
+
+
+(* 0p0 1to5dil OSL_005/ with VOSL conc *)
+
+(* Load XNDiff output data *)
+(* Yfiles must match those from fits !!! *)
+YFileDir="out/";
+YFileList=FileNames[YFileDir<>"SSS_180x360_P020_012_ST_360_400_N50_OSL.log"];
+YFileList=StringTrim[StringTrim[#,YFileDir],".log"]&/@YFileList;
+
+(*plot*)
+(*
+OutDir="MathematicaOut/SSS_0p0BC_1to5dil_OSL_005_plot/";
+Xnmode="X";
+expfileconc={"export/im_0051238_caz_CapA_0p0BC_1to5dil-H2O_s-scaled_sIdI.chi",0.05};
+Nmaxsp=6;
+Nmaxst=0;
+Fitsmin=0.0085;
+Fitsmax=0.37;
+ParStart={{c1,0.052586372247525714},{c2,0.004510639736581632},{c3,0.42054301527185284},{c4,0.35619147143577523},{c5,0.11911260635744349},{c6,0.047055894950821076},{rhoisl,339.79942098618864},{rhoosl,351.7491919219455},{rhodm,339.9999999998499},{Xa,0.00244205907423795}};
+ycohscf={1.8187777296904648};
+PlRange={{0.002,0.5},{10^-3,10^2}};
+plsc=1;(*Default is 1 *)
+Ymode=1;(*Default is 1 *)
+Smear={0,0.0};(*Default*)
+Tscf=1.0;(*Default is 1.0 *)
+PlotFlag=True;(*Default is True *)
+ow=True;(*Default is False *)
+BatchMultiPlot[OutDir,Xnmode,expfileconc,YFileDir,YFileList,Nmaxsp,Nmaxst,Fitsmin,Fitsmax,ParStart,ycohscf,PlRange,plsc,Ymode,Smear,Tscf,PlotFlag,ow]
+*)
+
+
+
+(* 0p0 1to5dil OSL_005/ with VOSL conc *)
+
+(* Load XNDiff output data *)
+(* Yfiles must match those from fits !!! *)
+YFileDir="out/";
+YFileList=FileNames[YFileDir<>"SSS_180x360_P012_040_ST_360_400_N50_OSL.log"];
+YFileList=StringTrim[StringTrim[#,YFileDir],".log"]&/@YFileList;
+
+(*plot*)
+OutDir="MathematicaOut/SSS_3p0BC_1to5dil_OSL_005_plot/";
+
+
+
+
+
+################################################
+LARGER vs normal vs SMALLER simulations and fits
+################################################
+
+xmgrace plots basically same except low Q
+
+chiXn differences in fits, little diff in fit params?
+
+
+
+SetDirectory["/home/martins/projects/BatchMultiFit"];
+
+
+
+(* Load XNDiff output data, Y-files for dilute SSS suspension *)
+YFileDir="out/";
+YFileList=FileNames[YFileDir<>"SSS_180x360_P*_N50_OSL_LARGER.log"];
+YFileList=StringTrim[StringTrim[#,YFileDir],".log"]&/@YFileList;
+
+
+
+
+(* with ycohscf(0.5-2.5), T *)
+OutDir="MathematicaOut/SSS_0p0BC_1to5dil_OSL_LARGER_005/";
+Xnmode="X";
+expfileconc={"export/im_0051238_caz_CapA_0p0BC_1to5dil-H2O_s-scaled_sIdI.chi",0.05};
+Nmaxsp=6;
+Nmaxst=0;
+FitFunc=NMinimize;
+FitMethod="DifferentialEvolution";
+Fitsmin=0.0085;
+Fitsmax=0.37;
+FitMaxIt=1000;
+FitTarF=T;
+ParStart={{"c1",True,0.2},{"c2",True,0.3},{"c3",True,0.3},{"c4",True,0.1},{"c5",True,0.1},{"c6",True,0.0},{"rhoisl",True,0,"270<#<400"},{"rhoosl",True,0,"270<#<400"},{"rhodm",True,0,"333<#<340"},{"Xa",True,0.002,"0.001<#<0.005"}};
+PlRange={{0.002,0.5},{10^-3,10^2}};
+plsc=1; (* Default *)
+Ymode=1; (* Default *)
+AddConstraints={}; (* Default *)
+Smear={0,0.0}; (* Default *)
+Tscf=1.0; (* Default *)
+ycohscf={True,1.0,"0.5<#<2.5"};
+LicoConstr={"","==1.0"}; (* Default *)
+ExportFlag=True;
+Print[AbsoluteTiming[BatchMultiFit[OutDir,Xnmode,expfileconc,YFileDir,YFileList,Nmaxsp,Nmaxst,FitFunc,FitMethod,Fitsmin,Fitsmax,FitMaxIt,FitTarF,ParStart,PlRange,plsc,Ymode,AddConstraints,Smear,Tscf,ycohscf,LicoConstr,ExportFlag]][[1]]]
+
+
+(* with ycohscf(0.5-2.5), T *)
+OutDir="MathematicaOut/SSS_3p0BC_1to5dil_OSL_LARGER_005/";
+Xnmode="X";
+expfileconc={"export/im_0051239_caz_CapB_3p0BC_1to5dil-H2O_s-scaled_sIdI.chi",0.05};
+Nmaxsp=6;
+Nmaxst=0;
+FitFunc=NMinimize;
+FitMethod="DifferentialEvolution";
+Fitsmin=0.0085;
+Fitsmax=0.37;
+FitMaxIt=1000;
+FitTarF=T;
+ParStart={{"c1",True,0.2},{"c2",True,0.3},{"c3",True,0.3},{"c4",True,0.1},{"c5",True,0.1},{"c6",True,0.0},{"rhoisl",True,0,"270<#<400"},{"rhoosl",True,0,"270<#<400"},{"rhodm",True,0,"333<#<340"},{"Xa",True,0.002,"0.001<#<0.005"}};PlRange={{0.002,0.5},{10^-3,10^2}};
+plsc=1; (* Default *)
+Ymode=1; (* Default *)
+AddConstraints={}; (* Default *)
+Smear={0,0.0}; (* Default *)
+Tscf=1.0; (* Default *)
+ycohscf={True,1.0,"0.5<#<2.5"};
+LicoConstr={"","==1.0"}; (* Default *)
+ExportFlag=True;
+Print[AbsoluteTiming[BatchMultiFit[OutDir,Xnmode,expfileconc,YFileDir,YFileList,Nmaxsp,Nmaxst,FitFunc,FitMethod,Fitsmin,Fitsmax,FitMaxIt,FitTarF,ParStart,PlRange,plsc,Ymode,AddConstraints,Smear,Tscf,ycohscf,LicoConstr,ExportFlag]][[1]]];
+
+
+
+
+
+
+(* Load XNDiff output data, Y-files for dilute SSS suspension *)
+YFileDir="out/";
+YFileList=FileNames[YFileDir<>"SSS_180x360_P*_N50_OSL_SMALLER.log"];
+YFileList=StringTrim[StringTrim[#,YFileDir],".log"]&/@YFileList;
+
+
+
+
+(* with ycohscf(0.5-2.5), T *)
+OutDir="MathematicaOut/SSS_0p0BC_1to5dil_OSL_SMALLER_005/";
+Xnmode="X";
+expfileconc={"export/im_0051238_caz_CapA_0p0BC_1to5dil-H2O_s-scaled_sIdI.chi",0.05};
+Nmaxsp=6;
+Nmaxst=0;
+FitFunc=NMinimize;
+FitMethod="DifferentialEvolution";
+Fitsmin=0.0085;
+Fitsmax=0.37;
+FitMaxIt=1000;
+FitTarF=T;
+ParStart={{"c1",True,0.2},{"c2",True,0.3},{"c3",True,0.3},{"c4",True,0.1},{"c5",True,0.1},{"c6",True,0.0},{"rhoisl",True,0,"270<#<400"},{"rhoosl",True,0,"270<#<400"},{"rhodm",True,0,"333<#<340"},{"Xa",True,0.002,"0.001<#<0.005"}};
+PlRange={{0.002,0.5},{10^-3,10^2}};
+plsc=1; (* Default *)
+Ymode=1; (* Default *)
+AddConstraints={}; (* Default *)
+Smear={0,0.0}; (* Default *)
+Tscf=1.0; (* Default *)
+ycohscf={True,1.0,"0.5<#<2.5"};
+LicoConstr={"","==1.0"}; (* Default *)
+ExportFlag=True;
+Print[AbsoluteTiming[BatchMultiFit[OutDir,Xnmode,expfileconc,YFileDir,YFileList,Nmaxsp,Nmaxst,FitFunc,FitMethod,Fitsmin,Fitsmax,FitMaxIt,FitTarF,ParStart,PlRange,plsc,Ymode,AddConstraints,Smear,Tscf,ycohscf,LicoConstr,ExportFlag]][[1]]]
+
+
+(* with ycohscf(0.5-2.5), T *)
+OutDir="MathematicaOut/SSS_3p0BC_1to5dil_OSL_SMALLER_005/";
+Xnmode="X";
+expfileconc={"export/im_0051239_caz_CapB_3p0BC_1to5dil-H2O_s-scaled_sIdI.chi",0.05};
+Nmaxsp=6;
+Nmaxst=0;
+FitFunc=NMinimize;
+FitMethod="DifferentialEvolution";
+Fitsmin=0.0085;
+Fitsmax=0.37;
+FitMaxIt=1000;
+FitTarF=T;
+ParStart={{"c1",True,0.2},{"c2",True,0.3},{"c3",True,0.3},{"c4",True,0.1},{"c5",True,0.1},{"c6",True,0.0},{"rhoisl",True,0,"270<#<400"},{"rhoosl",True,0,"270<#<400"},{"rhodm",True,0,"333<#<340"},{"Xa",True,0.002,"0.001<#<0.005"}};PlRange={{0.002,0.5},{10^-3,10^2}};
+plsc=1; (* Default *)
+Ymode=1; (* Default *)
+AddConstraints={}; (* Default *)
+Smear={0,0.0}; (* Default *)
+Tscf=1.0; (* Default *)
+ycohscf={True,1.0,"0.5<#<2.5"};
+LicoConstr={"","==1.0"}; (* Default *)
+ExportFlag=True;
+Print[AbsoluteTiming[BatchMultiFit[OutDir,Xnmode,expfileconc,YFileDir,YFileList,Nmaxsp,Nmaxst,FitFunc,FitMethod,Fitsmin,Fitsmax,FitMaxIt,FitTarF,ParStart,PlRange,plsc,Ymode,AddConstraints,Smear,Tscf,ycohscf,LicoConstr,ExportFlag]][[1]]];
+
+
+
+
+
+
+LARGER vs SMALLER
+
+3p0 005
+12_40 for all
+
+Normal
+
+c1 = 0.2603335056982107
+c2 = 0.09871976690753799
+c3 = 0.3666043432215503
+c4 = 0.16358030480959962
+c5 = 0.08142956400372214
+c6 = 0.029332515359379186
+rhoisl = 324.5557663966116
+rhoosl = 340.3200337156504
+rhodm = 337.90644817452437
+Xa = 0.0011974203824816794
+chiXn1 = 1.9793317758617377
+
+Target function values = 1.83615, 1.83615
+Chi2Red function values = 3.35569, 3.35569
+
+
+LARGER
+
+c1 = 0.26343935901452903
+c2 = 0.1065514547867438
+c3 = 0.36025589751133735
+c4 = 0.16254844974602134
+c5 = 0.07857913915493214
+c6 = 0.028625699786436382
+rhoisl = 323.75058197961226
+rhoosl = 340.1700363678106
+rhodm = 337.6719096703893
+Xa = 0.001034026930590134
+chiXn1 = 1.8453580894626482
+
+ici = 2.77215
+
+Target function values = 1.84133, 1.84133
+Chi2Red function values = 3.36006, 3.36006
+LogdI function values = 1.84133, 1.84133
+
+
+
+
+SMALLER
+
+Fitted parameters:
+c1 = 0.2597588244071314
+c2 = 0.08806917989334791
+c3 = 0.3705697186951222
+c4 = 0.16668390796067453
+c5 = 0.08372853712833851
+c6 = 0.031189831915385397
+rhoisl = 325.00068933337525
+rhoosl = 340.40145562616857
+rhodm = 338.0190762528449
+Xa = 0.0011695917107574538
+chiXn1 = 2.110809765304189
+
+ici = 2.82012
+
+Target function values = 1.8288, 1.8288
+Chi2Red function values = 3.06812, 3.06812
+LogdI function values = 1.8288, 1.8288
+
+
+
+
+
+
+
+0p0 005
+20_12 (16_16 for LARGER would be better)
+
+Normal
+
+c1 = 0.052586372247525714
+c2 = 0.004510639736581632
+c3 = 0.42054301527185284
+c4 = 0.35619147143577523
+c5 = 0.11911260635744349
+c6 = 0.047055894950821076
+rhoisl = 339.79942098618864
+rhoosl = 351.7491919219455
+rhodm = 339.9999999998499
+Xa = 0.00244205907423795
+chiXn1 = 1.8187777296904648
+
+Target function values = 2.50882, 2.50882
+Chi2Red function values = 11.6057, 11.6057
+
+LARGER
+
+c1 = 0.05729635465141869
+c2 = 0.016283455859393073
+c3 = 0.4162350962034741
+c4 = 0.355466537795804
+c5 = 0.11576579528749885
+c6 = 0.03895276020241126
+rhoisl = 339.67917065213095
+rhoosl = 351.93748091953086
+rhodm = 339.9999999976835
+Xa = 0.0022139526395870256
+chiXn1 = 1.752631871350909
+
+ici = 3.57298
+
+Target function values = 2.44415, 2.44415
+Chi2Red function values = 14.6963, 14.6963
+LogdI function values = 2.44415, 2.44415
+
+SMALLER
+
+c1 = 0.04575551255215571
+c2 = 6.857041625705315*10^-10
+c3 = 0.4187489235377322
+c4 = 0.35923771374692304
+c5 = 0.1219457176450851
+c6 = 0.05431213183239976
+rhoisl = 339.75304422546026
+rhoosl = 351.5761351189539
+rhodm = 340.
+Xa = 0.002472822392122774
+chiXn1 = 1.8691324005868033
+
+ici = 3.67455
+
+Target function values = 2.65355, 2.65355
+Chi2Red function values = 12.0032, 12.0032
+LogdI function values = 2.65355, 2.65355
+
+
+
+
+
+check disl dosl range for SMALLER and LARGER
+
+smaller diameters lead to thicker platelets, and chiXn increases as well
+why is that if the SAXS OSL patterns do actually look the same, also the Y_X_ are the same in the relevant Q range?!
+
+
+
+
+
+
+##################
+native dispersions
+##################
+
+run_BatchMultiFit_20190223.m
+
+	0p0 native
+
+	YFileList=FileNames[YFileDir<>"SSS_180x360_P*_ST_230_200_N50_OSL.log"]; !!! n3 = 1-6 used in stacks !!!
+
+	MathematicaOut/SSS_0p0BC_native_OSL_001/
+	Nmaxsp=6;
+	Nmaxst=5;
+	Fitsmin=0.0085;
+	Fitsmax=0.37;
+
+	fix c_i to dilute ones from OSL_005/
+
+	ycohscf={True,1.0,"0.5<#<2.5"};
+	fit with cdConstr, i.e. d_i and chi, cdConstr={True,{"chi",True,0.0}};
+
+	Results and observations:
+	->does not fit, simulated stacks patterns look strange (many peaks)
+	->noted that stacks with d_st ~ 22 nm and particles >3 unit cells thickness are physically unrealistic -> new simulations e.g. with particles of only 3 unit cells
+	->diffuse SAS range strong structure factor due to high conc, which is not accounted by the stack structure factor -> consider fitting s > 0.05 only
+	->diff btw native and dilute diffuse SAS is less for loaded samples, would ideally require new sim with their c_i
+
+
+run_BatchMultiFit_20190224.m
+
+	MathematicaOut/SSS_0p0BC_native_OSL_003/
+	same as MathematicaOut/SSS_0p0BC_native_OSL_001/
+	but:
+	
+	FitMethod="SimulatedAnnealing";
+	Fitsmin=0.05;
+	Fitsmax=0.37;
+
+	Results and observations:
+	-> same problems as above
+
+
+new XNDiff scans
+
+	20190227_betaSSS_abc_R_sigma_R_disl_dosl_scan.sh
+	simulated stacks of platelets with 3 unit cells thickness only, 
+	R=21.5:0.5:23.5, dR=0.5,1.0,2.0, dosl=disl=12,16,20 with dtot=32
+	SSS_180x360_P${disl_str2}_${dosl_str2}_ST_${D_str2}_${dR_str2}_N50_OSL_SPST_3
+
+	20190228_betaSSS_abc_R_sigma_R_disl_dosl_scan.sh
+	simulated stacks of platelets with 1-3 unit cells thickness only (not fitted yet)
+	SSS_180x360_P${disl_str2}_${dosl_str2}_ST_${D_str2}_${dR_str2}_N50_OSL_SPST_123
+
+
+
+run_BatchMultiFit_20190304_native_0p0_SPST_3_123.m
+
+
+	0p0 native
+	stacks of platelets with 3 unit cells thickness only
+
+	YFileList=FileNames[YFileDir<>"SSS_180x360_P*_ST_*_N50_OSL_SPST_3.log"];
+
+
+	MathematicaOut/SSS_0p0BC_native_OSL_SPST_3_001/
+	Nmaxsp=6;
+	Nmaxst=5;
+	FitFunc=NMinimize;
+	FitMethod="DifferentialEvolution";
+	Fitsmin=0.05;
+	Fitsmax=0.37;
+	fix c_i to dilute ones from OSL_005/
+	ycohscf={True,1.0,"0.5<#<2.5"};
+	fit with cdConstr, i.e. d_i and chi, cdConstr={True,{"chi",True,0.5}};
+
+	Results and observations:
+	-> does not fit, d_i usually 0.0, D=(211,)213,215,217(,220) would be actually a better range for D, use 1.0, 1.5 and 2.0 for dR
+	-> c_i=3,4 (weigthed as in dil) with smaller disl+dosl might be good as well since Bragg peak is too wide with c_i=3 only, 4*45+2*16 = 212 <= min(D), i.e. only half of stabilizer layer
+	-> form factor indicates that it is quite important to include 1 and 3,4 sp (see individual contrib plots/fits for dilute samples)
+	-> 215_100_*_3.log : xmgrace -legend load -log xy SSS_180x360_P016_016_ST_215_100_N50_OSL_SPST_3_X_st_0[2-4].dat SSS_180x360_P016_016_ST_215_100_N50_OSL_SPST_3_X_sp_0[1-5].dat /home/martins/projects/BatchMultiFit/export/im_0051252_caz_CapB_0p0BC_native-H2O_s-scaled_sIdI.chi &
+
+
+	same as MathematicaOut/SSS_0p0BC_native_OSL_SPST_3_001/ but w/ FindMinimum w/ start values:
+	MathematicaOut/SSS_0p0BC_native_OSL_SPST_3_003/
+	FitFunc=FindMinimum;
+	FitMethod="Automatic";
+	Fitsmin=0.05;
+	Fitsmax=0.37;
+	FitMaxIt=10000;
+	same as OSL_SPST_3_003/, fixed c_i from OSL_005/ fits, use 1/4 for d_i
+
+	Results and observations:
+	-> does not fit as well, no improvement
+
+
+	same as MathematicaOut/SSS_0p0BC_native_OSL_SPST_3_001/ but FindMinimum w/ start values, do not use chi/cdConstr i.e. fit directly c_i and d_i:
+	MathematicaOut/SSS_0p0BC_native_OSL_SPST_3_005/
+
+	cdConstr={False,{"chi",True,0.0(*,Constraint*)}};
+
+	Results and observations:
+	-> does not fit as well, little improvement
+
+
+
+
+next steps 
+new XNDiff scans
+
+	d001 betaSSS
+	2*pi/0.14035
+	ans =  44.768
+
+	determine d_st for 0p0 native with fityk
+	im_0051252_caz_CapB_0p0BC_native-H2O.fit in reduction_20181220_Jakob_ChrHansen/Ivsq/w_subtraction/SAXS/
+	fityk fit of 4 5 orders (3 Gaussian, 1 fixed at betaSSS Q001)
+	1./([.055 .082 .1235 .1471]./[2 3 4 5]/2/pi)
+	ans =
+
+	   228.48   229.87   203.50   213.57
+
+
+	use XNDiff collison control (stack mode 1) ???
+
+	DMIN  = n3[k-1] * abs( sp( Gs, a3) ) / betrag (Gs) ; // DMIN -> n3[k-1] * d001
+	DMIN += 2.0 * ( thickness_isl + thickness_osl ) ; // DMIN -> n3[k-1] * d001 + 2*dtot
+	while ((D[k] = n_rand (par->td1, par->D1, par->D2)) < DMIN) ; // generate D[k] according to chosen distr until D > DMIN
+
+	problem latter step would automatically exclude n3>3 for large dtot since n3==4 will never satisfy condition
+
+	implemented in XNDiff stack mode 4 which will set randomly generated D[k] (Guasian distr) to DMIN (n3[k-1] * d001 + 2dtot) if DMIN > D[k]
+	else if ( par->stackmode == 4 )
+	{
+		/* if DMIN + both soft stabilizer layers >  D[k] -> D[k] = DMIN */
+		/* reasonable if difference btw max(DMIN) ~ <D[k]> but not max(DMIN) >> <D[k]> */
+		DMIN += 2.0 * ( thickness_isl + thickness_osl ) ;
+		while ((D[k] = n_rand (par->td1, par->D1, par->D2)) < 0.0 ) ;
+		if ( DMIN > D[k] ) { D[k] = DMIN ; } 
+	}
+
+
+	similar as before but now include 1-4 sp but limit dtot to 32 with disl,dosl=8:4:24
+	201903xx_betaSSS_abc_R_sigma_R_disl_dosl_scan.sh
+
+	R=21.3:0.2:21.7, dR=1.0,1.5,(2.0) disl,dosl=8:4:24 with dtot=32
+	SSS_180x360_P${disl_str2}_${dosl_str2}_ST_${D_str2}_${dR_str2}_N50_OSL_SPST_1234_STMOD4
+
+
+
+
+run_BatchMultiFit_201903xx_native_0p0_SPST_1234_STMOD4.m
+
