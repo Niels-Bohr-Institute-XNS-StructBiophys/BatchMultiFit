@@ -310,10 +310,21 @@ run_BatchMultiFit_20190125.m
 
 	Yfiles (normalized with VOSL):
 	disl=4:4:144, dosl=4:4:144, disl+dosl<150
-	Nsp=6 
 	YFileList=FileNames[YFileDir<>"SSS_180x360_P*_ST_360_400_N50_OSL.log"];
 
-	(* with 0.5 < ycohscf < 2, T *)
+	expfileconc={"export/...BC_1to5dil-H2O_s-scaled_sIdI.chi",0.05};
+	Nmaxsp=6;
+	Nmaxst=0;
+	FitFunc=NMinimize;
+	FitMethod="DifferentialEvolution";
+	Fitsmin=0.0085;
+	Fitsmax=0.37;
+	FitMaxIt=1000;
+	ParStart= ... {"rhoisl",True,0,"270<#<400"},{"rhoosl",True,0,"270<#<400"},{"rhodm",True,0,"333<#<340"} ...
+	ycohscf={True,1.0,"0.5<#<2.5"};
+
+
+	(* with ycohscf(0.5-2.5), T *)
 	OutDir="MathematicaOut/SSS_*BC_1to5dil_OSL_005/";
 
 	best fits (T):
@@ -325,8 +336,12 @@ run_BatchMultiFit_20190125.m
 
 	-> except 7p5 the best fits are the same for VOSL approach as for VCRY
 
+	-> TODO stat:
+		model cmp:
 
-	(* with 0.5 < ycohscf < 2, ChiRed2 *)
+
+
+	(* with ycohscf(0.5-2.5), {Chi2,"red"}, with dI *)
 	OutDir="MathematicaOut/SSS_*BC_1to5dil_OSL_006/";
 
 	best fits (Chi2Red):
@@ -372,6 +387,132 @@ run_BatchMultiFit_20190130.m
 
 
 
+run_BatchMultiFit_20190206.m
+
+	YFileList=FileNames[YFileDir<>"SSS_180x360_P*_ST_360_400_N50_OSL.log"];
+
+	expfileconc={"export/...BC_1to5dil-H2O_s-scaled_sIdI.chi",0.05};
+	Nmaxsp=6;
+	Nmaxst=0;
+	FitFunc=NMinimize;
+	FitMethod="DifferentialEvolution";
+	Fitsmin=0.0085;
+	Fitsmax=0.37;
+	FitMaxIt=1000;
+	ParStart= ... {"rhoisl",True,0,"320<#<355"},{"rhoosl",True,0,"320<#<355"},{"rhodm",True,0,"334<#<340"} ...
+	ycohscf={True,1.0,"0.5<#<2.0"};
+
+	-> almost same as OSL_005/ but with higher lower limits for rho and max chiXn is 2.0
+
+	(* with ycohscf(0.5-2.0), T *)
+	OutDir="MathematicaOut/SSS_*BC_1to5dil_OSL_011/";
+
+	BC 	Tmin	disl	dosl
+	0p0	2.50882	020	012
+	3p0	1.87835	016	028
+	5p0	1.84983	016	036
+	7p5	1.78487	012	016
+
+	-> slightly worse fits as compared to OSL_005/ shell thickenesses also differ for loaded samples, especially 7p5 (expectable, since ill-defined)
+
+
+
+run_BatchMultiFit_20190207.m
+
+	for loaded samples we studied fits with Model 1 where we allowed to vary rhoisl and rhoosl only in small bands around the mixed rho of BC+ATOC in isl and TW80+PC in osl
+
+	see SLD.ods
+
+	Model 1 ATOC+BC in inner shell, TW80+Lecithin in outer (Expect that isl expands while osl stays the same)
+	BC	shell				rho
+	3p0	isl	1:3   (w/w) ATOC:BC	314.9
+	5p0	isl	1:5   (w/w) ATOC:BC	314.3
+	7p5	isl	1:7.5 (w/w) ATOC:BC	314.0
+	all	osl	8:2   (w/w) TW80:PC	350.7
+
+
+	YFileList=FileNames[YFileDir<>"SSS_180x360_P*_ST_360_400_N50_OSL.log"];
+
+	(* with ycohscf(0.5-2.0), T *)
+
+	OutDir="MathematicaOut/SSS_3p0BC_1to5dil_OSL_013/";
+	ParStart= ... {"rhoisl",True,0,"313<#<317"},{"rhoosl",True,0,"349<#<353"},{"rhodm",True,0,"334<#<340"} ... 
+
+	OutDir="MathematicaOut/SSS_5p0BC_1to5dil_OSL_013/";
+	ParStart= ... {"rhoisl",True,0,"312<#<316"},{"rhoosl",True,0,"349<#<353"},{"rhodm",True,0,"334<#<340"} ...
+
+	OutDir="MathematicaOut/SSS_7p5BC_1to5dil_OSL_013/";
+	ParStart= ... {"rhoisl",True,0,"312<#<316"},{"rhoosl",True,0,"349<#<353"},{"rhodm",True,0,"334<#<340"} ...
+
+	BC 	Tmin	disl	dosl
+	3p0	2.17434	016	016
+	5p0	2.15426	016	016
+	7p5	1.81636	020	008
+
+	-> fits significantly worse
+	-> disl does not really increase and dosl is too low anyway
+	-> Model 1 is not really good from the fits
+
+	-> TODO stat:
+
+
+run_BatchMultiFit_20190213.m
+
+	Model 4 in SLD.ods: one-shell model by constraining rhoosl to rhodm
+
+	YFileList=FileNames[YFileDir<>"SSS_180x360_P*_ST_360_400_N50_OSL.log"];
+
+	for unloaded one
+	(* with ycohscf(0.5-2.5), T *)
+	OutDir="MathematicaOut/SSS_0p0BC_1to5dil_OSL_015/";
+	ParStart= ... {"rhoisl",True,0,"300<#<360"},{"rhoosl",True,0},{"rhodm",True,0,"333<#<340"} ...
+	AddConstraints={"rhoosl==rhodm"};
+	ycohscf={True,1.0,"0.5<#<2.5"};
+
+	for loaded ones 
+	(* with ycohscf(0.5-2.0), T *)
+	OutDir="MathematicaOut/SSS_*BC_1to5dil_OSL_015/";
+	AddConstraints={"rhoosl==rhodm"};
+	ycohscf={True,1.0,"0.5<#<2.0"};
+
+
+	BC 	Tmin	disl	dosl	rhoisl	rhodm	chiXn1	ici
+	0p0	3.48043	044	004	344.1	340.0	2.2968	3.203
+	3p0	2.17554	012	004	326.0	338.3	1.2578	3.087
+	5p0	2.06225	012	004	325.4	337.1	1.2244	2.772
+	7p5	1.72763	012	004	322.6	333.9	1.0651	2.269
+
+	compare with rhoisl found for Model 4:
+
+	Model 4 one shell of all stuff				rhoisl
+	0p0	shell	0:1:8:2   (v/v) BC:ATOC:TW80:Lec	347.8
+	3p0	shell	3:1:8:2   (v/v) BC:ATOC:TW80:Lec	340.4
+	5p0	shell	5:1:8:2   (v/v) BC:ATOC:TW80:Lec	337.0
+	7p5	shell	7.5:1:8:2 (v/v) BC:ATOC:TW80:Lec	333.8
+
+	-> compare to OSL_005/: worse fit for 0p0 but also for loaded ones; same inner shell of 12Å for loaded ones with similar rhoisl; thus the inner shell does not follow in rhoisl and disl the predicted one; chiXn much lower for loaded ones, ici similar 
+
+
+
+	-> note this ansatz of setting rhoisl to rhodm is actually problematic with new VOSL norm. since now the dm from the osl would count into the particles
+	-> however also simulations with larger disl and small dosl(4Å) are included, where effect of VOSL vs VISL is rather small for abs intensity norm., the best fits do have actually 
+
+	-> of course one could renormalize I(q) with volumes listed in Y-files, this is a bit complicated to implement in BMF
+	# V_CRY = 6378329.691     [nm^3]
+	# V_ISL = 13142291.3      [nm^3]
+	# V_OSL = 50102619.14     [nm^3]
+	# V_DM = 5010261914      [nm^3]
+	# V_IRR = 501.0261914     [nm^2 cm]
+
+	-> TODO stat: see disl range
+
+	-> an easy fix to the abs norm problem would be to run fits again with constraining rhoosl to rhoisl instead of rhodm, then VOSL norm. is correct !!
+
+
+
+
+
+
 
 
 #########################################################
@@ -412,9 +553,13 @@ run_BatchMultiPlot_20190227.m
 
 
 
-#################################################
-LARGER and SMALLER vs normal simulations and fits
-#################################################
+
+
+
+
+#######################################################
+HUGE, LARGER and SMALLER vs normal simulations and fits
+#######################################################
 
 
 XNDiff simulations
@@ -534,10 +679,28 @@ LARGER vs SMALLER vs Normal results
 -> where do these differences actually come from? The scattering intensity (e.g. for Bragg) is prop to V^2 of the crystals, the volume for normalization is prop to V, so they should not cancel out
 -> note that the G lattice factor scales at maxima for single crystals as N1^2*N2^2*N3^2 i.e. V^2 (sin^2 Nx / sin^2 x function)
 
--> here btw HUGE and SMALLER we have diff in volume by ca. sqrt(2)^2 =  2 and thus in V^2/V by 2 as well
+-> here btw HUGE and SMALLER we have diff in volume by ca. (sqrt(2)^3)^2 = 8 and thus in V^2/V by 8 as well
 
 -> maybe that works only for crystals w/o shells (maybe additionally in vacuum as well)
 -> stabilizer shell should definitively have an influence to perturbate the scaling
+-> when increasing the diameter of the crystals by factor x and reducing the number by x^2 (e.g. doubling the lateral sizes and reducing the number density by 4 via the normal. with the 4-fold volume) one would not expect a change in Bragg and mid-high Q intensity. It shouldn't matter if we brake crystals laterally apart into smaller pieces for the mid-high-Q range and the 001 Bragg peak. Thus the V^2/V argumentation is definitively right for low Q but not for the rest incl 001 Bragg peak
+-> more or less we find this in the simulations
+-> checked simulations with 0-shell and 0-rho, where volume difference is about 2^2=4
+
+	sbatch SSS_180x360_P000_000_ST_360_400_N50_OSL.sh
+	sbatch SSS_180x360_P000_000_ST_360_400_N50_OSL_HUGE.sh
+
+	XNDiff_tests_P000_000/
+	plot_000_000_OSL_rho000.agr compares 1, 3, 5 btw HUGE vs normal
+	-> spme but not big differences btw curves, big differences as expected at low Q, some smaller differences at max and minima at mid-high Q
+
+-> the prop V^2 is maybe misleading, it might be more like N1*N2*N3^2 at the 001 Bragg peak, the sin^2 N_i x / sin^2 x function peaks only at the 001 Bragg peak for i=3 with N_3^2, but not necessarily for i=1,2 where it is the phase factor what determines the intensity dependence wrt N1 and N2
+
+
+-> overall:
+	it seems to be possible within certain limits that larger or smaller platelet sizes affect the intensity of the patterns also at mid and high Q and thus the chiXn factors
+	the effect is diametral, larger platelets will lead to smaller chiXn, thus if chiXn is too large testing larger diameters might help without affecting too much the stabilizer properties (when considering constant disl and dosl, the best fit with simulations of different diameters might actually have different (but similar) disl and dosl!)
+
 
 
 
