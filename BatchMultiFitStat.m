@@ -60,7 +60,7 @@ Clear[DeriveTp];
 DeriveTp[files0_,pattlist0_,data0_:{},appendQ0_:False]:=Module[{files=files0,pattlist=pattlist0,data=data0,appendQ=appendQ0,stream,dummy},
 (* create {disl,dosl} table *)
 If[appendQ==False,data=Table[Flatten[{files[[i]],(*Flatten[{#[[1]]/10^(#[[2]]-2)}]&@*)ToExpression[{#,StringLength[#]}&@StringSplit[StringDrop[StringDrop[StringCases[files[[i]],"_P"~~__~~"_ST"][[1]],2],-3],"_"]][[1]]}],{i,1,Length[files]}];];
-(* create list of patterns, the one for T is included automatically if not append *)
+(* create list of patterns *)
 If[Length[pattlist]==0,pattlist={pattlist};];
 (* Print[pattlist]; *)
 (* loop over all files and patterns *)
@@ -76,20 +76,48 @@ data];
 
 
 (*
-{1,2,3,4,...} = { file.log, disl, dosl, T, cis, rhos, chiXn1, <ichi> };
-disl, dosl in 2nd and 3rd col;
-T in 4th col;
+
+use same length for data/mindata/bestdata, lablist for simplicity, fill 1st position with dummy string in case of the latter
+
+data/mindata/bestdata:
+{1,2,3,4,4+1,...,4+Nsp,4+Nsp+1,,4+Nsp+3,...} = { file.log, disl, dosl, T, cis, rhos, chiXn1, <ichi> };
+-> disl, dosl in 2nd and 3rd col;
+-> T in 4th col;
+
+lablist:
+lablist=Join[{"filename","disl","dosl","Target function values"},Table["c"<>ToString[i],{i,1,Nsp}],{"rhoisl","rhoosl","rhodm","chiXn1"}];
+
 
 InputForm[Simplify[(a*x+b)/.Solve[{a*minT+b==minG,a*maxT+b==maxG},{a,b}]]]
 {(maxT*minG - maxG*minT + maxG*x - minG*x)/(maxT - minT)}
 *)
 Clear[pT]
-pT[data0_,dislmin0_,dislmax0_,ddisl0_,doslmin0_,doslmax0_,ddosl0_,Nsp0_,lablist0_,OptionsPattern[]]:=Module[{data=data0,dislmin=dislmin0,dislmax=dislmax0,ddisl=ddisl0,doslmin=doslmin0,doslmax=doslmax0,ddosl=ddosl0,Nsp=Nsp0,lablist=lablist0,mulist,mu2list,dummy,outdir,maxT,minT,maxG,minG,data2,bestdata,mindata,bestdots,mindot,MeanMedianStDevMinMax,expfile,stream,logstream,expdata,fitdata,plexp,plfit,plbestfit,plminfit,plfitcombo,count,count2,pl,box,plist,boxlist,boxcis,boxrho,boxbestcis,boxbestrho,PlRange,CisPlRange,RhoPlRange,PointSizeDot,n,ticks,dd,plotfiles},
+pT[data0_,dislmin0_,dislmax0_,ddisl0_,doslmin0_,doslmax0_,ddosl0_,Nsp0_,lablist0_,OptionsPattern[]]:=Module[{data=data0,dislmin=dislmin0,dislmax=dislmax0,ddisl=ddisl0,doslmin=doslmin0,doslmax=doslmax0,ddosl=ddosl0,Nsp=Nsp0,lablist=lablist0,mulist,mu2list,dummy,logdir,outdir,maxT,minT,treshT,maxG,minG,data2,bestdata,mindata,bestdots,mindot,MeanMedianStDevMinMax,expfile,stream,logstream,expdata,fitdata,plexp,plfit,plbestfit,plminfit,plfitcombo,count,count2,pl,box,plist,boxlist,boxcis,boxrho,boxbestcis,boxbestrho,PlRange,CisPlRange,RhoPlRange,PointSizeDot,n,ticks,dd,plotfiles},
 
-(* dir where log files are stored and pictures are exported to *)
-outdir=DirectoryName[data[[1,1]]];
 
-(* remove old files *)
+(* mu for a selected T-range *)
+mulist=OptionValue[mu];
+
+(* mu2 for a best selected T-range *)
+mu2list=OptionValue[mu2];
+
+
+(* dir where pictures and report are exported to *)
+logdir=DirectoryName[data[[1,1]]];
+If[StringTake[logdir,-1]!="/",logdir=logdir<>"/"];
+
+outdir=logdir<>"stat_"<>StringReplace[ToString[NumberForm[mu2list[[1]],3]],"."->"p"]<>"Tmin/";
+If[StringTake[outdir,-1]!="/",outdir=outdir<>"/"];
+
+
+(* if outdir already exists, delete content by pattern, otherwise create outdir *)
+If[DirectoryQ[outdir]==False,
+
+Print["Directory "<>outdir<>" does not exist. Create directory."];
+Run["mkdir -m u=rwx,g=rx,o=rx "<>outdir];,
+
+(* remove old files from outdir *)
+Print["Directory "<>outdir<>" already exists. Delete old files."];
 plotfiles=FileNames[outdir<>"fits_*.pdf"];
 Do[DeleteFile[plotfiles[[i]]];,{i,1,Length[plotfiles]}];
 plotfiles=FileNames[outdir<>"pl_*.pdf"];
@@ -101,22 +129,40 @@ Do[DeleteFile[plotfiles[[i]]];,{i,1,Length[plotfiles]}];
 plotfiles=FileNames[outdir<>"stat.log"];
 Do[DeleteFile[plotfiles[[i]]];,{i,1,Length[plotfiles]}];
 
+];
+
+
+(* remove old files from logdir, can be removed later *)
+plotfiles=FileNames[logdir<>"fits_*.pdf"];
+Do[DeleteFile[plotfiles[[i]]];,{i,1,Length[plotfiles]}];
+plotfiles=FileNames[logdir<>"pl_*.pdf"];
+Do[DeleteFile[plotfiles[[i]]];,{i,1,Length[plotfiles]}];
+plotfiles=FileNames[logdir<>"pl_*.png"];
+Do[DeleteFile[plotfiles[[i]]];,{i,1,Length[plotfiles]}];
+plotfiles=FileNames[logdir<>"box_*.png"];
+Do[DeleteFile[plotfiles[[i]]];,{i,1,Length[plotfiles]}];
+plotfiles=FileNames[logdir<>"stat.log"];
+Do[DeleteFile[plotfiles[[i]]];,{i,1,Length[plotfiles]}];
+
+
+
 (* open log file *)
 logstream=OpenWrite[outdir<>"stat.log"];
 If[logstream==$Failed,Print["Cannot write log-file "<>outdir<>"stat.log Exit."];Exit[];];
 
-(* mu for a selected T-range *)
-mulist=OptionValue[mu];
 
-(* mu2 for a best selected T-range *)
-mu2list=OptionValue[mu2];
+
+WriteString[logstream,"logdir = "<>logdir<>"\n"];
+WriteString[logstream,"outdir = "<>outdir<>"\n"];
+WriteString[logstream,"\n"];
+
 
 (* individual grids *)
 dd=OptionValue[Ticks];
 dd=If[ToString[dd]=="Automatic",{ddosl,ddisl},{dd,dd}];
 
-(* number of cols without filename, should be same as lablist *)
-n=Length[data[[1]]]-1;
+(* n, number of cols incl filename, should be same as lablist *)
+n=Length[data[[1]]];
 
 (* define Min and Max of T *)
 maxT=Max[data[[All,4]]];
@@ -135,7 +181,15 @@ maxT=Max[data[[All,4]]];
 minT=Min[data[[All,4]]];
 
 (* set markers for best fits mu2 range applies within mu range !!! *)
-bestdata=Select[data,(minT<=#[[4]]<=mu2list[[1]]*minT+mu2list[[2]]*maxT)&];
+treshT=mu2list[[1]]*minT+mu2list[[2]]*maxT;
+bestdata=Select[data,(minT<=#[[4]]<=treshT)&];
+
+WriteString[logstream,"minT = "<>ToString[minT]<>"\n"];
+WriteString[logstream,"maxT = "<>ToString[maxT]<>"\n"];
+WriteString[logstream,"mu2list = "<>ToString[mu2list]<>"\n"];
+WriteString[logstream,"T-range = ["<>ToString[minT]<>","<>ToString[treshT]<>"]\n"];
+WriteString[logstream,"\n"];
+
 
 (* Determine mindata *)
 mindata=Select[data,(#[[4]]==minT)&];
@@ -145,34 +199,42 @@ WriteString[logstream,"Length[bestdata] = "<>ToString[Length[bestdata]]<>"\n"];
 WriteString[logstream,"Length[mindata] = "<>ToString[Length[mindata]]<>"\n"];
 WriteString[logstream,"\n"];
 
-WriteString[logstream,"params = "<>ToString[Join[{"filename"},lablist]]<>"\n\n"];
+WriteString[logstream,"lablist = "<>ToString[lablist]<>"\n"];
+WriteString[logstream,"Length[lablist] = "<>ToString[Length[lablist]]<>"\n"];
+WriteString[logstream,"data[[1]] = "<>ToString[data[[1]]]<>"\n"];
+WriteString[logstream,"Length[data[[1]]] (n) = "<>ToString[n]<>"\n"];
+WriteString[logstream,"\n"];
 
 (* calc Mean and Var from data, bestdata, mindata and write to logfile *)
+(* includes disl, dosl, Tmin, cis, rhos, ... *)
 WriteString[logstream,"stat ={Mean, Median, StandardDev, Min, Max}"<>"\n\n"];
 
 WriteString[logstream,"data ("<>ToString[Length[data]]<>" fits):\n"];
 MeanMedianStDevMinMax=If[Length[data]>1,
-Table[{Mean[#],Median[#],StandardDeviation[#],Min[#],Max[#]}&@data[[All,1+k]],{k,1,n}],
-Table[{#[[1]],#[[1]],0,#[[1]],#[[1]]}&@data[[All,1+k]],{k,1,n}]
+Table[{Mean[#],Median[#],StandardDeviation[#],Min[#],Max[#]}&@data[[All,k]],{k,2,n}],
+Table[{#[[1]],#[[1]],0,#[[1]],#[[1]]}&@data[[All,k]],{k,2,n}]
 ];
-Do[WriteString[logstream,lablist[[k]]<>" = "<>NumberListToString[N[MeanMedianStDevMinMax[[k]]]]<>"\n"],{k,1,n}];
+PrependTo[MeanMedianStDevMinMax,{}];
+Do[WriteString[logstream,lablist[[k]]<>" = "<>NumberListToString[N[MeanMedianStDevMinMax[[k]]]]<>"\n"],{k,2,n}];
 WriteString[logstream,"\n"];
 
 WriteString[logstream,"bestdata ("<>ToString[Length[bestdata]]<>" fits):\n"];
 MeanMedianStDevMinMax=If[Length[bestdata]>1,
-Table[{Mean[#],Median[#],StandardDeviation[#],Min[#],Max[#]}&@bestdata[[All,1+k]],{k,1,n}],
-Table[{#[[1]],#[[1]],0,#[[1]],#[[1]]}&@bestdata[[All,1+k]],{k,1,n}]
+Table[{Mean[#],Median[#],StandardDeviation[#],Min[#],Max[#]}&@bestdata[[All,k]],{k,2,n}],
+Table[{#[[1]],#[[1]],0,#[[1]],#[[1]]}&@bestdata[[All,k]],{k,2,n}]
 ];
-Do[WriteString[logstream,lablist[[k]]<>" = "<>NumberListToString[N[MeanMedianStDevMinMax[[k]]]]<>"\n"],{k,1,n}];
+PrependTo[MeanMedianStDevMinMax,{}];
+Do[WriteString[logstream,lablist[[k]]<>" = "<>NumberListToString[N[MeanMedianStDevMinMax[[k]]]]<>"\n"],{k,2,n}];
 WriteString[logstream,"\n"];
 
 (* WriteString[logstream,"mindata = "<>ToString[mindata[[1]]]<>"\n\n"]; *)
 WriteString[logstream,"mindata ("<>ToString[Length[mindata]]<>" fits):\n"];
 MeanMedianStDevMinMax=If[Length[mindata]>1,
-Table[{Mean[#],Median[#],StandardDeviation[#],Min[#],Max[#]}&@mindata[[All,1+k]],{k,1,n}],
-Table[{#[[1]],#[[1]],0,#[[1]],#[[1]]}&@mindata[[All,1+k]],{k,1,n}]
+Table[{Mean[#],Median[#],StandardDeviation[#],Min[#],Max[#]}&@mindata[[All,k]],{k,2,n}],
+Table[{#[[1]],#[[1]],0,#[[1]],#[[1]]}&@mindata[[All,k]],{k,2,n}]
 ];
-Do[WriteString[logstream,lablist[[k]]<>" = "<>NumberListToString[N[MeanMedianStDevMinMax[[k]]]]<>"\n"],{k,1,n}];
+PrependTo[MeanMedianStDevMinMax,{}];
+Do[WriteString[logstream,lablist[[k]]<>" = "<>NumberListToString[N[MeanMedianStDevMinMax[[k]]]]<>"\n"],{k,2,n}];
 WriteString[logstream,"\n"];
 
 (* Point radius {r_x,r_y} for black and white dots, adapt automatically to grid *)
@@ -230,16 +292,16 @@ boxlist=Table[,{i,1,Ceiling[n,3]/3},{j,1,Min[3,n-(i-1)*3]}];
 ticks={{(If[!IntegerQ[#],#+0.0,#])&/@Range[doslmin,doslmax,dd[[2]]],None},{{#,Rotate[ToString[#],90Degree],{0,0.01}}&/@(If[!IntegerQ[#],#+0.0,#]&/@Range[dislmin,dislmax,dd[[1]]]),None}};
 
 
-(* 2D pl maps for individual fit parameters, excl single ci *)
+(* 2D pl maps for individual fit parameters, excl single cis *)
 (* loop over k=1,..,n *)
 count=1;count2=1;
 Do[
 
-If[(k==3)||(k>(3+Nsp)),
+If[(k==4)||(k>(4+Nsp)),
 (* range for current plot *)
-maxT=Max[data[[All,1+k]]];
-minT=Min[data[[All,1+k]]];
-data2=Join[data[[All,{2,3,1+k}]],dummy];
+maxT=Max[data[[All,k]]];
+minT=Min[data[[All,k]]];
+data2=Join[data[[All,{2,3,k}]],dummy];
 (* background plot for mu-range selection *)
 (* instead of PlotLegends->Automatic one could also play around with PlotLegends->BarLegend[...] with more styling options *)
 pl=ListDensityPlot[data2,InterpolationOrder->0,FrameTicks->ticks,FrameStyle->Directive[1.5*OptionValue[PlotFontSize],Black],FrameLabel->{"disl (A)","dosl (A)"},ClippingStyle->White,ColorFunction->(Hue[0.7*(1-(#-minT)/(maxT-minT+0.000001))]&),ColorFunctionScaling->False,PlotRange->{{dislmin-ddisl/2,dislmax+ddisl/2},{doslmin-ddosl/2,doslmax+ddosl/2},{minT-0.000001,maxT+0.000001}},BoundaryStyle->Black,ImageSize->OptionValue[ImageSize],PlotLegends->BarLegend[Automatic,LegendFunction->"Frame",LegendMargins->10,LabelStyle->{FontSize->28}],PlotLabel->Style[StringReplace[lablist[[k]]," "->"_"],1.5*OptionValue[PlotFontSize],Black]];
@@ -251,22 +313,24 @@ count=count+1;
 If[count>3,count=1;count2+=1;];
 ];
 
-,{k,1,n}];
+,{k,2,n}];
 
-(* WhiskerBox plots for individual fit parameters, excl single ci and rho *)
+(* WhiskerBox plots for individual fit parameters *)
 (* loop over k=1,..,n *)
 count=1;count2=1;
 Do[
 
-If[(k==3)||(k>(3+Nsp+3)),
+(* Select T, excl single cis and rhos *)
+If[(k==4)||(k>(4+Nsp+3)),
+
 (* PlotRange for WhiskerBox plots *)
-PlRange={0.97*Min[#],1.03*Max[#]}&@data[[All,1+k]];
+PlRange={0.97*Min[#],1.03*Max[#]}&@data[[All,k]];
 (* min point for individual WhiskerBox plots done via Epilog, combination of ListPlot and BoxWhiskerChart works only in Mathematica < 11.3 *)
-(* plmin=ListPlot[{mindata[[1,1+k]]},PlotStyle->{Red,PointSize[Large]}]; *)
-box=BoxWhiskerChart[data[[All,1+k]],"Mean",ChartLabels->lablist[[k]],FrameStyle->Directive[OptionValue[PlotFontSize],Black],PlotLabel->Style[StringReplace[lablist[[k]]<>" all"," "->"_"],OptionValue[PlotFontSize],Black],GridLines->{None,Automatic},BarSpacing->1,Epilog->{Red,PointSize[0.01],Point[{0.75,mindata[[1,1+k]]}]}];
+(* plmin=ListPlot[{mindata[[1,k]]},PlotStyle->{Red,PointSize[Large]}]; *)
+box=BoxWhiskerChart[data[[All,k]],"Mean",ChartLabels->lablist[[k]],FrameStyle->Directive[OptionValue[PlotFontSize],Black],PlotLabel->Style[StringReplace[lablist[[k]]<>" all"," "->"_"],OptionValue[PlotFontSize],Black],GridLines->{None,Automatic},BarSpacing->1,Epilog->{Red,PointSize[0.01],Point[{0.75,mindata[[1,k]]}]}];
 Export[outdir<>"box_"<>StringReplace[lablist[[k]]," "->"_"]<>"_all.png",Show[box,PlotRange->PlRange],"PNG",ImageSize->OptionValue[ImageSize]];
 (* WhiskerBox stat plots for bestdata *)
-box=BoxWhiskerChart[bestdata[[All,1+k]],"Mean",ChartLabels->lablist[[k]],FrameStyle->Directive[OptionValue[PlotFontSize],Black],PlotLabel->Style[StringReplace[lablist[[k]]<>" best"," "->"_"],OptionValue[PlotFontSize],Black],GridLines->{None,Automatic},BarSpacing->1,Epilog->{Red,PointSize[0.01],Point[{0.75,mindata[[1,1+k]]}]}];
+box=BoxWhiskerChart[bestdata[[All,k]],"Mean",ChartLabels->lablist[[k]],FrameStyle->Directive[OptionValue[PlotFontSize],Black],PlotLabel->Style[StringReplace[lablist[[k]]<>" best"," "->"_"],OptionValue[PlotFontSize],Black],GridLines->{None,Automatic},BarSpacing->1,Epilog->{Red,PointSize[0.01],Point[{0.75,mindata[[1,k]]}]}];
 Export[outdir<>"box_"<>StringReplace[lablist[[k]]," "->"_"]<>"_best.png",Show[box,PlotRange->PlRange],"PNG",ImageSize->OptionValue[ImageSize]];
 boxlist[[count2,count]]=box;
 
@@ -274,28 +338,40 @@ count=count+1;
 If[count>3,count=1;count2+=1;];
 ];
 
-,{k,1,n}];
+,{k,2,n}];
+
 
 (* all stuff derived / gathered from fit parameters *)
-CisPlRange={0.97*Min[#],1.03*Max[#]}&@data[[All,4+1;;4+Nsp]];(*OptionValue[CisPlotRange];*)
-RhoPlRange={0.97*Min[#],1.03*Max[#]}&@data[[All,4+Nsp+1;;4+Nsp+3]];(*OptionValue[RhosPlotRange];*)
 
-boxcis=BoxWhiskerChart[Transpose[data[[All,4+1;;4+Nsp]]],"Mean",ChartLabels->lablist[[1+1;;1+Nsp]],(*{{"MedianMarker",White},{"MeanMarker",Black},{"Whiskers",Thick},{"Fences",Thick}},*)FrameStyle->Directive[1.5*OptionValue[PlotFontSize],Black],PlotLabel->Style["cis all",1.5*OptionValue[PlotFontSize],Black],ChartStyle->{Opacity[1]},Joined->True,GridLines->{None,Automatic},BarSpacing->1,Epilog->{Red,PointSize[0.01],Point[Table[{i-1+0.75,mindata[[1,4+i]]},{i,1,Nsp}]]}];
+(* cis *)
+CisPlRange=If[ToString[OptionValue[CisPlotRange]]=="Automatic",{0.97*Min[#],1.03*Max[#]}&@data[[All,4+1;;4+Nsp]],OptionValue[CisPlotRange]];
+WriteString[logstream,"CisPlRange = "<>ToString[CisPlRange]<>"\n"];
 
-boxbestcis=BoxWhiskerChart[Transpose[bestdata[[All,4+1;;4+Nsp]]],"Mean",FrameStyle->Directive[1.5*OptionValue[PlotFontSize],Black],PlotLabel->Style["cis best",1.5*OptionValue[PlotFontSize],Black],ChartLabels->lablist[[1+1;;1+Nsp]],ChartStyle->{Opacity[1]},Joined->True,GridLines->{None,Automatic},BarSpacing->1,Epilog->{Red,PointSize[0.01],Point[Table[{i-1+0.75,mindata[[1,4+i]]},{i,1,Nsp}]]}];
+boxcis=BoxWhiskerChart[Transpose[data[[All,4+1;;4+Nsp]]],"Mean",ChartLabels->lablist[[4+1;;4+Nsp]],(*{{"MedianMarker",White},{"MeanMarker",Black},{"Whiskers",Thick},{"Fences",Thick}},*)FrameStyle->Directive[1.5*OptionValue[PlotFontSize],Black],PlotLabel->Style["cis all",1.5*OptionValue[PlotFontSize],Black],ChartStyle->{Opacity[1]},Joined->True,GridLines->{None,Automatic},BarSpacing->1,Epilog->{Red,PointSize[0.01],Point[Table[{i-1+0.75,mindata[[1,4+i]]},{i,1,Nsp}]]}];
 
-boxrho=BoxWhiskerChart[Transpose[data[[All,4+Nsp+1;;4+Nsp+3]]],"Mean",FrameStyle->Directive[1.5*OptionValue[PlotFontSize],Black],PlotLabel->Style["rho all",1.5*OptionValue[PlotFontSize],Black],ChartLabels->lablist[[1+Nsp+1;;1+Nsp+3]],ChartStyle->{Opacity[1]},Joined->True,GridLines->{None,Automatic},BarSpacing->1,Epilog->{Red,PointSize[0.01],Point[Table[{i-1+0.75,mindata[[1,4+Nsp+i]]},{i,1,Nsp}]]}];
-
-boxbestrho=BoxWhiskerChart[Transpose[bestdata[[All,4+Nsp+1;;4+Nsp+3]]],"Mean",FrameStyle->Directive[1.5*OptionValue[PlotFontSize],Black],PlotLabel->Style["rhos best",1.5*OptionValue[PlotFontSize],Black],ChartLabels->lablist[[1+Nsp+1;;1+Nsp+3]],ChartStyle->{Opacity[1]},Joined->True,GridLines->{None,Automatic},BarSpacing->1,Epilog->{Red,PointSize[0.01],Point[Table[{i-1+0.75,mindata[[1,4+Nsp+i]]},{i,1,Nsp}]]}];
+boxbestcis=BoxWhiskerChart[Transpose[bestdata[[All,4+1;;4+Nsp]]],"Mean",FrameStyle->Directive[1.5*OptionValue[PlotFontSize],Black],PlotLabel->Style["cis best",1.5*OptionValue[PlotFontSize],Black],ChartLabels->lablist[[4+1;;4+Nsp]],ChartStyle->{Opacity[1]},Joined->True,GridLines->{None,Automatic},BarSpacing->1,Epilog->{Red,PointSize[0.01],Point[Table[{i-1+0.75,mindata[[1,4+i]]},{i,1,Nsp}]]}];
 
 Export[outdir<>"box_cis_best.png",Show[boxbestcis,PlotRange->CisPlRange],(*"PDF",ImageResolution->300*)"PNG",ImageSize->1.5*OptionValue[ImageSize]];
-Export[outdir<>"box_rho_best.png",Show[boxbestrho,PlotRange->RhoPlRange],(*"PDF",ImageResolution->300*)"PNG",ImageSize->1.5*OptionValue[ImageSize]];
 Export[outdir<>"box_cis_all.png",Show[boxcis,PlotRange->CisPlRange],(*"PDF",ImageResolution->300*)"PNG",ImageSize->1.5*OptionValue[ImageSize]];
+
+
+(* rhos *)
+RhoPlRange=If[ToString[OptionValue[RhosPlotRange]]=="Automatic",{0.97*Min[#],1.03*Max[#]}&@data[[All,4+Nsp+1;;4+Nsp+3]],OptionValue[RhosPlotRange]];
+WriteString[logstream,"RhoPlRange = "<>ToString[RhoPlRange]<>"\n"];
+
+
+
+boxrho=BoxWhiskerChart[Transpose[data[[All,4+Nsp+1;;4+Nsp+3]]],"Mean",FrameStyle->Directive[1.5*OptionValue[PlotFontSize],Black],PlotLabel->Style["rho all",1.5*OptionValue[PlotFontSize],Black],ChartLabels->lablist[[4+Nsp+1;;4+Nsp+3]],ChartStyle->{Opacity[1]},Joined->True,GridLines->{None,Automatic},BarSpacing->1,Epilog->{Red,PointSize[0.01],Point[Table[{i-1+0.75,mindata[[1,4+Nsp+i]]},{i,1,3}]]}];
+
+boxbestrho=BoxWhiskerChart[Transpose[bestdata[[All,4+Nsp+1;;4+Nsp+3]]],"Mean",FrameStyle->Directive[1.5*OptionValue[PlotFontSize],Black],PlotLabel->Style["rhos best",1.5*OptionValue[PlotFontSize],Black],ChartLabels->lablist[[4+Nsp+1;;4+Nsp+3]],ChartStyle->{Opacity[1]},Joined->True,GridLines->{None,Automatic},BarSpacing->1,Epilog->{Red,PointSize[0.01],Point[Table[{i-1+0.75,mindata[[1,4+Nsp+i]]},{i,1,3}]]}];
+
+Export[outdir<>"box_rho_best.png",Show[boxbestrho,PlotRange->RhoPlRange],(*"PDF",ImageResolution->300*)"PNG",ImageSize->1.5*OptionValue[ImageSize]];
 Export[outdir<>"box_rho_all.png",Show[boxrho,PlotRange->RhoPlRange],(*"PDF",ImageResolution->300*)"PNG",ImageSize->1.5*OptionValue[ImageSize]];
+
 
 Close[logstream];
 
 (*{plfitcombo,Grid[plist],Grid[boxlist],Grid[{{boxbestcis},{boxbestrho}}]}*)];
-Options[pT]={mu->{1,0,0,1},mu2->{1.1,0},PointSize->"Automatic"(*{1.0,1.0}*),Ticks->"Automatic",ImageSize->1024,PlotFontSize->18(*for 1024 ImageSize*),RhosPlotRange->{270,400},CisPlotRange->{0,0.5}};
+Options[pT]={mu->{1,0,0,1},mu2->{1.1,0},PointSize->"Automatic"(*{1.0,1.0}*),Ticks->"Automatic",ImageSize->1024,PlotFontSize->18(*for 1024 ImageSize*),RhosPlotRange->"Automatic"(*{300,360}*),CisPlotRange->"Automatic"(*{0.0,0.5}*)};
 
 

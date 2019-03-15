@@ -1,0 +1,105 @@
+
+Syntax::com: Warning: comma encountered with no adjacent expression. The expression will be treated as Null.  (line 255 of "BatchMultiFitStat.m").
+
+Syntax::com: Warning: comma encountered with no adjacent expression. The expression will be treated as Null.  (line 256 of "BatchMultiFitStat.m").
+
+Syntax::com: Warning: comma encountered with no adjacent expression. The expression will be treated as Null.  (line 288 of "BatchMultiFitStat.m").
+
+Syntax::com: Warning: comma encountered with no adjacent expression. The expression will be treated as Null.  (line 289 of "BatchMultiFitStat.m").
+{"MathematicaOut/SSS_0p0BC_1to5dil_003", "MathematicaOut/SSS_0p0BC_1to5dil_004", "MathematicaOut/SSS_3p0BC_1to5dil_003", "MathematicaOut/SSS_3p0BC_1to5dil_004", "MathematicaOut/SSS_5p0BC_1to5dil_003", "MathematicaOut/SSS_5p0BC_1to5dil_004", "MathematicaOut/SSS_7p5BC_1to5dil_003", "MathematicaOut/SSS_7p5BC_1to5dil_004"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_0p0BC_1to5dil_003/stat_1p1Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_0p0BC_1to5dil_003/stat_1p2Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_0p0BC_1to5dil_003/stat_1p3Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_0p0BC_1to5dil_003/stat_1p5Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_0p0BC_1to5dil_004/stat_1p1Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_0p0BC_1to5dil_004/stat_1p2Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_0p0BC_1to5dil_004/stat_1p3Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_0p0BC_1to5dil_004/stat_1p5Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_3p0BC_1to5dil_003/stat_1p1Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_3p0BC_1to5dil_003/stat_1p2Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_3p0BC_1to5dil_003/stat_1p3Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_3p0BC_1to5dil_003/stat_1p5Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_3p0BC_1to5dil_004/stat_1p1Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_3p0BC_1to5dil_004/stat_1p2Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_3p0BC_1to5dil_004/stat_1p3Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_3p0BC_1to5dil_004/stat_1p5Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_5p0BC_1to5dil_003/stat_1p1Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_5p0BC_1to5dil_003/stat_1p2Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_5p0BC_1to5dil_003/stat_1p3Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_5p0BC_1to5dil_003/stat_1p5Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_5p0BC_1to5dil_004/stat_1p1Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_5p0BC_1to5dil_004/stat_1p2Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_5p0BC_1to5dil_004/stat_1p3Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_5p0BC_1to5dil_004/stat_1p5Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_7p5BC_1to5dil_003/stat_1p1Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_7p5BC_1to5dil_003/stat_1p2Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_7p5BC_1to5dil_003/stat_1p3Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_7p5BC_1to5dil_003/stat_1p5Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_7p5BC_1to5dil_004/stat_1p1Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_7p5BC_1to5dil_004/stat_1p2Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_7p5BC_1to5dil_004/stat_1p3Tmin/ does not exist. Create directory."
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1"}
+{"filename", "disl", "dosl", "Target function values", "c1", "c2", "c3", "c4", "c5", "c6", "rhoisl", "rhoosl", "rhodm", "chiXn1", "dtot", "ici", "disl_rhoisl", "dosl_rhoosl", "disl_rhoisl_dosl_rhoosl"}
+"Directory MathematicaOut/SSS_7p5BC_1to5dil_004/stat_1p5Tmin/ does not exist. Create directory."
