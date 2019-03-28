@@ -31,15 +31,14 @@ dirlist=Select[Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_00*","",Infinity
 *)
 
 
-
+(*
 Nsp=6;
 mindisl=4;maxdisl=144;ddisl=4;
 mindosl=4;maxdosl=144;ddosl=4;
 
 dirlist=Select[Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_00*","",Infinity],StringMatchQ[#,{_~~"*005",_~~"*006"}]&],DirectoryQ];
 dirlist=Select[FileNames["MathematicaOut/SSS_7p5BC_1to5dil_006","",Infinity],DirectoryQ];
-
-
+*)
 
 
 
@@ -53,7 +52,20 @@ mindosl=4;maxdosl=144;ddosl=4;
 
 (* all OSL_*00[5,6]/ incl SMALLER and LARGER, HUGE *)
 dirlist=Select[Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_OSL_*00*","",Infinity],StringMatchQ[#,{_~~"*005",_~~"*006"}]&],DirectoryQ];
+
 *)
+
+
+
+Nsp=6;
+mindisl=4;maxdisl=100;ddisl=4;
+mindosl=4;maxdosl=100;ddosl=4;
+
+(* SSS_7p5BC_1to5dil_OSL_HUGE_005_more and SSS_7p5BC_1to5dil_OSL_LARGER_005_more *)
+dirlist=Select[Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_OSL_*00*","",Infinity],StringMatchQ[#,{_~~"*005_more"}]&],DirectoryQ];
+
+
+
 
 
 (*
