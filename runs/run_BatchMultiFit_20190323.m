@@ -5,7 +5,7 @@ Get["/home/martins/projects/BatchMultiFit/BatchMultiFit.m"];
 
 (* define number of threads, using more than >6 threads causes the vncserver crashing (?!) *)
 CloseKernels[]
-LaunchKernels[16]
+LaunchKernels[8]
 $KernelCount
 
 

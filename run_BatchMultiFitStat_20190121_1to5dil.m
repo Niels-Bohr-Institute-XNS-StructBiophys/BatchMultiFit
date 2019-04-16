@@ -2,7 +2,7 @@
 How-to run:
 
 local (desktop) machine:
-MathKernel -noprompt -run "<<run_BatchMultiFitStat_20190121_1to5dil.m" > run_BatchMultiFitStat_20190121_1to5dil.log &
+MathKernel -noprompt -run "<<run_BatchMultiFitStat_20190121_1to5dil.m" > run_BatchMultiFitStat_20190416_1to5dil.log &
 
 on a (headless) server (where no X is running):
 screen -d -m xvfb-run MathKernel -noprompt -run "<<run_BatchMultiFitStat_20190121_1to5dil.m" > run_BatchMultiFitStat_20190121_1to5dil.log
@@ -50,20 +50,23 @@ Nsp=6;
 mindisl=4;maxdisl=144;ddisl=4;
 mindosl=4;maxdosl=144;ddosl=4;
 
-(* all OSL_*00[5,6]/ incl SMALLER and LARGER, HUGE *)
+(* all OSL_*00[5,6]/ incl SMALLER, LARGER and HUGE *)
 dirlist=Select[Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_OSL_*00*","",Infinity],StringMatchQ[#,{_~~"*005",_~~"*006"}]&],DirectoryQ];
-
 *)
 
 
 
+
+
+(*
 Nsp=6;
 mindisl=4;maxdisl=100;ddisl=4;
 mindosl=4;maxdosl=100;ddosl=4;
 
-(* SSS_7p5BC_1to5dil_OSL_HUGE_005_more and SSS_7p5BC_1to5dil_OSL_LARGER_005_more *)
+(* SSS_*BC_1to5dil_OSL_ASSYM_005, SSS_*BC_1to5dil_OSL_HUGE_005_more, SSS_*BC_1to5dil_OSL_LARGER_005_more and SSS_*BC_1to5dil_OSL_SMALLER_005_more *)
 dirlist=Select[Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_OSL_*00*","",Infinity],StringMatchQ[#,{_~~"*005_more"}]&],DirectoryQ];
-
+dirlist=Select[Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_OSL_ASSYM_00*","",Infinity],StringMatchQ[#,{_~~"*005"}]&],DirectoryQ];
+*)
 
 
 
@@ -82,8 +85,11 @@ Nsp=6;
 mindisl=4;maxdisl=144;ddisl=4;
 mindosl=4;maxdosl=144;ddosl=4;
 
-dirlist=Select[Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_OSL_0*","",Infinity],StringMatchQ[#,{_~~"*011",_~~"*013",_~~"*015"}]&],DirectoryQ];
+dirlist=Select[Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_OSL_0*","",Infinity],StringMatchQ[#,{_~~"*011",_~~"*013",_~~"*015",_~~"*017"}]&],DirectoryQ];
 *)
+
+
+
 
 
 

@@ -5,7 +5,7 @@ Get["/home/martins/projects/BatchMultiFit/BatchMultiFit.m"];
 
 (* define number of threads, using more than >6 threads causes the vncserver crashing (?!) *)
 CloseKernels[]
-LaunchKernels[8]
+LaunchKernels[16]
 $KernelCount
 
 
@@ -22,6 +22,7 @@ YFileList=StringTrim[StringTrim[#,YFileDir],".log"]&/@YFileList;
 
 
 (* with ycohscf(0.5-2.5), T *)
+(*
 OutDir="MathematicaOut/SSS_0p0BC_1to5dil_OSL_017/";
 Xnmode="X";
 expfileconc={"export/im_0051238_caz_CapA_0p0BC_1to5dil-H2O_s-scaled_sIdI.chi",0.05};
@@ -44,7 +45,7 @@ ycohscf={True,1.0,"0.5<#<2.5"};
 LicoConstr={"","==1.0"}; (* Default *)
 ExportFlag=True;
 Print[AbsoluteTiming[BatchMultiFit[OutDir,Xnmode,expfileconc,YFileDir,YFileList,Nmaxsp,Nmaxst,FitFunc,FitMethod,Fitsmin,Fitsmax,FitMaxIt,FitTarF,ParStart,PlRange,plsc,Ymode,AddConstraints,Smear,Tscf,ycohscf,LicoConstr,ExportFlag]][[1]]]
-
+*)
 
 (* with ycohscf(0.5-2.5), T *)
 OutDir="MathematicaOut/SSS_3p0BC_1to5dil_OSL_017/";
