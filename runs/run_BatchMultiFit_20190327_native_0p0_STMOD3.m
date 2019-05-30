@@ -196,7 +196,7 @@ cdConstr={True,{"chi",True,0.0,"0.0<#<0.7"}}; (* {False,{"chi",True,0.0(*,Constr
 Print[AbsoluteTiming[BatchMultiFit[OutDir,Xnmode,expfileconc,YFileDir,YFileList,Nmaxsp,Nmaxst,FitFunc,FitMethod,Fitsmin,Fitsmax,FitMaxIt,FitTarF,ParStart,PlRange,plsc,Ymode,AddConstraints,Smear,Tscf,ycohscf,LicoConstr,ExportFlag,PlotFlag,cdConstr]][[1]]]
 
 (* with ycohscf(0.5-2.5), T, w/ start values from OSL_005/ fits, DiffEvol ign. start values for di and chi, use chi/cdConstr with constraint 0.0<chi<0.9 *)
-(* same as 003/ but with 0<chi<0.7 max 90% sp, min 10% stacks and max 3er stacks *)
+(* same as 003/ but with 0<chi<0.9 max 90% sp, min 10% stacks and max 3er stacks *)
 OutDir="MathematicaOut/SSS_0p0BC_native_STMOD3_OSL_015/";
 Xnmode="X";
 expfileconc={"export/im_0051252_caz_CapB_0p0BC_native-H2O_s-scaled_sIdI.chi",0.30};

@@ -449,11 +449,12 @@ run_BatchMultiFit_20190207.m
 	5p0	2.15426	016	016
 	7p5	1.81636	020	008
 
-	-> fits significantly worse
-	-> disl does not really increase and dosl is too low anyway
-	-> Model 1 is not really good from the fits
+	-> almost all fits significantly worse
+	-> only a few good fits (not much worse as those from OSL_005/), most are however really bad
+	-> the good/best ones have however the right rhos and the chiXn are quite good, only 1-1.25 for these "normal" sized crystals!
+	-> for these good fits however disl does not really increase and dosl is too low anyway
+	-> Model 1 is questionable cause of the thicknesses
 
-	-> TODO stat:
 
 
 run_BatchMultiFit_20190213.m
@@ -490,8 +491,13 @@ run_BatchMultiFit_20190213.m
 	5p0	shell	5:1:8:2   (v/v) BC:ATOC:TW80:Lec	337.0
 	7p5	shell	7.5:1:8:2 (v/v) BC:ATOC:TW80:Lec	333.8
 
-	-> compare to OSL_005/: worse fit for 0p0 but also for loaded ones; same inner shell of 12Å for loaded ones with similar rhoisl; thus the inner shell does not follow in rhoisl and disl the predicted one; chiXn much lower for loaded ones, ici similar 
-
+	-> compare to OSL_005/:
+		-worse fit for 0p0 but also for loaded ones as seen by Tmin but also by comparing:
+			-1.1 BMFS Tmin and fits plots for unloaded, disl=36-52Å in 015/
+			-1.2 BMFS Tmin and fits plots for loaded, disl=8-16Å for all loaded in 015/
+		-same inner shell of 12Å for loaded ones with similar rhoisl; thus the inner shell does not follow in rhoisl and disl the predicted one
+		-chiXn much lower for loaded ones, ici similar 
+		-in Tmin maps dosl is somewhat ill-defined since rhoosl==rhodm was fixed (column of white dots with same best Tmin), however since it counts in normalization not all fits with same disl have the same Tmin (will be the same in a corrected version where rhoosl==rhoisl and thus norm is correct)
 
 
 	-> note this ansatz of setting rhoisl to rhodm is actually problematic with new VOSL norm. since now the dm from the osl would count into the particles
@@ -504,9 +510,7 @@ run_BatchMultiFit_20190213.m
 	# V_DM = 5010261914      [nm^3]
 	# V_IRR = 501.0261914     [nm^2 cm]
 
-	-> TODO stat: see disl range
-
-	-> an easy fix to the abs norm problem would be to run fits again with constraining rhoosl to rhoisl instead of rhodm, then VOSL norm. is correct !!
+	->an easy fix to the abs norm problem would be to run fits again with constraining rhoosl to rhoisl instead of rhodm, then VOSL norm. is correct !!
 
 
 
@@ -565,11 +569,11 @@ HUGE, LARGER and SMALLER vs normal simulations and fits
 XNDiff simulations
 
 		d-Factor	V-factor	d1 [nm]		d2 [nm]		scan script
-	SMALLER	1/sqrt(2)	1/2		141.4 28.3	106.1 21.2	20190216_betaSSS_abc_disl_dosl_scan.sh
+	SMALLER	1/sqrt(2)	1/2		141.4 28.3	106.1 21.2	20190216_betaSSS_abc_disl_dosl_scan.sh & 20190327_betaSSS_abc_disl_dosl_scan_SMALLER.sh
 	normal	1		1		200.0 40.0	150.0 30.0	20190122_betaSSS_abc_disl_dosl_scan_sb4.sh
-	LARGER	1/sqrt(2)	2		282.8 57.6	212.1 42.4	20190215_betaSSS_abc_disl_dosl_scan.sh
-	HUGE	1/2		4		400.0 80.0	300.0 60.0	20190311_betaSSS_abc_disl_dosl_scan.sh
-
+	LARGER	1/sqrt(2)	2		282.8 57.6	212.1 42.4	20190215_betaSSS_abc_disl_dosl_scan.sh & 20190320_betaSSS_abc_disl_dosl_scan_LARGER.sh
+	HUGE	1/2		4		400.0 80.0	300.0 60.0	20190311_betaSSS_abc_disl_dosl_scan.sh & 20190321_betaSSS_abc_disl_dosl_scan_HUGE.sh
+	ASSYM	ca. 2:1		1.6		400.0 100.0	120.0 40.0	20190322_betaSSS_abc_disl_dosl_scan_ASSYM.sh
 
 -> xmgrace plots of *.dat are basically same for small, normal and large OSL, except low Q, (s < 0.005 1/nm)
 -> main difference is btw OSL and non-OSL simulations
@@ -965,11 +969,20 @@ run_BatchMultiFit_201903xx_native_0p0_SPST_1234_STMOD4.m
 	Target function values = 3.17501
 
 
+new XNDiff scans
 
-new XNDiff scans ???
+	20190325_betaSSS_abc_R_sigma_R_disl_dosl_STMOD3_scan.sh
 
-	one could do a similar approach as before but include all 1-6 thicknesses and adapt each time the distance to DMIN?
+	do a similar approach as before but include all 1-6 thicknesses and adapt each time the distance to DMIN
 	-> mostly distances of 3*45+2*dtot and 4*45+2*dtot, i.e. with dtot ~ 20-40 Å, 
+	-> use par->stackmode == 3 and cis from OSL_005/:
+
+	else if ( par->stackmode == 3 )
+	{
+		/* for DNA/DMPC stacks add n3 times the projection of a3 on Gs to D, that is the n3-thickness */
+		/* include also both soft stabilizer layer */
+		D[k] = DMIN + 2.0 * ( thickness_isl + thickness_osl ) ;
+	}
 
 	3*45+2*[20,30,40]
 	ans =   175   195   215
@@ -977,11 +990,59 @@ new XNDiff scans ???
 	4*45+2*[20,30,40]
 	ans =   220   240   260
 
-	of course thinner platelets might have thicker shells as well on their surface, e.g. 40Å for 3er and 20Å for 4er, providing on average very similar thicknesses of about ~215Å
 
+	# <= 48.0 only
+	upper_check=$(echo "$dtot >  4.8" | bc)
+	lower_check=$(echo "$dtot <  0.8" | bc)
+
+
+	see Mathematica file about distr of dst: dst_distr_STMOD_3_cis_dtot.nb/pdf under ../Jakob_Mogens_SLN_Pigments/DataAnalysis/SSS_0p0_native_STMOD3_OSL/
+
+	of course thinner platelets might have thicker shells as well on their surface, e.g. 40Å for 3er and 20Å for 4er, providing on average very similar thicknesses of about ~215Å
 	-> to fit different Yfiles for one pattern is difficult to achieve in BMF via Ymode, since normally the mode is coupled to a measurement/sample. I.e. one cannot mix multiple modes for 1 pattern so far.
 	-> would require changes in BMF (main, loadY) to allow Ymode not only for for each pattern, but even for each sp or st pattern (Ymode is then a matrix #-datasets x #(Nst+Nsp) instead of #-datasets x 1), or simply a manipulation of Yfile names in the run script 
 	-> one could also think of a new stack mode where for a new stack disl and dosl are adapted such that n'*d001+2*dtot' = D (dtot'=disl'+dosl') and disl'/dosl'=disl/dosl, where D is the stack distance of a not too wide Gaussian distr and disl and dosl the shell thicknesses for a core thickness matching n*d001+2*dtot = <D>
+
+
+run_BatchMultiFit_20190327_native_0p0_STMOD3.m
+
+	(* Load XNDiff output data, Y-files *)
+	YFileDir="out/";
+	YFileList=FileNames[YFileDir<>"SSS_180x360_P*_STMOD3_N50_OSL.log"];
+	YFileList=StringTrim[StringTrim[#,YFileDir],".log"]&/@YFileList;
+
+
+	(* with ycohscf(0.5-2.5), T, w/ start values from OSL_005/ fits, DiffEvol ign. start values for di and chi, use chi/cdConstr with constraint 0.0<chi<0.5 *)
+	OutDir="MathematicaOut/SSS_0p0BC_native_STMOD3_OSL_003/";
+	expfileconc={"export/im_0051252_caz_CapB_0p0BC_native-H2O_s-scaled_sIdI.chi",0.30};
+	Nmaxsp=6;
+	Nmaxst=5;
+	FitFunc=NMinimize;
+	FitMethod="DifferentialEvolution";
+	Fitsmin=0.06;
+	Fitsmax=0.37;
+	FitMaxIt=1000;
+	FitTarF=T;
+	ParStart={{"c1",False,0.052586},{"c2",False,0.004511},{"c3",False,0.420543},{"c4",False,0.356191},{"c5",False,0.119113},{"c6",False,0.047056},{"d2",True,0.25},{"d3",True,0.25},{"d4",True,0.25},{"d5",True,0.25},{"rhoisl",True,325,"300<#<360"},{"rhoosl",True,350,"300<#<360"},{"rhodm",True,335,"333<#<340"},{"Xa",True,0.02,"0.001<#<0.025"}};
+	ycohscf={True,1.0,"0.5<#<2.5"};
+	LicoConstr={"","==1.0"}; (* Default *)
+	cdConstr={True,{"chi",True,0.0,"0.0<#<0.5"}}; (* {False,{"chi",True,0.0(*,Constraint*)}} is default *)
+
+	...
+
+	005/ (* same as 003 but FindMinimum *)
+	007/ (* same as 003 but smaller Fitsmin, higher chiXn, chi *) -> best Tmin is not the best fit for the Bragg peak
+	009/ (* same as 003 but smaller Fitsmin, higher chiXn, chi, only stacks *) -> best Tmin is not the best fit for the Bragg peak
+	011/ (* same as 003 but higher chiXn, rhodm *) -> bit better than 003/
+	013/ (* same as 003/ but with 0<chi<0.7 max 70% sp, min 30% stacks and max 3er stacks *) -> bit better than 003/
+	015/ (* same as 003/ but with 0<chi<0.9 max 90% sp, min 10% stacks and max 3er stacks *) -> too weak stack peaks
+
+	-> some of the fits 00[3,5,7,9,11,13]/ reproduce the Braggpeak quite good, especially the higher peak at higher Q
+	-> bump is partially well covered as well
+	-> all fail at the lower-Q edge of the bump (s<0.08 1/nm), i.e. the scattering in the range btw diffuse SAS and bump is much too high
+	-> scaling factors too high
+
+
 
 
 
