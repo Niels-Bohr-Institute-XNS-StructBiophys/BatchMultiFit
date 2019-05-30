@@ -140,6 +140,7 @@ Print[AbsoluteTiming[BatchMultiFit[OutDir,Xnmode,expfileconc,YFileDir,YFileList,
 
 (* with ycohscf(0.5-2.5), T, w/ start values from OSL_005/ fits, DiffEvol ign. start values for di and chi, use chi/cdConstr with constraint 0.0<chi<0.5 *)
 (* same as 003 but higher chiXn, rhodm *)
+(*
 OutDir="MathematicaOut/SSS_0p0BC_native_STMOD3_OSL_011/";
 Xnmode="X";
 expfileconc={"export/im_0051252_caz_CapB_0p0BC_native-H2O_s-scaled_sIdI.chi",0.30};
@@ -164,7 +165,62 @@ ExportFlag=True;
 PlotFlag=False;
 cdConstr={True,{"chi",True,0.0,"0.0<#<0.5"}}; (* {False,{"chi",True,0.0(*,Constraint*)}} is default *)
 Print[AbsoluteTiming[BatchMultiFit[OutDir,Xnmode,expfileconc,YFileDir,YFileList,Nmaxsp,Nmaxst,FitFunc,FitMethod,Fitsmin,Fitsmax,FitMaxIt,FitTarF,ParStart,PlRange,plsc,Ymode,AddConstraints,Smear,Tscf,ycohscf,LicoConstr,ExportFlag,PlotFlag,cdConstr]][[1]]]
+*)
 
+
+(* with ycohscf(0.5-2.5), T, w/ start values from OSL_005/ fits, DiffEvol ign. start values for di and chi, use chi/cdConstr with constraint 0.0<chi<0.7 *)
+(* same as 003/ but with 0<chi<0.7 max 70% sp, min 30% stacks and max 3er stacks *)
+OutDir="MathematicaOut/SSS_0p0BC_native_STMOD3_OSL_013/";
+Xnmode="X";
+expfileconc={"export/im_0051252_caz_CapB_0p0BC_native-H2O_s-scaled_sIdI.chi",0.30};
+Nmaxsp=6;
+Nmaxst=3;
+FitFunc=NMinimize;
+FitMethod="DifferentialEvolution";
+Fitsmin=0.06;
+Fitsmax=0.37;
+FitMaxIt=1000;
+FitTarF=T;
+ParStart={{"c1",False,0.052586},{"c2",False,0.004511},{"c3",False,0.420543},{"c4",False,0.356191},{"c5",False,0.119113},{"c6",False,0.047056},{"d2",True,0.5},{"d3",True,0.5},{"rhoisl",True,325,"300<#<360"},{"rhoosl",True,350,"300<#<360"},{"rhodm",True,335,"333<#<340"},{"Xa",True,0.02,"0.001<#<0.025"}};
+PlRange={{0.002,0.5},{10^-2,10^2}};
+plsc=1; (* Default *)
+Ymode=1; (* Default, only 1 type of Yfiles *)
+AddConstraints={}; (* Default *)
+Smear={0,0.0}; (* Default *)
+Tscf=1.0; (* Default *)
+ycohscf={True,1.0,"0.5<#<2.5"};
+LicoConstr={"","==1.0"}; (* Default *)
+ExportFlag=True;
+PlotFlag=False;
+cdConstr={True,{"chi",True,0.0,"0.0<#<0.7"}}; (* {False,{"chi",True,0.0(*,Constraint*)}} is default *)
+Print[AbsoluteTiming[BatchMultiFit[OutDir,Xnmode,expfileconc,YFileDir,YFileList,Nmaxsp,Nmaxst,FitFunc,FitMethod,Fitsmin,Fitsmax,FitMaxIt,FitTarF,ParStart,PlRange,plsc,Ymode,AddConstraints,Smear,Tscf,ycohscf,LicoConstr,ExportFlag,PlotFlag,cdConstr]][[1]]]
+
+(* with ycohscf(0.5-2.5), T, w/ start values from OSL_005/ fits, DiffEvol ign. start values for di and chi, use chi/cdConstr with constraint 0.0<chi<0.9 *)
+(* same as 003/ but with 0<chi<0.7 max 90% sp, min 10% stacks and max 3er stacks *)
+OutDir="MathematicaOut/SSS_0p0BC_native_STMOD3_OSL_015/";
+Xnmode="X";
+expfileconc={"export/im_0051252_caz_CapB_0p0BC_native-H2O_s-scaled_sIdI.chi",0.30};
+Nmaxsp=6;
+Nmaxst=3;
+FitFunc=NMinimize;
+FitMethod="DifferentialEvolution";
+Fitsmin=0.06;
+Fitsmax=0.37;
+FitMaxIt=1000;
+FitTarF=T;
+ParStart={{"c1",False,0.052586},{"c2",False,0.004511},{"c3",False,0.420543},{"c4",False,0.356191},{"c5",False,0.119113},{"c6",False,0.047056},{"d2",True,0.5},{"d3",True,0.5},{"rhoisl",True,325,"300<#<360"},{"rhoosl",True,350,"300<#<360"},{"rhodm",True,335,"333<#<340"},{"Xa",True,0.02,"0.001<#<0.025"}};
+PlRange={{0.002,0.5},{10^-2,10^2}};
+plsc=1; (* Default *)
+Ymode=1; (* Default, only 1 type of Yfiles *)
+AddConstraints={}; (* Default *)
+Smear={0,0.0}; (* Default *)
+Tscf=1.0; (* Default *)
+ycohscf={True,1.0,"0.5<#<2.5"};
+LicoConstr={"","==1.0"}; (* Default *)
+ExportFlag=True;
+PlotFlag=False;
+cdConstr={True,{"chi",True,0.0,"0.0<#<0.9"}}; (* {False,{"chi",True,0.0(*,Constraint*)}} is default *)
+Print[AbsoluteTiming[BatchMultiFit[OutDir,Xnmode,expfileconc,YFileDir,YFileList,Nmaxsp,Nmaxst,FitFunc,FitMethod,Fitsmin,Fitsmax,FitMaxIt,FitTarF,ParStart,PlRange,plsc,Ymode,AddConstraints,Smear,Tscf,ycohscf,LicoConstr,ExportFlag,PlotFlag,cdConstr]][[1]]]
 
 
 
