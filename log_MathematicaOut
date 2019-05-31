@@ -417,7 +417,10 @@ run_BatchMultiFit_20190206.m
 
 
 
+
 run_BatchMultiFit_20190207.m
+
+	see ../Jakob_Mogens_SLN_Pigments/DataAnalysis/SSS_1to5dil_diff_models/Results_1to5dil_models.ods
 
 	for loaded samples we studied fits with Model 1 where we allowed to vary rhoisl and rhoosl only in small bands around the mixed rho of BC+ATOC in isl and TW80+PC in osl
 
@@ -444,20 +447,24 @@ run_BatchMultiFit_20190207.m
 	OutDir="MathematicaOut/SSS_7p5BC_1to5dil_OSL_013/";
 	ParStart= ... {"rhoisl",True,0,"312<#<316"},{"rhoosl",True,0,"349<#<353"},{"rhodm",True,0,"334<#<340"} ...
 
-	BC 	Tmin	disl	dosl
-	3p0	2.17434	016	016
-	5p0	2.15426	016	016
-	7p5	1.81636	020	008
+	BC 	Tmin	disl	dosl	Tmin_005_OSL	disl	dosl
+	3p0	2.17434	016	016	1.8362		12	40
+	5p0	2.15426	016	016	1.7971		12	40
+	7p5	1.81636	020	008	1.6860		4	4
+
 
 	-> almost all fits significantly worse
 	-> only a few good fits (not much worse as those from OSL_005/), most are however really bad
 	-> the good/best ones have however the right rhos and the chiXn are quite good, only 1-1.25 for these "normal" sized crystals!
 	-> for these good fits however disl does not really increase and dosl is too low anyway
+
 	-> Model 1 is questionable cause of the thicknesses
 
 
 
 run_BatchMultiFit_20190213.m
+
+	see ../Jakob_Mogens_SLN_Pigments/DataAnalysis/SSS_1to5dil_diff_models/Results_1to5dil_models.ods
 
 	Model 4 in SLD.ods: one-shell model by constraining rhoosl to rhodm
 
@@ -496,18 +503,18 @@ run_BatchMultiFit_20190213.m
 			-1.1 BMFS Tmin and fits plots for unloaded, disl=36-52Å in 015/
 			-1.2 BMFS Tmin and fits plots for loaded, disl=8-16Å for all loaded in 015/
 		-same inner shell of 12Å for loaded ones with similar rhoisl; thus the inner shell does not follow in rhoisl and disl the predicted one
-		-chiXn much lower for loaded ones, ici similar 
+		-chiXn much lower for loaded ones, ici similar
 		-in Tmin maps dosl is somewhat ill-defined since rhoosl==rhodm was fixed (column of white dots with same best Tmin), however since it counts in normalization not all fits with same disl have the same Tmin (will be the same in a corrected version where rhoosl==rhoisl and thus norm is correct)
 
 
 	-> note this ansatz of setting rhoisl to rhodm is actually problematic with new VOSL norm. since now the dm from the osl would count into the particles
-	-> however also simulations with larger disl and small dosl(4Å) are included, where effect of VOSL vs VISL is rather small for abs intensity norm., the best fits do have actually 
+	-> however also simulations with larger disl and small dosl(4Å) are included, where effect of VOSL vs VISL is rather small for abs intensity norm., the best fits do have actually
 
 	-> of course one could renormalize I(q) with volumes listed in Y-files, this is a bit complicated to implement in BMF
 	# V_CRY = 6378329.691     [nm^3]
 	# V_ISL = 13142291.3      [nm^3]
 	# V_OSL = 50102619.14     [nm^3]
-	# V_DM = 5010261914      [nm^3]
+	# V_DM  = 5010261914      [nm^3]
 	# V_IRR = 501.0261914     [nm^2 cm]
 
 	->an easy fix to the abs norm problem would be to run fits again with constraining rhoosl to rhoisl instead of rhodm, then VOSL norm. is correct !!
@@ -515,7 +522,21 @@ run_BatchMultiFit_20190213.m
 
 
 
+run_BatchMultiFit_20190326.m
 
+	see ../Jakob_Mogens_SLN_Pigments/DataAnalysis/SSS_1to5dil_diff_models/Results_1to5dil_models.ods
+
+	Model 4 in SLD.ods: one-shell model by constraining rhoosl to rhodm
+
+	->similar as 015/ but now constraining rhoosl == rhoisl instead of to rhodm, then VOSL norm. is correct
+	-> *_OSL_017/
+
+	fits are worse than *_OSL_005/ especially for 0p0_1to5dil
+	fits are as good or slightly better as with model 1 for 3,5 and 7.5% BC
+
+	disl+dosl are only 4+8=12Å and thus much too low, for 0p0 they are 44Å with rho being the avergae of rhoisl and rhoosl of OSL_005/
+
+	-> not good model wrt fit quality and params
 
 
 
