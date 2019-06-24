@@ -1066,4 +1066,47 @@ run_BatchMultiFit_20190327_native_0p0_STMOD3.m
 
 
 
+native loaded samples
+
+	XNDiff simulations with 8-52 Å inner and outer shells (dtot<=60), using cis fro 1to5dil samples, ASSYM sizes
+	20190605_betaSSS_abc_disl_dosl_STMOD3_OSL_ASSYM_3p0BC_native_scan.sh
+	20190605_betaSSS_abc_disl_dosl_STMOD3_OSL_ASSYM_5p0BC_native_scan.sh
+	20190605_betaSSS_abc_disl_dosl_STMOD3_OSL_ASSYM_7p5BC_native_scan.sh
+
+	(* with ycohscf(0.5-2.5), T, w/ start values from OSL_005/ fits, DiffEvol ign. start values for di and chi, use chi/cdConstr with constraint 0.0<chi<0.5 *)
+
+	OutDir="MathematicaOut/SSS_3p0BC_native_STMOD3_OSL_011/";
+	Nmaxsp=6;
+	Nmaxst=5;
+	Fitsmin=0.06;
+	Fitsmax=0.37;
+	ParStart={{"c1",False,0.26249759281607415},{"c2",False,0.09872287568105395},{"c3",False,0.36419901965372614},{"c4",False,0.16257579386053717},{"c5",False,0.0817375025739596},{"c6",False,0.03026721541464894},{"d2",True,0.25},{"d3",True,0.25},{"d4",True,0.25},{"d5",True,0.25},{"rhoisl",True,325,"300<#<360"},{"rhoosl",True,350,"300<#<360"},{"rhodm",True,335,"333<#<345"},{"Xa",True,0.02,"0.001<#<0.025"}};
+	ycohscf={True,1.0,"0.5<#<5.0"};
+	cdConstr={True,{"chi",True,0.0,"0.0<#<0.5"}}; (* {False,{"chi",True,0.0(*,Constraint*)}} is default *)
+
+
+	(* with ycohscf(0.5-2.5), T, w/ start values from OSL_005/ fits, DiffEvol ign. start values for di and chi, use chi/cdConstr with constraint 0.0<chi<0.7 *)
+	(* same as 011/ but with 0<chi<0.7 i.e. max 70% sp and min 30% stacks, and max 3er stacks *)
+
+	OutDir="MathematicaOut/SSS_3p0BC_native_STMOD3_OSL_013/";
+	Nmaxsp=6;
+	Nmaxst=3;
+	ParStart={{"c1",False,0.26249759281607415},{"c2",False,0.09872287568105395},{"c3",False,0.36419901965372614},{"c4",False,0.16257579386053717},{"c5",False,0.0817375025739596},{"c6",False,0.03026721541464894},{"d2",True,0.5},{"d3",True,0.5},{"rhoisl",True,325,"300<#<360"},{"rhoosl",True,350,"300<#<360"},{"rhodm",True,335,"333<#<340"},{"Xa",True,0.02,"0.001<#<0.025"}};
+	ycohscf={True,1.0,"0.5<#<2.5"};
+	cdConstr={True,{"chi",True,0.0,"0.0<#<0.7"}}; (* {False,{"chi",True,0.0(*,Constraint*)}} is default *)
+
+	-> some fits reproduce native loaded data quite reasonable, although not perfect and with smaller dtot / other ED
+
+	3p0 011/ with dtot ~40 Å some fit quite okay
+	3p0 013/ with dtot ~40 Å some fit quite okay, 8_32, 12_28, 16_24 for 12_40 requires smaller d_st
+
+	5p0 011/ with dtot ~40 Å some fit quite okay, 8_32, 12_28, 16_24, Bragg peak too broad and too low, requires maybe more thicker platelets inside, use cis instead of nis, free cis?
+	5p0 013/ with dtot ~40 Å some fits very good for Bragg and quite okay for bump, 8_32, 12_28, 16_24, Bragg a bit peak too broad, bump too low, requires maybe more thicker platelets inside, use cis instead of nis, free cis?
+
+	7p5 011/ with dtot ~40 Å some fit quite okay, 8_32, 12_28, 16_24, Bragg peak too broad, requires maybe more thicker platelets inside, use cis instead of nis, free cis? 12_40 requires smaller d_st
+	7p5 013/ less good as 011/, seems to require a higher amount of stacks to get the sharper stack peaks as in case of 011/
+
+
+	restrict ycohsf to 2.5 next time, not to 5 for 011
+
 
