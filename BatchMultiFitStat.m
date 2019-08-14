@@ -276,38 +276,44 @@ mindot=Table[Graphics[{White,Disk[mindata[[i,2;;3]],PointSizeDot]}],{i,1,Length[
 stream=ToString[InputForm[Import[data[[1,1]]]]]; (* exp data set from first log file derived *)
 expfile="export/"<>StringCases[StringCases[stream,Shortest["Load file export/"~~__~~"\\n"]][[1]],"export/"~~x__~~"\\n"->x][[1]];
 expdata=loadexp[{expfile},False, Print][[1]];
-plexp=ErrorListLogLogPlot[{{#[[1]],#[[2]]},ErrorBar[0*#[[3]],#[[4]]]}&/@expdata,Joined->False,PlotStyle->{Green,Thin},DisplayFunction->Identity];
+plexp=ErrorListLogLogPlot[{{#[[1]],#[[2]]},ErrorBar[0*#[[3]],#[[4]]]}&/@expdata,Joined->False,PlotStyle->{Black(*Green*),Thin},DisplayFunction->Identity,PlotRange->OptionValue[PlRangeFit]];
 
 plfit=Table[,{i,1,Length[data]}];
 plbestfit=Table[,{i,1,Length[bestdata]}];
-minG=0.0;maxG=0.8;
+(* minG goes with minT and maxG with maxT *)
+(*minG=0.0;maxG=0.8;*) (* for GrayScale minG=0 is black and maxG is light gray *)
+minG=0.19;maxG=0.1; (* for Hue from Orange(0.1) to LightGreen(0.19), does somehow not work ??? *)
 
 Do[
 fitdata=Import[StringReplace[data[[i,1]],".log"->"_set_1_fit.dat"],"Table"];
-plfit[[i]]=ListLogLogPlot[fitdata,Joined->True,PlotStyle->{Thin,Opacity[0.5],Red},DisplayFunction->Identity];
+plfit[[i]]=ListLogLogPlot[fitdata,Joined->True,PlotStyle->{Thin,Opacity[0.5],Red},DisplayFunction->Identity,PlotRange->OptionValue[PlRangeFit]];
 ,{i,1,Length[data]}];
 Do[
 fitdata=Import[StringReplace[bestdata[[i,1]],".log"->"_set_1_fit.dat"],"Table"];
-plbestfit[[i]]=ListLogLogPlot[fitdata,Joined->True,PlotStyle->{Opacity[1],GrayLevel[(maxT*minG-maxG*minT+(maxG-minG)*Tpdata[[i,4]])/(maxT-minT)]},DisplayFunction->Identity];
+plbestfit[[i]]=ListLogLogPlot[fitdata,Joined->True,PlotStyle->Hue[(maxT*minG-maxG*minT+(maxG-minG)*Tpdata[[i,4]])/(maxT-minT)](*{Opacity[1],GrayLevel[(maxT*minG-maxG*minT+(maxG-minG)*Tpdata[[i,4]])/(maxT-minT)]}*),DisplayFunction->Identity,PlotRange->{{0.08,0.45},{0.0009,8}}];
 ,{i,1,Length[bestdata]}];
 fitdata=Import[StringReplace[mindata[[1,1]],".log"->"_set_1_fit.dat"],"Table"];
-plminfit=ListLogLogPlot[fitdata,Joined->True,PlotStyle->{Yellow},DisplayFunction->Identity];
+plminfit=ListLogLogPlot[fitdata,Joined->True,PlotStyle->{Green(*Yellow*),Thick},DisplayFunction->Identity,PlotRange->OptionValue[PlRangeFit]];
 
 (* Export data with fits *)
-plfitcombo=Show[{plexp,plfit,plbestfit,plminfit},FrameLabel->{"s=Q/2Pi [1/nm]","I [1/cm]"},Frame->True,FrameStyle->Directive[4*OptionValue[PlotFontSize],Black],PlotLabel->Style["fits in "<>outdir,4*OptionValue[PlotFontSize],Black]];
+plfitcombo=Show[{plexp,plfit,plbestfit,plminfit},FrameLabel->{Row[{"s=Q/(",2\[Pi],") [nm",Superscript["",-1],"]"}], 
+ Row[{"I [cm",Superscript["",-1],"]"}]},Frame->True,FrameTicks->OptionValue[FrameTicksFit],FrameStyle->Directive[4*OptionValue[PlotFontSize],Black,Thick](*,PlotLabel->Style["fits in "<>outdir,4*OptionValue[PlotFontSize],Black]*)];
 Export[outdir<>"pl_fits_all_best_min.png",plfitcombo,"PNG",ImageSize->4*OptionValue[ImageSize]];
 
-plfitcombo=Show[{plexp,plfit,plbestfit,plminfit},FrameLabel->{"s=Q/2Pi [1/nm]","I [1/cm]"},Frame->True,PlotLabel->Style["fits in "<>outdir]];
+plfitcombo=Show[{plexp,plfit,plbestfit,plminfit},FrameLabel->{Row[{"s=Q/(",2\[Pi],") [nm",Superscript["",-1],"]"}], 
+ Row[{"I [cm",Superscript["",-1],"]"}]},Frame->True,FrameTicks->OptionValue[FrameTicksFit](*,PlotLabel->Style["fits in "<>outdir]*)];
 Export[outdir<>"pl_fits_all_best_min.pdf",plfitcombo,"PDF",ImageResolution->300];
 
 Do[
 fitdata=Import[StringReplace[bestdata[[i,1]],".log"->"_set_1_fit.dat"],"Table"];
-plbestfit[[i]]=ListLogLogPlot[fitdata,Joined->True,PlotStyle->{Opacity[1],GrayLevel[0]},DisplayFunction->Identity];,{i,1,Length[bestdata]}];
+plbestfit[[i]]=ListLogLogPlot[fitdata,Joined->True,PlotStyle->{Opacity[1],Yellow(*GrayLevel[0]*)},DisplayFunction->Identity,PlotRange->OptionValue[PlRangeFit]];,{i,1,Length[bestdata]}];
 
-plfitcombo=Show[{plexp,plfit,plbestfit,plminfit},FrameLabel->{"s=Q/2Pi [1/nm]","I [1/cm]"},Frame->True,FrameStyle->Directive[4*OptionValue[PlotFontSize],Black],PlotLabel->Style["fits in "<>outdir,4*OptionValue[PlotFontSize],Black]];
+plfitcombo=Show[{plexp,plfit,plbestfit,plminfit},FrameLabel->{Row[{"s=Q/(",2\[Pi],") [nm",Superscript["",-1],"]"}], 
+ Row[{"I [cm",Superscript["",-1],"]"}]},Frame->True,FrameTicks->OptionValue[FrameTicksFit],FrameStyle->Directive[4*OptionValue[PlotFontSize],Black,Thick](*,PlotLabel->Style["fits in "<>outdir,4*OptionValue[PlotFontSize],Black]*)];
 Export[outdir<>"pl_fits_all_best_min_easy.png",plfitcombo,"PNG",ImageSize->4*OptionValue[ImageSize]];
 
-plfitcombo=Show[{plexp,plfit,plbestfit,plminfit},FrameLabel->{"s=Q/2Pi [1/nm]","I [1/cm]"},Frame->True,PlotLabel->Style["fits in "<>outdir]];
+plfitcombo=Show[{plexp,plfit,plbestfit,plminfit},FrameLabel->{Row[{"s=Q/(",2\[Pi],") [nm",Superscript["",-1],"]"}], 
+ Row[{"I [cm",Superscript["",-1],"]"}]},Frame->True,FrameTicks->OptionValue[FrameTicksFit](*,PlotLabel->Style["fits in "<>outdir]*)];
 Export[outdir<>"pl_fits_all_best_min_easy.pdf",plfitcombo,"PDF",ImageResolution->300];
 
 (* plot arrangement for notebook *)
@@ -399,6 +405,6 @@ Export[outdir<>"box_rho_all.png",Show[boxrho,PlotRange->RhoPlRange],(*"PDF",Imag
 Close[logstream];
 
 (*{plfitcombo,Grid[plist],Grid[boxlist],Grid[{{boxbestcis},{boxbestrho}}]}*)];
-Options[pT]={mu->{1,0,0,1},mu2->{1.1,0},PointSize->"Automatic"(*{1.0,1.0}*),Ticks->"Automatic",ImageSize->1024,PlotFontSize->18(*for 1024 ImageSize*),RhosPlotRange->"Automatic"(*{300,360}*),CisPlotRange->"Automatic"(*{0.0,0.5}*),Quantiles->{{0.25,0.75},{0.1,0.9}},QuantilesSelectPlot->1};
+Options[pT]={mu->{1,0,0,1},mu2->{1.1,0},PointSize->"Automatic"(*{1.0,1.0}*),Ticks->"Automatic",ImageSize->512,PlotFontSize->18(*for 1024 ImageSize*),RhosPlotRange->"Automatic"(*{300,360}*),CisPlotRange->"Automatic"(*{0.0,0.5}*),PlRangeFit->{{0.0085,0.4},{0.0007,13}}(* for Log plots PlotRange needs to be in plot cmd and not Show, or try to logarithmize PlRange when using it in Show *),FrameTicksFit->{{{Log[0.01],0.01},{Log[0.1],0.1},{Log[1],1}},{{Log[0.001],Superscript[10,-3]},{Log[0.01],Superscript[10,-2]},{Log[0.1],Superscript[10,-1]},{Log[1],Superscript[10,0]},{Log[10],Superscript[10,1]}}}(* in Log plots tick positions need to be logarithmized *),Quantiles->{{0.25,0.75},{0.1,0.9}},QuantilesSelectPlot->1};
 
 
