@@ -100,7 +100,7 @@ dirlist=Select[Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_OSL_ASSYM_symmsh
 
 mindisl=8;maxdisl=92;ddisl=4;
 mindosl=8;maxdosl=92;ddosl=4;
-dirlist=Select[Select[FileNames["MathematicaOut/SSS_*p0BC_1to5dil_OSL_ASSYM_00*","",Infinity],StringMatchQ[#,{_~~"*005"}]&],DirectoryQ];
+dirlist=Select[Select[FileNames["MathematicaOut/SSS_*BC_1to5dil_OSL_ASSYM_00*","",Infinity],StringMatchQ[#,{_~~"*005"}]&],DirectoryQ];
 
 
 
@@ -115,7 +115,7 @@ Print[dirlist];
 Trangelist={1.1,1.2,1.3,1.5};
 UserDefinedRhosPlotRange={280,400};(*"Automatic";*)
 UserDefinedCisPlotRange={0.0,0.55};(*"Automatic";*)
-QuantileList={{0.25,0.75},{0.1,0.9}};
+QuantileList={{0.25,0.75},{1.0/6.0,1.0-1.0/6.0},{0.1,0.9}};
 QuantilesPlotSelector=2;
 d001=44.77; (* d001 beta-SSS for nis *)
 
