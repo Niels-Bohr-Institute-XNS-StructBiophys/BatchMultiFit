@@ -1110,3 +1110,187 @@ native loaded samples
 	restrict ycohsf to 2.5 next time, not to 5 for 011
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+OSL_ASSYM_symmshells simulations and fits:
+
+	inroduced phase factors with shift vectors for each platelet for isl and osl parallelepideds to make shells symmetric around crystals
+
+	fits as for OSL_ASSYM
+
+		(* Load XNDiff output data, Y-files for dilute SSS suspension *)
+		YFileDir="out/";
+		YFileList=FileNames[YFileDir<>"SSS_180x360_P*_ST_360_400_N50_OSL_ASSYM_symmshells.log"];
+		YFileList=StringTrim[StringTrim[#,YFileDir],".log"]&/@YFileList;
+
+		(* with ycohscf(0.5-2.0), T *)
+		OutDir="MathematicaOut/SSS_0p0BC_1to5dil_OSL_ASSYM_symmshells_005/";
+		Nmaxsp=6;
+		Nmaxst=0;
+		ParStart={{"c1",True,0.2},{"c2",True,0.3},{"c3",True,0.3},{"c4",True,0.1},{"c5",True,0.1},{"c6",True,0.0},{"rhoisl",True,0,"270<#<400"},{"rhoosl",True,0,"270<#<400"},{"rhodm",True,0,"333<#<340"},{"Xa",True,0.002,"0.001<#<0.005"}};
+		ycohscf={True,1.0,"0.5<#<2.0"};
+
+
+		OutDir="MathematicaOut/SSS_3p0BC_1to5dil_OSL_ASSYM_symmshells_005/";
+		OutDir="MathematicaOut/SSS_5p0BC_1to5dil_OSL_ASSYM_symmshells_005/";
+		OutDir="MathematicaOut/SSS_7p5BC_1to5dil_OSL_ASSYM_symmshells_005/";
+
+
+	->fits get worse, fit parameters seem to be much less senseful, especially for loaded samples.
+	->for unloaded sample pre-bump not so well reproduced anymore, still meaningfull shell thicknesses and EDs
+	->for loaded samples too small (inner) shell thicknesses and inverted ED profile (rhoisl > rhoosl < rhodm) what makes no sense
+
+
+	(* 007 same as 005 but fixed rhodm to 334 *)
+
+		-> worse as 005
+
+	(* 009 same as 005 but smaller rhodm and chiXn1 range *)
+		ParStart={{"c1",True,0.2},{"c2",True,0.3},{"c3",True,0.3},{"c4",True,0.1},{"c5",True,0.1},{"c6",True,0.0},{"rhoisl",True,0,"270<#<400"},{"rhoosl",True,0,"270<#<400"},{"rhodm",True,0,"332<#<337"},{"Xa",True,0.002,"0.001<#<0.005"}};
+		ycohscf={True,1.0,"0.65<#<1.35"};
+
+		-> worse as 005
+
+
+
+
+
+
+OSL_ASSYM_convcheckVCRYtoVOSLsymmshells simulations and fits:
+
+	introduced phase factors with shift vectors for each platelet for isl and osl parallelepideds to make shells symmetric around crystals
+	!!! additionally corrected shell thicknesses with new projection calculation !!!
+
+	(* 005 *)
+		OutDir="MathematicaOut/SSS_0p0BC_1to5dil_OSL_ASSYM_convcheckVCRYtoVOSLsymmshells_005/";
+		expfileconc={"export/im_0051238_caz_CapA_0p0BC_1to5dil-H2O_s-scaled_sIdI.chi",0.05};
+		Nmaxsp=6;
+		Nmaxst=0;
+		FitFunc=NMinimize;
+		FitMethod="DifferentialEvolution";
+		Fitsmin=0.0085;
+		Fitsmax=0.37;
+		FitMaxIt=1000;
+		FitTarF=T;
+		ParStart={{"c1",True,0.2},{"c2",True,0.3},{"c3",True,0.3},{"c4",True,0.1},{"c5",True,0.1},{"c6",True,0.0},{"rhoisl",True,0,"270<#<400"},{"rhoosl",True,0,"270<#<400"},{"rhodm",True,0,"333<#<340"},{"Xa",True,0.002,"0.001<#<0.005"}};
+
+		ycohscf={True,1.0,"0.5<#<2.0"};
+
+		use mappar:
+		mappar "SSS_180x360_P*_*_ST_360_400_N50_OSL_ASSYM_convcheckVCRYtoVOSLsymmshells.png" 4 4 116 4 4 116
+
+
+		0p0_1to5dil: 32-20 Å (chiXn 2 for best fit)
+
+		maxselTminfac = 1.2
+		Good fits [minTmin,maxselTmin] = [2.05315,2.463780]
+		x=8:4:116
+		y=8:4:116
+
+		    --------------------------------
+		116 | oooooooooooooooooooooooooooo |
+		112 | oooooooooooooooooooooooooooo |
+		108 | oooooooooooooooooooooooooooo |
+		104 | oooooooooooooooooooooooooooo |
+		100 | xooooooooooooooooooooooooooo |
+		 96 | xxoooooooooooooooooooooooooo |
+		 92 | xxxooooooooooooooooooooooooo |
+		 88 | xxxxoooooooooooooooooooooooo |
+		 84 | xxxxxooooooooooooooooooooooo |
+		 80 | xxxxxxoooooooooooooooooooooo |
+		 76 | xxxxxxxooooooooooooooooooooo |
+		 72 | xxxxxxxxoooooooooooooooooooo |
+		 68 | xxxxxxxxxooooooooooooooooooo |
+		 64 | xxxxxxxxxxoooooooooooooooooo |
+		 60 | xxxxxxxxxxxooooooooooooooooo |
+		 56 | xxxxxxxxxxxxoooooooooooooooo |
+		 52 | xxxxxxxxxxxxxooooooooooooooo |
+		 48 | +xxxxxxxxxxxxxoooooooooooooo |
+		 44 | +xxxxxxxxxxxxxxooooooooooooo |
+		 40 | ++xxxxxxxxxxxxxxoooooooooooo |
+		 36 | +xxxxxxxxxxxxxxxxooooooooooo |
+		 32 | xxxx+xxxxxxxxxxxxxoooooooooo |
+		 28 | xxxx++xxxxxxxxxxxxxooooooooo |
+		 24 | +xxxx++xxxxxxxxxxxxxoooooooo |
+		 20 | xxxxx+o+xxxxxxxxxxxxxooooooo |
+		 16 | xxxxxx+++xxxxxxxxxxxxxoooooo |
+		 12 | xxxxxx++++xxxxxxxxxxxxxooooo |
+		  8 | xxxxxxx+++xxxxxxxxxxxxxooooo |
+		    --------------------------------
+				             11111  
+		       112223344455666778889900011  
+		      8260482604826048260482604826  
+
+
+
+		3p0_1to5dil: 4-4 Å
+
+		maxselTminfac = 1.2
+		Good fits [minTmin,maxselTmin] = [1.90571,2.286852]
+		x=4:4:116
+		y=4:4:116
+
+		    ---------------------------------
+		116 | ooooooooooooooooooooooooooooo |
+		112 | ooooooooooooooooooooooooooooo |
+		108 | ooooooooooooooooooooooooooooo |
+		104 | xoooooooooooooooooooooooooooo |
+		100 | xxooooooooooooooooooooooooooo |
+		 96 | xxxoooooooooooooooooooooooooo |
+		 92 | xxxxooooooooooooooooooooooooo |
+		 88 | xxxxxoooooooooooooooooooooooo |
+		 84 | xxxxxxooooooooooooooooooooooo |
+		 80 | xxxxxxxoooooooooooooooooooooo |
+		 76 | xxxxxxxxooooooooooooooooooooo |
+		 72 | xxxxxxxxxoooooooooooooooooooo |
+		 68 | xxxxxxxxxxooooooooooooooooooo |
+		 64 | xxxxxxxxxxxoooooooooooooooooo |
+		 60 | xxxxxxxxxxxxooooooooooooooooo |
+		 56 | xxxxxxxxxxxxxoooooooooooooooo |
+		 52 | xxxxxxxxxxxxxxooooooooooooooo |
+		 48 | xxxxxxxxxxxxxxxoooooooooooooo |
+		 44 | xxxxxx++xxxxxxxxooooooooooooo |
+		 40 | xx+xxx++xxxxxxxxxoooooooooooo |
+		 36 | xx++xx+++xxxxxxxxxooooooooooo |
+		 32 | xx+++x+++xxxxxxxxxxoooooooooo |
+		 28 | xxx++++++xxxxxxxxxxxooooooooo |
+		 24 | xxx++++++xxxxxxxxxxxxoooooooo |
+		 20 | +xx++++++xxxxxxxxxxxxxooooooo |
+		 16 | ++++++xx+xxxxxxxxxxxxxxoooooo |
+		 12 | ++++++xx++xxxxxxxxxxxxxxooooo |
+		  8 | +++++++xxxxxxxxxxxxxxxxxooooo |
+		  4 | o++++++xxxxxxxxxxxxxxxxxooooo |
+		    ---------------------------------
+				              11111  
+			112223344455666778889900011  
+		      48260482604826048260482604826  
+
+
+		similar problems for 5p0 etc
+
+
+
+	(* 007 same as 005 but fixed rhodm to 334 *)
+
+		-> worse as 005
+
+	(* 009 same as 005 but smaller rhodm and chiXn1 range *)
+		ParStart={{"c1",True,0.2},{"c2",True,0.3},{"c3",True,0.3},{"c4",True,0.1},{"c5",True,0.1},{"c6",True,0.0},{"rhoisl",True,0,"270<#<400"},{"rhoosl",True,0,"270<#<400"},{"rhodm",True,0,"332<#<337"},{"Xa",True,0.002,"0.001<#<0.005"}};
+		ycohscf={True,1.0,"0.65<#<1.35"};
+
+		-> worse as 005
+
+
+
+
