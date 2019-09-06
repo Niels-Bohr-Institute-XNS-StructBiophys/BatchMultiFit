@@ -23,6 +23,8 @@ YFileList=FileNames[YFileDir<>"SSS_180x360_P*_STMOD3_nis_totd_N50_OSL_ASSYM_0p0B
 YFileList=StringTrim[StringTrim[#,YFileDir],".log"]&/@YFileList;
 
 
+(* 015 does not exist for 0p0 *)
+
 (* with ycohscf(0.5-2.5), T, w/ start values from OSL_005/ fits, DiffEvol ign. start values for di and chi, use chi/cdConstr with constraint 0.0<chi<0.6 *)
 (* same as 015/ but max 3er stacks and rhos constraints *)
 
@@ -61,6 +63,8 @@ YFileDir="out/";
 YFileList=FileNames[YFileDir<>"SSS_180x360_P*_STMOD3_nis_totd_N50_OSL_ASSYM_3p0BC_native.log"];
 YFileList=StringTrim[StringTrim[#,YFileDir],".log"]&/@YFileList;
 
+
+(* 015 is the same as 017 for 3p0 *)
 
 (* with ycohscf(0.5-2.5), T, w/ start values from OSL_005/ fits, DiffEvol ign. start values for di and chi, use chi/cdConstr with constraint 0.0<chi<0.6 *)
 (* same as 015/ but max 3er stacks and rhos constraints *)
@@ -192,7 +196,6 @@ ExportFlag=True;
 PlotFlag=False;
 cdConstr={True,{"chi",True,0.0,"0.0<#<0.6"}}; (* {False,{"chi",True,0.0(*,Constraint*)}} is default *)
 Print[AbsoluteTiming[BatchMultiFit[OutDir,Xnmode,expfileconc,YFileDir,YFileList,Nmaxsp,Nmaxst,FitFunc,FitMethod,Fitsmin,Fitsmax,FitMaxIt,FitTarF,ParStart,PlRange,plsc,Ymode,AddConstraints,Smear,Tscf,ycohscf,LicoConstr,ExportFlag,PlotFlag,cdConstr]][[1]]]
-
 
 
 (* with ycohscf(0.5-2.5), T, w/ start values from OSL_005/ fits, DiffEvol ign. start values for di and chi, use chi/cdConstr with constraint 0.0<chi<0.6 *)

@@ -23,7 +23,7 @@ YFileList=FileNames[YFileDir<>"SSS_180x360_P*_STMOD3_nis_totd_N50_OSL_ASSYM_0p0B
 YFileList=StringTrim[StringTrim[#,YFileDir],".log"]&/@YFileList;
 
 
-(* with ycohscf(0.5-2.5), T, w/ start values from OSL_005/ fits, DiffEvol ign. start values for di and chi, use chi/cdConstr with constraint 0.0<chi<0.5 *)
+(* with ycohscf(0.5-5.0), T, w/ start values from OSL_005/ fits, DiffEvol ign. start values for di and chi, use chi/cdConstr with constraint 0.0<chi<0.5 *)
 
 OutDir="MathematicaOut/SSS_0p0BC_native_STMOD3_nis_totd_OSL_011/";
 Xnmode="X";

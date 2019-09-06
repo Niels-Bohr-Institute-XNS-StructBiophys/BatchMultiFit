@@ -1063,10 +1063,76 @@ run_BatchMultiFit_20190327_native_0p0_STMOD3.m
 	-> all fail at the lower-Q edge of the bump (s<0.08 1/nm), i.e. the scattering in the range btw diffuse SAS and bump is much too high
 	-> scaling factors too high
 
+	011/ -> 12-28 Å 
+	SSS_0p0BC_native_STMOD3_OSL_011$ mappar "SSS_180x360_P*_*_STMOD3_N50_OSL.png" 4 4 36 4 4 36
+
+	maxselTminfac = 1.2
+	Good fits [minTmin,maxselTmin] = [2.05998,2.471976]
+	x=4:4:36
+	y=4:4:36
+
+	   -------------
+	36 | oxxoooooo |
+	32 | o+xxooooo |
+	28 | o+oxxoooo |
+	24 | ox++xxooo |
+	20 | oxx++xxoo |
+	16 | oxxx++xxo |
+	12 | oxxxx++xx |
+	 8 | o+xxxxxxx |
+	 4 | ooooooooo |
+	   -------------
+	       1122233  
+	     482604826  
+
+
+	013/ -> 12-28 Å 
+	SSS_0p0BC_native_STMOD3_OSL_013$ mappar "SSS_180x360_P*_*_STMOD3_N50_OSL.png" 4 4 36 4 4 36
+
+	maxselTminfac = 1.2
+	Good fits [minTmin,maxselTmin] = [2.13582,2.562984]
+	x=4:4:36
+	y=4:4:36
+
+	   -------------
+	36 | oxxoooooo |
+	32 | o++xooooo |
+	28 | o+oxxoooo |
+	24 | ox++xxooo |
+	20 | ox+++xxoo |
+	16 | oxx+++xxo |
+	12 | oxxx+++xx |
+	 8 | o+xxxx+xx |
+	 4 | ooooooooo |
+	   -------------
+	       1122233  
+	     482604826  
+
+	015/ -> 16-20 Å 
+	SSS_0p0BC_native_STMOD3_OSL_015$ mappar "SSS_180x360_P*_*_STMOD3_N50_OSL.png" 4 4 36 4 4 36
+
+	maxselTminfac = 1.2
+	Good fits [minTmin,maxselTmin] = [2.10845,2.530140]
+	x=4:4:36
+	y=4:4:36
+
+	   -------------
+	36 | oxxoooooo |
+	32 | o++xooooo |
+	28 | o+++xoooo |
+	24 | o+++xxooo |
+	20 | ox+o+xxoo |
+	16 | ox++++xxo |
+	12 | ox+++++xx |
+	 8 | oxx+x++xx |
+	 4 | ooooooooo |
+	   -------------
+	       1122233  
+	     482604826  
 
 
 
-native loaded samples
+native loaded samples (011/, 013/, 015/ follow 0p0)
 
 	XNDiff simulations with 8-52 Å inner and outer shells (dtot<=60), using cis fro 1to5dil samples, ASSYM sizes
 	20190605_betaSSS_abc_disl_dosl_STMOD3_OSL_ASSYM_3p0BC_native_scan.sh
@@ -1111,9 +1177,112 @@ native loaded samples
 
 
 
+	STMOD3_nis_totd_OSL_01{1,3,5,7} fits:
+
+		(* with ycohscf(0.5-2.5), T, w/ start values from OSL_005/ fits, DiffEvol ign. start values for di and chi, use chi/cdConstr with constraint 0.0<chi<0.5 *)
+		OutDir="MathematicaOut/SSS_0p0BC_native_STMOD3_nis_totd_OSL_011/";
+		expfileconc={"export/im_0051252_caz_CapB_0p0BC_native-H2O_s-scaled_sIdI.chi",0.30};
+		Nmaxsp=6;
+		Nmaxst=5;
+		FitMethod="DifferentialEvolution";
+		Fitsmin=0.06;
+		Fitsmax=0.37;
+		ParStart={{"c1",False,0.0569721703},{"c2",False,0.0064034703},{"c3",False,0.4180488201},{"c4",False,0.3559066429},{"c5",False,0.1183186870},{"c6",False,0.0443502094},{"d2",True,0.25},{"d3",True,0.25},{"d4",True,0.25},{"d5",True,0.25},{"rhoisl",True,325,"300<#<360"},{"rhoosl",True,350,"300<#<360"},{"rhodm",True,335,"333<#<345"},{"Xa",True,0.02,"0.001<#<0.025"}};
+		ycohscf={True,1.0,"0.5<#<5.0"};
+		cdConstr={True,{"chi",True,0.0,"0.0<#<0.5"}}; (* {False,{"chi",True,0.0(*,Constraint*)}} is default *)
 
 
 
+		(* 013/ same as 011/ but with 0<chi<0.7 i.e. max 70% sp and min 30% stacks, and max 3er stacks *)
+		OutDir="MathematicaOut/SSS_0p0BC_native_STMOD3_nis_totd_OSL_013/";
+		Nmaxsp=6;
+		Nmaxst=3;
+		ycohscf={True,1.0,"0.5<#<2.5"};
+		cdConstr={True,{"chi",True,0.0,"0.0<#<0.7"}}; (* {False,{"chi",True,0.0(*,Constraint*)}} is default *)
+
+
+		(* 015/ has rhos constrained and max 5er stacks, 015/ does not exist for 0p0 and 015/ is 017/ for 3p0 *)
+
+		(* 017/ has rhos even further constrained (depends on sample) and max 3er stacks, 015/ is 017/ for 3p0 *)
+		Xnmode="X";
+		Nmaxsp=6;
+		Nmaxst=3;
+		ParStart={...,{"d2",True,0.5},{"d3",True,0.5},{"rhoisl",True,322,"320<#<325"},{"rhoosl",True,339,"335<#<343"},{"rhodm",True,336,"333<#<339"},{"Xa",True,0.02,"0.001<#<0.025"}};
+		ycohscf={True,1.0,"0.5<#<2.5"};
+		cdConstr={True,{"chi",True,0.0,"0.0<#<0.6"}}; (* {False,{"chi",True,0.0(*,Constraint*)}} is default *)
+
+
+		0p0 native
+
+			011/ -> 12-28 Å
+
+			SSS_0p0BC_native_STMOD3_nis_totd_OSL_011$ mappar "SSS_180x360_P*_*_STMOD3_nis_totd_N50_OSL_ASSYM_0p0BC_native.png" 4 4 36 4 4 36
+			Using Target function values
+
+			maxselTminfac = 1.2
+			Good fits [minTmin,maxselTmin] = [1.96574,2.358888]
+			x=4:4:36
+			y=4:4:36
+
+			   -------------
+			36 | ooooooooo |
+			32 | o+xxooooo |
+			28 | oxoxxoooo |
+			24 | ox++xxooo |
+			20 | oxx++xxoo |
+			16 | oxxx++xxo |
+			12 | ooxxx++xo |
+			 8 | oooxxxxxo |
+			 4 | ooooooooo |
+			   -------------
+			       1122233  
+			     482604826  
+
+
+			013/ -> 16-24 Å
+
+			SSS_0p0BC_native_STMOD3_nis_totd_OSL_013$ mappar "SSS_180x360_P*_*_STMOD3_nis_totd_N50_OSL_ASSYM_0p0BC_native.png" 4 4 36 4 4 36
+			Using Target function values
+
+			maxselTminfac = 1.2
+			Good fits [minTmin,maxselTmin] = [2.06583,2.478996]
+			x=4:4:36
+			y=4:4:36
+
+			   -------------
+			36 | ooooooooo |
+			32 | o++xooooo |
+			28 | o++xxoooo |
+			24 | ox+oxxooo |
+			20 | oxx++xxoo |
+			16 | oxx+++xxo |
+			12 | ooxxx++xo |
+			 8 | oooxxx+xo |
+			 4 | ooooooooo |
+			   -------------
+			       1122233  
+			     482604826  
+
+		Conclusions:
+		-> overall for 013/ dtot = 40 Å fits (12-28 for 0p0 and 16-24 for >=3p0) best fit the native data, nis_totd_.._013/ looks a little bit better, but not much.
+		-> use ..._nis_totd_.._013/ plots, note that the best fits usually are not so good in the  Bragg peak range!
+
+
+
+
+	Redo all STMOD3_nis_totd_OSL_01{1,3,5,7} fits:
+
+		-the nis_totd in the Excel sheet were wrong (forgot factor of 2 for dtot):
+		-for 0p0 the wrong cis were used, 20-12 instead of 16-16
+
+		-> used now correct nis_totd and 16-16 for 0p0
+		-> redid simulations and fits (011_v2 and 013_v2)
+		-> used Nst=3 for all fits, limited chiXn<2.5 and rhodm<340
+		-> 013_v2 (max 30% stacks) usually better than 011_v2 (max 50% stacks) for the chosen stackmode
+		-> by visual inspection (not by Tmin) best fits are 16-20 for 0p0 and 16-24 for all other samples
+		-> chi decreases from ~2.3 to ~1.0 with increasing BC conc. (close to 1 for 5 and 7.5% BC)
+		-> fits become also better with increasing BC conc.
+		-> ED profile is not so far away from dilute disp
 
 
 
